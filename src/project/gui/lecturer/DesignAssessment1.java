@@ -3,33 +3,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package project.gui.lecturer;
-import project.utils.*;
-import project.roles.*;
 
+import project.roles.*;
+import project.utils.*;
 /**
  *
  * @author Khoo Guo Hao
  */
-public class LecturerDashboard extends FrameFormat {
+public class DesignAssessment1 extends FrameFormat {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LecturerDashboard.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DesignAssessment1.class.getName());
     private Lecturer sessionUser;
+    private project.roles.Class designClass;
     /**
-     * Creates new form LecturerDashboard
+     * Creates new form DesignAssessment1
      */
-    public LecturerDashboard(Lecturer sessionUser) {
+    public DesignAssessment1(Lecturer sessionUser, project.roles.Class designClass) {
         initComponents();
-        super.formatWindow("Lecturer Dashboard");
+        super.formatWindow("Design Module Assessment - Select Class");
         this.sessionUser = sessionUser;
-        this.sessionUser.printFullLecturerData();
-        
-        sessionUser.Lec_Classes.forEach(he -> {
-            System.out.println(he.getClassId()); 
-        });
-        
-        sessionUser.Lec_Modules.forEach(he -> {
-            System.out.println(he.getModuleId()); 
-        });
+        this.designClass = designClass;
+        System.out.println(this.designClass.getClassId());
     }
 
     /**
@@ -41,27 +35,17 @@ public class LecturerDashboard extends FrameFormat {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jButton1.setText("jButton1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(165, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(133, 133, 133))
+            .addGap(0, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(64, 64, 64)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(196, Short.MAX_VALUE))
+            .addGap(0, 300, Short.MAX_VALUE)
         );
 
         pack();
@@ -89,18 +73,9 @@ public class LecturerDashboard extends FrameFormat {
         //</editor-fold>
 
         /* Create and display the form */
-        InteractTxt.initDatabase();
-        String x = "lc076206";
-        InteractTxt.allLecturer.forEach(l -> {
-            System.out.println(l.getId());
-            if (l.getId().equals(x)) {
-                System.out.println(l.getId());
-                java.awt.EventQueue.invokeLater(() -> new LecturerDashboard(l).setVisible(true));
-            }
-        });
+//        java.awt.EventQueue.invokeLater(() -> new DesignAssessment1().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
 }

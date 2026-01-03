@@ -3,64 +3,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package project.gui.lecturer;
-import javax.swing.JFrame;
-import project.roles.*;
-import project.utils.*;
+
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  *
  * @author Khoo Guo Hao
  */
-public class DesignAssessment extends FrameFormat {
+public class test extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DesignAssessment.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(test.class.getName());
 
     /**
-     * Creates new form DesignAssessment
+     * Creates new form test
      */
-    public DesignAssessment() {
+    public test() {
         initComponents();
-        super.formatWindow("Design Module Assessment");
         
-        InteractTxt.initDatabase();
-        for (IntakeModule x : InteractTxt.allIntakeModule) {
-            x.getAllIMDetails();
-            String y = x.getIMID();
-            System.out.println("Intake id = "+y);
-            
-            for (Assessment i : x.IM_Assessments) {
-                System.out.println("Ass = "+i);
-                i.getAllAssDetails();
-            }
-            if (y.equals("gayyyyyyy")) {
-                System.out.println("Hit! = "+ y);
-                x.setIMID("IMID1");
-            }
-        }
-        for (Assessment x : InteractTxt.allAssessment) {
-            x.getAllAssDetails();
-        }
-
-//        for (Lecturer x : InteractTxt.allLecturer) {
-//            System.out.println(x.getLeader().getName());
-//        }
-//        
-//        for (Leader x : InteractTxt.allLeader) {
-//            x.getFullUserData();
-//            if (x.getName().equals("keewenyew")) {
-//                x.setName("wenyew");
-//            }
-//        }
-//        
-//        for (Leader x : InteractTxt.allLeader) {
-//            System.out.println(x.getFullUserData());
-//        }
-//        
-//        for (Lecturer x : InteractTxt.allLecturer) {
-//            System.out.println(x.getLeader().getName());
-//        }
-
-            
+        AutoCompleteDecorator.decorate(jComboBox1);
     }
 
     /**
@@ -72,17 +32,27 @@ public class DesignAssessment extends FrameFormat {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jComboBox1 = new javax.swing.JComboBox<>();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 604, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(85, 85, 85)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(153, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 407, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(61, 61, 61)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(213, Short.MAX_VALUE))
         );
 
         pack();
@@ -110,9 +80,10 @@ public class DesignAssessment extends FrameFormat {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new DesignAssessment().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new test().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> jComboBox1;
     // End of variables declaration//GEN-END:variables
 }
