@@ -1,6 +1,18 @@
-Ass1
-Assessment ABC
-MCQ
+Group Assignment
+Group Assignment
+Assignment
+40
+IMID1
+
+Ass2
+Individual Assignment
+Assignment
 50
+IMID1
+
+Ass3
+Test Skills
+Class Test
+10
 IMID1
 

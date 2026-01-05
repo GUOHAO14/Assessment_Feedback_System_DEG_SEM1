@@ -4,9 +4,7 @@
  */
 package project.gui.lecturer;
 import java.util.ArrayList;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import project.roles.*;
 import project.utils.*;
@@ -20,32 +18,24 @@ public class DesignAssessment0 extends FrameFormat {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DesignAssessment0.class.getName());
     private Lecturer sessionUser;
     private Intake chosenIntake;
-    private Intake chosenModule;
-    private IntakeModule chosenIM;
-    private String chosenIMID;
-    private project.roles.Class chosenClass = null;
+    private IntakeModule chosenIM = null;
     
     /**
      * Creates new form DesignAssessment
      */
     
     private void clearTextForUser() {
-        chosenClass = null;
-        textForUser.setText("Choose a class");
+        chosenIM = null;
+        textForUser.setText("Choose a module~");
     }
     
-    private void setTextForUser(String c) {
-        textForUser.setText("<html><p style='text-align: center;'>Proceed to Design Assessment page for "+c+"</p></html>");
+    private void setTextForUser(String IMID, String details) {
+        textForUser.setText("<html><div style='text-align: center;'><p>Proceed to Design Assessment page for "+IMID+":</p><p>"+details+"</p></div></html>");
     }
     
     private void disableModuleDropdown() {
         moduleDropdown.setEnabled(false);
         AutoCompleteDecorator.decorate(moduleDropdown);
-    }
-    
-    private void disableClassDropdown() {
-        classDropdown.setEnabled(false);
-        AutoCompleteDecorator.decorate(classDropdown);
     }
     
     public DesignAssessment0(Lecturer sessionUser) {
@@ -67,9 +57,6 @@ public class DesignAssessment0 extends FrameFormat {
         
         disableModuleDropdown();
         moduleDropdown.setMaximumRowCount(6);
-
-        disableClassDropdown();
-        classDropdown.setMaximumRowCount(6);
         
 //        InteractTxt.initDatabase();
 //        for (IntakeModule x : InteractTxt.allIntakeModule) {
@@ -126,10 +113,8 @@ public class DesignAssessment0 extends FrameFormat {
         jProgressBar1 = new javax.swing.JProgressBar();
         intakeDropdown = new javax.swing.JComboBox<>();
         moduleDropdown = new javax.swing.JComboBox<>();
-        classDropdown = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         editClassButt = new javax.swing.JButton();
         textForUser = new javax.swing.JLabel();
 
@@ -139,49 +124,44 @@ public class DesignAssessment0 extends FrameFormat {
 
         moduleDropdown.addActionListener(this::moduleDropdownActionPerformed);
 
-        classDropdown.addActionListener(this::classDropdownActionPerformed);
-
         jLabel1.setText("Intake");
 
         jLabel2.setText("Module");
-
-        jLabel3.setText("Class");
 
         editClassButt.setText("Edit");
         editClassButt.addActionListener(this::editClassButtActionPerformed);
 
         textForUser.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         textForUser.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        textForUser.setText("Choose a Class");
+        textForUser.setText("Choose a module");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(textForUser, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(135, 135, 135)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(intakeDropdown, 0, 178, Short.MAX_VALUE)
-                                .addComponent(moduleDropdown, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(classDropdown, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(231, 231, 231)
-                            .addComponent(editClassButt, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(135, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(231, 231, 231)
+                        .addComponent(editClassButt, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(63, 63, 63)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(textForUser, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(intakeDropdown, 0, 316, Short.MAX_VALUE)
+                                    .addComponent(moduleDropdown, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                .addContainerGap(69, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(92, 92, 92)
+                .addGap(102, 102, 102)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(intakeDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
@@ -189,15 +169,11 @@ public class DesignAssessment0 extends FrameFormat {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(moduleDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(classDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(53, 53, 53)
-                .addComponent(textForUser, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addGap(31, 31, 31)
+                .addComponent(textForUser, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
+                .addGap(31, 31, 31)
                 .addComponent(editClassButt)
-                .addGap(41, 41, 41))
+                .addGap(44, 44, 44))
         );
 
         pack();
@@ -207,7 +183,6 @@ public class DesignAssessment0 extends FrameFormat {
         // TODO add your handling code here:
         clearTextForUser();
         disableModuleDropdown();
-        disableClassDropdown();
         moduleDropdown.removeAllItems();
         String choice = intakeDropdown.getSelectedItem().toString();
         System.out.println(choice);
@@ -250,10 +225,7 @@ public class DesignAssessment0 extends FrameFormat {
     private void moduleDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moduleDropdownActionPerformed
         // TODO add your handling code here:
         clearTextForUser();
-        disableClassDropdown();
-//        moduleDropdown.setSelectedItem("None");
         try {
-            classDropdown.removeAllItems();
             String choice = moduleDropdown.getSelectedItem().toString();
             System.out.println(choice);
 
@@ -270,72 +242,25 @@ public class DesignAssessment0 extends FrameFormat {
                 InteractTxt.allIntakeModule.forEach(im -> {
                     if (chosenIntake.getIntakeId().equals(im.getIntakeId()) && chosenModuleId.equals(im.getModuleId())) {
                         chosenIM = im;
-                        chosenIMID = chosenIM.getIMID();
                     }
                 });
-
-                ArrayList<String> ownClasses = new ArrayList<String>();
-
-                sessionUser.Lec_Classes.forEach(c -> {
-                    ownClasses.add(c.getClassId());
-                });
-
-                chosenIM.IM_Classes.forEach(c -> {
-                    String classId = c.getClassId();
-                    if (ownClasses.contains(classId)) {
-                        classDropdown.addItem(classId+" ("+c.getClassName()+")");
-                    }
-                });
-
-                classDropdown.addItem("None");
-                classDropdown.setSelectedItem("None");
-                classDropdown.setEnabled(true);
+                
+                if (chosenIM != null) {
+                    setTextForUser(chosenIM.getIMID(), chosenIM.getIntakeId()+" - "+chosenIM.getModuleId());
+                }
             }
         } catch (java.lang.NullPointerException e) {
             System.out.println("Error recorded: dropdown referenced without user action. Safe to ignore.");
         }
     }//GEN-LAST:event_moduleDropdownActionPerformed
 
-    private void classDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_classDropdownActionPerformed
-        // TODO add your handling code here:
-        clearTextForUser();
-//        classDropdown.setSelectedItem("None");
-        try {
-            String choice = classDropdown.getSelectedItem().toString();
-            System.out.println(choice);
-
-            if (choice == null || choice.isEmpty() || choice.equals("None")) 
-                return;
-            else {
-                // valid choice
-                System.out.println("------");
-
-                String chosenClassId = choice.split(" \\(")[0];
-
-                System.out.println(chosenClassId);
-
-                InteractTxt.allClass.forEach(c -> {
-                    if (c.getClassId().equals(chosenClassId)) {
-                        chosenClass = c;
-                    }
-                });
-                
-                if (chosenClass != null) {
-                    setTextForUser(chosenClass.getClassId()+" ("+chosenClass.getClassName()+")");
-                }
-            }
-        } catch (java.lang.NullPointerException e) {
-            System.out.println("Error recorded: dropdown referenced without user action. Safe to ignore.");
-        }
-    }//GEN-LAST:event_classDropdownActionPerformed
-
     private void editClassButtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editClassButtActionPerformed
         // TODO add your handling code here:
-        if (chosenClass != null) {
-            new DesignAssessment1(sessionUser, chosenClass).setVisible(true);
+        if (chosenIM != null) {
+            new DesignAssessment1(sessionUser, chosenIM).setVisible(true);
             this.dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "You must select a class before proceeding!", "Error - Incomplete Action", 0);
+            JOptionPane.showMessageDialog(this, "You must select a module before proceeding!", "Error - Incomplete Action", 0);
         }
     }//GEN-LAST:event_editClassButtActionPerformed
 
@@ -373,12 +298,10 @@ public class DesignAssessment0 extends FrameFormat {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> classDropdown;
     private javax.swing.JButton editClassButt;
     private javax.swing.JComboBox<String> intakeDropdown;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JComboBox<String> moduleDropdown;
     private javax.swing.JLabel textForUser;
