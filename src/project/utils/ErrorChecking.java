@@ -17,14 +17,24 @@ public class ErrorChecking {
         for (IntakeModule im : InteractTxt.allIntakeModule) {
             int totalPercent = 0;
             
+            System.out.println("IM Assessment array size: "+im.IM_Assessments.size());
+            
+            if (im.IM_Assessments.size() == 0) continue;
+            
             for (Assessment a : im.IM_Assessments) {
                 totalPercent += Integer.parseInt(a.getAssPercentage());
+                System.out.println("Ass id: "+a.getAssId());
+                System.out.println("Percent: "+a.getAssPercentage());
             }
             
+            System.out.println("Total Percent: "+totalPercent);
+            
             if (totalPercent != 100) {
+                System.out.println("wtf");
                 return false;
             }
         }
+        System.out.println("Lol");
         return true;
     }
     

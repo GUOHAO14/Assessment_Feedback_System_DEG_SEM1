@@ -130,7 +130,7 @@ public class DesignAssessment1 extends FrameFormat {
                                 designIM.IM_Assessments.add(newAssessment);
                                 InteractTxt.allAssessment.add(newAssessment);
                             } else {
-                                a.setAssId(name);
+                                a.setAssName(name);
                                 a.setAssType(type);
                                 a.setAssPercentage(percent);
                             }
@@ -281,7 +281,7 @@ public class DesignAssessment1 extends FrameFormat {
 
     private void saveChangesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveChangesActionPerformed
         // TODO add your handling code here:
-        
+        ErrorChecking.checkIM_Assessments();
     }//GEN-LAST:event_saveChangesActionPerformed
 
     /**

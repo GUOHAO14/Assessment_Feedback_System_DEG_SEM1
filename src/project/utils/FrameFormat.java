@@ -39,10 +39,12 @@ abstract public class FrameFormat extends JFrame {
                 
                     // YES triggers graceful exit
                     if (choice == JOptionPane.YES_OPTION) {
-
+                        System.out.println("hello1");
                         if (!frameClassName.contains("LoginPage")) {
+                            System.out.println("hello2");
+                            System.out.println(ErrorChecking.checkIM_Assessments());
                             if (ErrorChecking.checkIM_Assessments()) {
-                                
+                                System.out.println("hello3");
                                 System.out.println(windowEvent.getComponent());
 
                                 System.out.println("--- Executing Program Termination ---");
@@ -64,6 +66,7 @@ abstract public class FrameFormat extends JFrame {
 
                                 System.exit(0); 
                             } else {
+                                System.out.println("hello4");
                                 JOptionPane.showMessageDialog(windowEvent.getComponent(), "Cannot exit program. There is an error in IntakeModule Assessments", "Exit Program Failure", JOptionPane.WARNING_MESSAGE);
                             }
                             
