@@ -11,6 +11,7 @@ import project.utils.*;
 import project.utils.FrameFormat;
 
 
+
 public class StudentClassRegistration extends FrameFormat {
     private Student sessionStudent;
     private String intakeId;
@@ -21,15 +22,71 @@ public class StudentClassRegistration extends FrameFormat {
      */
     public StudentClassRegistration(Student student) {        
         initComponents();
+        
         this.sessionStudent = student;
         this.intakeId = student.getIntakeId();
+        
+        setupTables();
+        populateModuleTable();
+        setupModuleSelectionListener();
 
-    // Get the table model from jTable1
-    tableModel = (DefaultTableModel) jTable1.getModel();
-
-    // Load modules into the table
     }
     
+    private void setupTables() {
+    // Module table
+    jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        new Object[][] {},
+        new String[] { "Module ID", "Module Name" }
+    ) {
+        public boolean isCellEditable(int row, int column) { return false; }
+    });
+
+    // Class table
+    jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        new Object[][] {},
+        new String[] { "Class ID", "Class Name" }
+    ) {
+        public boolean isCellEditable(int row, int column) { return false; }
+    });
+}
+    private void populateModuleTable() {
+    DefaultTableModel model1 = (DefaultTableModel) jTable1.getModel();
+    model1.setRowCount(0); // clear table first
+
+    Intake intake = InteractTxt.checkIntID(intakeId);
+    if (intake != null) {
+        for (project.roles.Module m : intake.Int_Modules) {
+            model1.addRow(new Object[]{ m.getModuleId(), m.getModuleName() });
+        }
+    }
+}
+private void setupModuleSelectionListener() {
+    jTable1.getSelectionModel().addListSelectionListener(e -> {
+        if (!e.getValueIsAdjusting()) {
+            int selectedRow = jTable1.getSelectedRow();
+            if (selectedRow != -1) {
+                String moduleId = jTable1.getValueAt(selectedRow, 0).toString();
+                populateClassTable(moduleId);
+            }
+        }
+    });
+}
+
+private void populateClassTable(String moduleId) {
+    DefaultTableModel model2 = (DefaultTableModel) jTable2.getModel();
+    model2.setRowCount(0); // clear old data
+
+    // Loop through all IntakeModule objects
+    for (IntakeModule im : InteractTxt.allIntakeModule) {
+        if (im.getIntakeId().equals(intakeId) && im.getModuleId().equals(moduleId)) {
+            for (project.roles.Class c : im.IM_Classes) {
+                model2.addRow(new Object[]{ c.getClassId(), c.getClassName() });
+            }
+        }
+    }
+}
+
+
 
     /**
      * Load all modules for this student based on IntakeID
