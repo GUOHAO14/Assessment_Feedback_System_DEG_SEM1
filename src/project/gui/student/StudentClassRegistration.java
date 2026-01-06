@@ -12,42 +12,28 @@ import project.utils.FrameFormat;
 
 
 public class StudentClassRegistration extends FrameFormat {
-private Student sessionUser;
-private Intake chosenIntake;
-private DefaultTableModel tableModel;
+    private Student sessionStudent;
+    private String intakeId;
+    private DefaultTableModel tableModel;
 
     /**
      * Creates new form StudentClassRegistration
      */
     public StudentClassRegistration(Student student) {        
         initComponents();
-       this.sessionUser = student;
+        this.sessionStudent = student;
+        this.intakeId = student.getIntakeId();
 
     // Get the table model from jTable1
     tableModel = (DefaultTableModel) jTable1.getModel();
 
     // Load modules into the table
-    loadModulesForStudent();
     }
     
 
     /**
      * Load all modules for this student based on IntakeID
      */
-    private void loadModulesForStudent() {
-        tableModel.setRowCount(0); // clear table first
-
-        String intakeId = sessionUser.getIntakeId();
-
-        for (IntakeModule im : InteractTxt.allIntakeModule) {
-        if (im.getIntakeId().equals(intakeId)) {
-            project.roles.Module mod = InteractTxt.checkModID(im.getModuleId());
-            if (mod != null) {
-                tableModel.addRow(new Object[] { mod.getModuleName() });
-            }
-        }
-    }
-    }
 
 
     /**

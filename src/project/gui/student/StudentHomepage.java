@@ -4,17 +4,22 @@
  */
 package project.gui.student;
 
+import project.roles.Student;
+
 /**
  *
  * @author joshl
  */
 public class StudentHomepage extends javax.swing.JFrame {
-
+    private Student sessionStudent;
+    private String intakeId;
     /**
      * Creates new form StudentHomepage
      */
-    public StudentHomepage() {
+    public StudentHomepage(Student student) {
         initComponents();
+        this.sessionStudent = student;
+        this.intakeId = student.getIntakeId();
     }
 
     /**
@@ -77,7 +82,10 @@ public class StudentHomepage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+    new StudentClassRegistration(sessionStudent).setVisible(true);
+
+    // Optional: close homepage
+    this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -108,11 +116,14 @@ public class StudentHomepage extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new StudentHomepage().setVisible(true);
-            }
-        });
+        java.awt.EventQueue.invokeLater(() -> {
+        // TEMP dummy student for UI testing only
+        Student dummy = new Student(new String[]{
+            "TP000", "Dummy Student", "dummy@email.com", "1234", "Student"
+        }, new String[]{"TP000", "INTI-2024", "01/01/2000"});
+
+        new StudentHomepage(dummy).setVisible(true);
+    });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

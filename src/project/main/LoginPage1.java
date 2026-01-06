@@ -212,7 +212,7 @@ public class LoginPage1 extends FrameFormat {
             // 3. Identify and Cast the Concrete User Type
             if (sessionUser instanceof Student && userType.equals("Student")) {
                 Student student = (Student) sessionUser;
-                new project.gui.student.StudentHomepage().setVisible(true);
+                new project.gui.student.StudentHomepage(student).setVisible(true);
                 this.dispose();
 
             } else if (sessionUser instanceof Lecturer && userType.equals("Lecturer")) {
