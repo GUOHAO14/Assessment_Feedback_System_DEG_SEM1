@@ -5,12 +5,13 @@
 package project.gui.student;
 
 import project.roles.Student;
+import project.utils.FrameFormat;
 
 /**
  *
  * @author joshl
  */
-public class StudentHomepage extends javax.swing.JFrame {
+public class StudentHomepage extends FrameFormat {
     private Student sessionStudent;
     private String intakeId;
     /**
