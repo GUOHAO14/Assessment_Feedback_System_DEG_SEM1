@@ -63,25 +63,30 @@ public class DesignAssessment1 extends FrameFormat {
         JComboBox typeDropdown = new JComboBox(assessmentTypes);
         JTextField assessmentName = new JTextField(10);
         JTextField assessmentPercent = new JTextField(10);
+        JTextField assessmentFullMarks = new JTextField(10);
         
         String type;
         String name;
         String percent;
+        String fullMarks;
         
         JPanel panel = new JPanel();
         
-        panel.setLayout(new GridLayout(4, 3, 5, 5)); // 2 rows, 2 columns, 5px gap
+        panel.setLayout(new GridLayout(4, 2, 5, 5));
         panel.add(new JLabel("Assessment Type:"));
         panel.add(typeDropdown);
         panel.add(new JLabel("Assessment Name:"));
         panel.add(assessmentName);  
-        panel.add(new JLabel("Score Percentage % (integer):"));
+        panel.add(new JLabel("Full Marks % (integer):"));
+        panel.add(assessmentFullMarks);
+        panel.add(new JLabel("Total Score Percentage % (integer):"));
         panel.add(assessmentPercent);
         
         panel.setPreferredSize(new Dimension(400, 120));
         
         if (a != null) {
             assessmentName.setText(a.getAssName());
+            assessmentFullMarks.setText(a.getAssFullMarks());
             assessmentPercent.setText(a.getAssPercentage());
             typeDropdown.setSelectedItem(a.getAssType());
             createSignal = false;
@@ -97,11 +102,11 @@ public class DesignAssessment1 extends FrameFormat {
                 type = typeDropdown.getSelectedItem().toString();
                 name = assessmentName.getText();
                 percent = assessmentPercent.getText();
-                int intPercent = Integer.parseInt(percent);
+                fullMarks = assessmentFullMarks.getText();
                 
                 int userConfirm = JOptionPane.showConfirmDialog(
                         this, 
-                        "Type: " + type+"\nName: " + name+"\nPortion: " + percent, 
+                        "Type: " + type+"\nName: " + name+"\nFull Marks: "+fullMarks+"\nScore Percent: " + percent, 
                         "Confirm Creation", 
                         JOptionPane.YES_NO_OPTION);
                 if (userConfirm == JOptionPane.YES_OPTION) {
@@ -113,8 +118,13 @@ public class DesignAssessment1 extends FrameFormat {
                     //try-catch block to ensure integer input for percent
                     
                     try {
+                        int intPercent = Integer.parseInt(percent);
+                        int intFullMarks = Integer.parseInt(fullMarks);
+                        
                         if (name.length() > Constants.ITEM_NAME_LENGTH) throw new ItemNameLengthException("Assessment");
-                        if (intPercent < 1 || intPercent > 100) throw new IntegerRangeException("Score percentage", 1, 100);
+                        if (intPercent < 1 || intPercent > 100) throw new IntegerRangeException("Score Percentage", 1, 100);
+                        if (intFullMarks < 1 || intFullMarks > 100) throw new IntegerRangeException("Full Marks", 10, 100);
+                        
                         int total = intPercent;
                         for (Assessment ass : designIM.IM_Assessments) {
                             if (!createSignal) if (a.getAssId().equals(ass.getAssId())) continue;
@@ -125,7 +135,7 @@ public class DesignAssessment1 extends FrameFormat {
                         if (total <= 100) {
                             if (createSignal) {
                                 String newId = "Ass"+String.valueOf(designIM.IM_Assessments.size() + 1);
-                                Assessment newAssessment = new Assessment(newId, name, type, percent, designIM);
+                                Assessment newAssessment = new Assessment(newId, name, type, percent, fullMarks, designIM);
 
                                 designIM.IM_Assessments.add(newAssessment);
                                 InteractTxt.allAssessment.add(newAssessment);

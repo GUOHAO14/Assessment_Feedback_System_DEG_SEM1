@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 public class Student extends User {
     private String intakeId, dob;
-    public ArrayList<Class> Stu_Classes = new ArrayList<Class>();
+    public ArrayList<Class> Stu_Classes = new ArrayList<();
+    public ArrayList<StudentScore> Stu_Scores = new ArrayList<>();
     
     public Student(String[] userData) {
         super(userData);

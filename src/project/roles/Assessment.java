@@ -1,10 +1,10 @@
 package project.roles;
 
 public class Assessment {
-    private String assId, assName, assType, assPercentage;
+    private String assId, assName, assType, assPercentage, assFullMarks;
     private IntakeModule assIM;
     
-    public Assessment(String assId, String assName, String assType, String assPercentage, IntakeModule assIM) {
+    public Assessment(String assId, String assName, String assType, String assPercentage, String assFullMarks, IntakeModule assIM) {
         this.assId = assId;
         this.assName = assName;
         this.assType = assType;
@@ -50,6 +50,14 @@ public class Assessment {
 
     public void setAssIM(IntakeModule assIM) {
         this.assIM = assIM;
+    }
+
+    public String getAssFullMarks() {
+        return assFullMarks;
+    }
+
+    public void setAssFullMarks(String assFullMarks) {
+        this.assFullMarks = assFullMarks;
     }
     
     public void getAllAssDetails() {

@@ -9,13 +9,14 @@ package project.roles;
  * @author Khoo Guo Hao
  */
 public class StudentScore {
-    private Student student;
     private Assessment assessment;
     private String score;
+    private String fullMarks;
     
-    public StudentScore(Assessment assessment, String score) {
+    public StudentScore(Assessment assessment, String score, String fullMarks) {
         this.assessment = assessment;
         this.score = score;
+        this.fullMarks = fullMarks;
     }
 
     public Assessment getAssessment() {
@@ -28,5 +29,13 @@ public class StudentScore {
 
     public void setScore(String score) {
         this.score = score;
+    }
+
+    public String getFullMarks() {
+        return fullMarks;
+    }
+
+    public void setFullMarks(String fullMarks) {
+        this.fullMarks = fullMarks;
     }
 }

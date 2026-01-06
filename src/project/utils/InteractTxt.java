@@ -371,6 +371,19 @@ public class InteractTxt {
                 a.println();
             }
             a.close();
+            
+            PrintWriter b = new PrintWriter("src/resources/student_assessment.txt");
+            for(Student x : allStudent){
+                if (x.Stu_Scores.size() >= 1) {
+                    for (StudentScore y : x.Stu_Scores) {
+                        b.println(x.getId());
+                        b.println(y.getAssessment().getAssId());
+                        b.println(y.getScore());
+                        b.println(y.getFullMarks());
+                    }
+                }
+            }
+            b.close();
         }catch(Exception e){
             System.out.println("Error in write ..........");
             e.printStackTrace();
@@ -384,11 +397,21 @@ public class InteractTxt {
                 String id = s1.nextLine();
                 String name = s1.nextLine();
                 String type = s1.nextLine();
+                String fullMarks = s1.nextLine();
                 String percentage = s1.nextLine();
                 String IMID = s1.nextLine();
                 s1.nextLine();
-                allAssessment.add(new Assessment(id, name, type, percentage, checkIMID(IMID)));
+                allAssessment.add(new Assessment(id, name, type, fullMarks, percentage,checkIMID(IMID)));
                 InteractTxt.checkIMID(IMID).IM_Assessments.add(InteractTxt.checkAssID(id));
+            } 
+            Scanner s2 = new Scanner(new File("src/resources/student_assessment.txt"));
+            while(s2.hasNext()){
+                String stuId = s2.nextLine();
+                String assId = s2.nextLine();
+                String score = s2.nextLine();
+                String fullMarks = s2.nextLine();
+                s2.nextLine();
+                InteractTxt.checkStuID(stuId).Stu_Scores.add(new StudentScore(InteractTxt.checkAssID(assId), score, fullMarks));
             } 
         }catch(Exception e){
             System.out.println("Error in read ..........");
