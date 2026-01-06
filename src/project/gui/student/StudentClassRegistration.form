@@ -56,8 +56,9 @@
         <Component class="javax.swing.JTable" name="jTable1">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="1" rowCount="1">
+              <Table columnCount="2" rowCount="1">
                 <Column editable="true" title="Module" type="java.lang.Object"/>
+                <Column editable="true" title="Status" type="java.lang.Object"/>
               </Table>
             </Property>
           </Properties>
