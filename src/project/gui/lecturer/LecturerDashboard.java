@@ -41,31 +41,52 @@ public class LecturerDashboard extends FrameFormat {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        designAssessment = new javax.swing.JButton();
+        enterAssessmentMarks = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("jButton1");
+        designAssessment.setText("Design Assessment");
+        designAssessment.addActionListener(this::designAssessmentActionPerformed);
+
+        enterAssessmentMarks.setText("Enter Marks");
+        enterAssessmentMarks.addActionListener(this::enterAssessmentMarksActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(165, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(133, 133, 133))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(117, 117, 117)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(designAssessment, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(enterAssessmentMarks, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(156, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(64, 64, 64)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(196, Short.MAX_VALUE))
+                .addGap(61, 61, 61)
+                .addComponent(designAssessment, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(61, 61, 61)
+                .addComponent(enterAssessmentMarks, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(98, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void enterAssessmentMarksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterAssessmentMarksActionPerformed
+        // TODO add your handling code here:
+        new EnterAssessmentMarks0(sessionUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_enterAssessmentMarksActionPerformed
+
+    private void designAssessmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_designAssessmentActionPerformed
+        // TODO add your handling code here:
+        new DesignAssessment0(sessionUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_designAssessmentActionPerformed
 
     /**
      * @param args the command line arguments
@@ -101,6 +122,7 @@ public class LecturerDashboard extends FrameFormat {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton designAssessment;
+    private javax.swing.JButton enterAssessmentMarks;
     // End of variables declaration//GEN-END:variables
 }

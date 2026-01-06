@@ -366,6 +366,7 @@ public class InteractTxt {
                 a.println(x.getAssId());
                 a.println(x.getAssName());
                 a.println(x.getAssType());
+                a.println(x.getAssFullMarks());
                 a.println(x.getAssPercentage());
                 a.println(x.getAssIM().getIMID());
                 a.println();
@@ -378,8 +379,9 @@ public class InteractTxt {
                     for (StudentScore y : x.Stu_Scores) {
                         b.println(x.getId());
                         b.println(y.getAssessment().getAssId());
-                        b.println(y.getScore());
-                        b.println(y.getFullMarks());
+                        b.println(y.getFinalScore());
+                        b.println(y.getOrginalScore());
+                        b.println(y.getOrginalfullMarks());
                     }
                 }
             }
@@ -408,10 +410,11 @@ public class InteractTxt {
             while(s2.hasNext()){
                 String stuId = s2.nextLine();
                 String assId = s2.nextLine();
-                String score = s2.nextLine();
-                String fullMarks = s2.nextLine();
+                String finalScore = s2.nextLine();
+                String originalScore = s2.nextLine();
+                String originalFullMarks = s2.nextLine();
                 s2.nextLine();
-                InteractTxt.checkStuID(stuId).Stu_Scores.add(new StudentScore(InteractTxt.checkAssID(assId), score, fullMarks));
+                InteractTxt.checkStuID(stuId).Stu_Scores.add(new StudentScore(InteractTxt.checkAssID(assId), finalScore, originalScore, originalFullMarks));
             } 
         }catch(Exception e){
             System.out.println("Error in read ..........");

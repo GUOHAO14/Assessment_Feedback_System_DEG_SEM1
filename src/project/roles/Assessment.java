@@ -9,6 +9,7 @@ public class Assessment {
         this.assName = assName;
         this.assType = assType;
         this.assPercentage = assPercentage;
+        this.assFullMarks = assFullMarks;
         this.assIM = assIM;
     }
 

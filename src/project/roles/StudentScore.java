@@ -10,32 +10,42 @@ package project.roles;
  */
 public class StudentScore {
     private Assessment assessment;
-    private String score;
-    private String fullMarks;
+    private String finalScore;
+    private String orginalScore;
+    private String orginalfullMarks;
     
-    public StudentScore(Assessment assessment, String score, String fullMarks) {
+    public StudentScore(Assessment assessment, String finalScore, String originalScore, String originalFullMarks) {
         this.assessment = assessment;
-        this.score = score;
-        this.fullMarks = fullMarks;
+        this.finalScore = finalScore;
+        this.orginalScore = orginalScore;
+        this.orginalfullMarks = originalFullMarks;
     }
 
     public Assessment getAssessment() {
         return assessment;
     }
 
-    public String getScore() {
-        return score;
+    public String getFinalScore() {
+        return finalScore;
     }
 
-    public void setScore(String score) {
-        this.score = score;
+    public void setFinalScore(String finalScore) {
+        this.finalScore = finalScore;
     }
 
-    public String getFullMarks() {
-        return fullMarks;
+    public String getOrginalScore() {
+        return orginalScore;
     }
 
-    public void setFullMarks(String fullMarks) {
-        this.fullMarks = fullMarks;
+    public void setOrginalScore(String orginalScore) {
+        this.orginalScore = orginalScore;
+    }
+
+    public String getOrginalfullMarks() {
+        return orginalfullMarks;
+    }
+
+    public void setOrginalfullMarks(String orginalfullMarks) {
+        this.orginalfullMarks = orginalfullMarks;
     }
 }
