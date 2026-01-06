@@ -9,16 +9,26 @@ package project.roles;
  * @author Khoo Guo Hao
  */
 public class StudentScore {
-    private Assessment assessment;
+    private final Assessment assessment;
     private String finalScore;
     private String orginalScore;
-    private String orginalfullMarks;
+    private String originalFullMarks;
+    private String feedback;
     
-    public StudentScore(Assessment assessment, String finalScore, String originalScore, String originalFullMarks) {
+    public StudentScore(Assessment assessment, String finalScore, String originalScore, String originalFullMarks, String feedback) {
         this.assessment = assessment;
         this.finalScore = finalScore;
-        this.orginalScore = orginalScore;
-        this.orginalfullMarks = originalFullMarks;
+        this.orginalScore = originalScore;
+        this.originalFullMarks = originalFullMarks;
+        this.feedback = feedback;
+    }
+    
+    public StudentScore(StudentScore other) {
+        this.assessment = other.assessment;
+        this.finalScore = other.finalScore;
+        this.orginalScore = other.orginalScore;
+        this.originalFullMarks = other.originalFullMarks;
+        this.feedback = other.feedback;
     }
 
     public Assessment getAssessment() {
@@ -41,11 +51,19 @@ public class StudentScore {
         this.orginalScore = orginalScore;
     }
 
-    public String getOrginalfullMarks() {
-        return orginalfullMarks;
+    public String getOriginalFullMarks() {
+        return originalFullMarks;
     }
 
-    public void setOrginalfullMarks(String orginalfullMarks) {
-        this.orginalfullMarks = orginalfullMarks;
+    public void setOirginalFullMarks(String originalFullMarks) {
+        this.originalFullMarks = originalFullMarks;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
     }
 }

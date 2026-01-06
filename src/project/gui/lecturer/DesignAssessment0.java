@@ -44,13 +44,13 @@ public class DesignAssessment0 extends FrameFormat {
         this.sessionUser = sessionUser;
         
         intakeDropdown.setEditable(true);
+        intakeDropdown.addItem("None");
+        intakeDropdown.setSelectedItem("None");
+        
         InteractTxt.allIntake.forEach(i -> {
             String item = i.getIntakeId() + " (" + i.getIntakeName() + ")";
             intakeDropdown.addItem(item);
         });
-        
-        intakeDropdown.addItem("None");
-        intakeDropdown.setSelectedItem("None");
         
         AutoCompleteDecorator.decorate(intakeDropdown);
         intakeDropdown.setMaximumRowCount(6);
@@ -211,13 +211,14 @@ public class DesignAssessment0 extends FrameFormat {
                 ownMods.add(m.getModuleId());
             });
 
+            moduleDropdown.addItem("None");
+            moduleDropdown.setSelectedItem("None");
+            
             chosenIntake.Int_Modules.forEach(m -> {
                 String modId = m.getModuleId();
                 if (ownMods.contains(modId)) moduleDropdown.addItem(modId+" ("+m.getModuleName()+")");
             });
 
-            moduleDropdown.addItem("None");
-            moduleDropdown.setSelectedItem("None");
             moduleDropdown.setEnabled(true);
         }
     }//GEN-LAST:event_intakeDropdownActionPerformed

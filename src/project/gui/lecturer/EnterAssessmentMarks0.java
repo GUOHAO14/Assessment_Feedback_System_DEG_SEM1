@@ -4,8 +4,10 @@
  */
 package project.gui.lecturer;
 
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import project.roles.*;
@@ -28,6 +30,8 @@ public class EnterAssessmentMarks0 extends FrameFormat {
     private IntakeModule chosenIM = null;
     private project.roles.Class chosenClass = null;
     private Student chosenStudent = null;
+    private String intakeFullName;
+    private String moduleFullName;
     
     /**
      * Creates new form EnterAssessmentMarks0
@@ -47,7 +51,7 @@ public class EnterAssessmentMarks0 extends FrameFormat {
     
     private void disableStudentDropdown() {
         studentDropdown.setEnabled(false);
-        AutoCompleteDecorator.decorate(moduleDropdown);
+        AutoCompleteDecorator.decorate(studentDropdown);
         chosenStudent = null;
     }
     
@@ -56,8 +60,10 @@ public class EnterAssessmentMarks0 extends FrameFormat {
         initComponents();
         super.formatWindow("Enter Assessment Details - Select Student");
         this.sessionUser = sessionUser;
+        
         mainTable.getColumnModel().getColumn(1).setPreferredWidth(250);
         mainTable.setAutoCreateRowSorter(true);
+        mainTable.setDefaultEditor(Object.class, null);
         
         sessionUser.Lec_Modules.forEach(m -> {
             ownMods.add(m.getModuleId());
@@ -68,25 +74,26 @@ public class EnterAssessmentMarks0 extends FrameFormat {
         });
         
         intakeDropdown.setEditable(true);
+        
         InteractTxt.allIntake.forEach(i -> {
             String item = i.getIntakeId() + " (" + i.getIntakeName() + ")";
             intakeDropdown.addItem(item);
         });
         
+        
         intakeDropdown.addItem("None");
         intakeDropdown.setSelectedItem("None");
-        
         AutoCompleteDecorator.decorate(intakeDropdown);
         intakeDropdown.setMaximumRowCount(6);
         
-        disableModuleDropdown();
         moduleDropdown.setMaximumRowCount(6);
+        disableModuleDropdown();
         
-        disableClassDropdown();
         classDropdown.setMaximumRowCount(6);
+        disableClassDropdown();
         
-        disableStudentDropdown();
         studentDropdown.setMaximumRowCount(6);
+        disableStudentDropdown();
     }
 
     /**
@@ -113,6 +120,11 @@ public class EnterAssessmentMarks0 extends FrameFormat {
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane2 = new javax.swing.JScrollPane();
         mainTable = new javax.swing.JTable();
+        studentCountLabel = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        intakeLabel = new javax.swing.JLabel();
+        moduleLabel = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -136,11 +148,13 @@ public class EnterAssessmentMarks0 extends FrameFormat {
         jLabel1.setText("Intake*");
 
         jLabel2.setText("Module*");
+        jLabel2.setMaximumSize(new java.awt.Dimension(38, 16));
+        jLabel2.setMinimumSize(new java.awt.Dimension(38, 16));
 
         searchStudentsButt.setText("Search");
         searchStudentsButt.addActionListener(this::searchStudentsButtActionPerformed);
 
-        textForUser.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        textForUser.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         textForUser.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         textForUser.setText("Filter Search");
 
@@ -165,28 +179,24 @@ public class EnterAssessmentMarks0 extends FrameFormat {
         });
         jScrollPane2.setViewportView(mainTable);
 
+        studentCountLabel.setText("Total Count: ");
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Click Student Row to Insert/Edit Assessment Marks");
+
+        intakeLabel.setText("Intake: ");
+
+        moduleLabel.setText("Module:");
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("Enter Student Assessment Marks");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(69, 69, 69)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(intakeDropdown, javax.swing.GroupLayout.Alignment.LEADING, 0, 215, Short.MAX_VALUE)
-                    .addComponent(classDropdown, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(58, 58, 58)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(moduleDropdown, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(studentDropdown, 0, 247, Short.MAX_VALUE))
-                .addGap(58, 58, 58))
             .addComponent(jSeparator1)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,25 +204,59 @@ public class EnterAssessmentMarks0 extends FrameFormat {
                         .addGap(348, 348, 348)
                         .addComponent(searchStudentsButt, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(69, 69, 69)
-                        .addComponent(textForUser, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(163, 163, 163)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 453, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(47, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 697, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(54, 54, 54))
+                .addContainerGap(41, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(studentCountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(intakeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(moduleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 697, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(41, 41, 41))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(58, 58, 58)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(textForUser, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(intakeDropdown, javax.swing.GroupLayout.Alignment.LEADING, 0, 215, Short.MAX_VALUE)
+                                    .addComponent(classDropdown, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(moduleDropdown, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(studentDropdown, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(58, 58, 58))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(57, 57, 57)
+                .addGap(17, 17, 17)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(textForUser)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(intakeDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
                     .addComponent(moduleDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(classDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -224,8 +268,16 @@ public class EnterAssessmentMarks0 extends FrameFormat {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(intakeLabel)
+                    .addComponent(moduleLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(studentCountLabel)
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();
@@ -248,7 +300,10 @@ public class EnterAssessmentMarks0 extends FrameFormat {
             InteractTxt.allIntake.forEach(i -> {
                 String intakeId = i.getIntakeId();
 
-                if (intakeId.equals(chosenIntakeId)) chosenIntake = i;
+                if (intakeId.equals(chosenIntakeId)) {
+                    intakeFullName = chosenIntakeId+" ("+i.getIntakeName()+")";
+                    chosenIntake = i;
+                }
             });
 
             System.out.println("Selected i: " + chosenIntake.getIntakeName());
@@ -258,13 +313,14 @@ public class EnterAssessmentMarks0 extends FrameFormat {
             //find overlap of modules from chosen intake
             //and the lecturer's (sessionUser) own modules
 
+            moduleDropdown.addItem("None");
+            moduleDropdown.setSelectedItem("None");
+            
             chosenIntake.Int_Modules.forEach(m -> {
                 String modId = m.getModuleId();
                 if (ownMods.contains(modId)) moduleDropdown.addItem(modId+" ("+m.getModuleName()+")");
             });
 
-            moduleDropdown.addItem("None");
-            moduleDropdown.setSelectedItem("None");
             moduleDropdown.setEnabled(true);
         }
     }//GEN-LAST:event_intakeDropdownActionPerformed
@@ -275,6 +331,7 @@ public class EnterAssessmentMarks0 extends FrameFormat {
         classDropdown.removeAllItems();
         try {
             String choice = moduleDropdown.getSelectedItem().toString();
+            System.out.println("hello: "+choice);
             System.out.println(choice);
 
             if (choice == null || choice.isEmpty() || choice.equals("None")) chosenIM = null;
@@ -288,21 +345,23 @@ public class EnterAssessmentMarks0 extends FrameFormat {
                 
                 InteractTxt.allIntakeModule.forEach(im -> {
                     if (chosenIntake.getIntakeId().equals(im.getIntakeId()) && chosenModuleId.equals(im.getModuleId())) {
+                        moduleFullName = chosenModuleId+" ("+InteractTxt.checkModID(chosenModuleId).getModuleName()+")";
                         chosenIM = im;
                     }
                 });
 
-                if (chosenIM != null) {
-                    JOptionPane.showMessageDialog(this, "Assessment edit failed.\nReport this error.", "Error - Unknown Error", 0);
+                if (chosenIM == null) {
+                    JOptionPane.showMessageDialog(this, "Filter selection failed.\nReport this error.", "Error - Unknown Error", 0);
                 } else {
+                    
+                    classDropdown.addItem("None");
+                    classDropdown.setSelectedItem("None");
                     
                     chosenIM.IM_Classes.forEach(c -> {
                         String classId = c.getClassId();
                         if (ownClasses.contains(classId)) classDropdown.addItem(classId+" ("+c.getClassName()+")");
                     });
                     
-                    classDropdown.addItem("None");
-                    classDropdown.setSelectedItem("None");
                     classDropdown.setEnabled(true);
                     
                 }
@@ -314,31 +373,56 @@ public class EnterAssessmentMarks0 extends FrameFormat {
 
     private void searchStudentsButtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchStudentsButtActionPerformed
         // TODO add your handling code here:
-        
+        model.setRowCount(0);
         if (chosenIntake == null || chosenIM == null) {
             JOptionPane.showMessageDialog(this, "Intake and Module must be chosen to proceed.\nIf you did, kindly report this error.", "Error - Incomplete Action", 0);
         } else {
             //chosenIM must be present
-            
-            String showIntakeId = chosenIntake.getIntakeId();
-            String showModuleId = chosenIM.getModuleId();
+            int total = 0;
                     
             if (chosenClass == null && chosenStudent != null) JOptionPane.showMessageDialog(this, "Student selection failed.\nReport this error.", "Error - Unknown Error", 0);
             else if (chosenClass == null && chosenStudent == null) {
                 // only choose intake module - show everyone in the intake module who is under the session user
-                chosenIM.IM_Classes.forEach(c -> {
+                for (project.roles.Class c : chosenIM.IM_Classes) {
                     String tableClassId = c.getClassId();
-                    c.Class_Students.forEach(s -> {
-//                        String s.getId();
-//                        s.getName();
-                    });
-                });
+                    for (Student s : c.Class_Students) {
+                        String [] record = {s.getId(), s.getName(), tableClassId, Tools.calcStuGPA(Tools.calcStuScore(chosenIM, s))};
+                        model.addRow(record);
+                        total++;
+                    }
+                }
             } else if (chosenClass != null && chosenStudent == null) {
                 // choose intake & class - show everyone in that class (already guaranteed under session user)
-
+                for (project.roles.Class c : chosenIM.IM_Classes) {
+                    String tableClassId = c.getClassId();
+                    if (tableClassId.equals(chosenClass.getClassId())) {
+                        for (Student s : c.Class_Students) {
+                            String [] record = {s.getId(), s.getName(), tableClassId, Tools.calcStuGPA(Tools.calcStuScore(chosenIM, s))};
+                            model.addRow(record);
+                            total++;
+                        }
+                    }
+                }
             } else if (chosenClass != null && chosenStudent != null) {
                 //class & student chosen - show only the student (already guaranteed under session user)
+                for (project.roles.Class c : chosenIM.IM_Classes) {
+                    String tableClassId = c.getClassId();
+                    if (tableClassId.equals(chosenClass.getClassId())) {
+                        for (Student s : c.Class_Students) {
+                            String tableStuId = s.getId();
+                            if (tableStuId.equals(chosenStudent.getId())) {
+                                String [] record = {s.getId(), s.getName(), tableClassId, Tools.calcStuGPA(Tools.calcStuScore(chosenIM, s))};
+                                model.addRow(record);
+                                total++;
+                            }
+                        }
+                    }
+                }
             }
+            
+            intakeLabel.setText("Intake: "+intakeFullName);
+            moduleLabel.setText("Module: "+moduleFullName);
+            studentCountLabel.setText("Row Count: "+String.valueOf(total));
         }
     }//GEN-LAST:event_searchStudentsButtActionPerformed
 
@@ -365,16 +449,17 @@ public class EnterAssessmentMarks0 extends FrameFormat {
                     }
                 });
                 
-                if (chosenClass != null) {
-                    JOptionPane.showMessageDialog(this, "Assessment edit failed.\nReport this error.", "Error - Unknown Error", 0);
+                if (chosenClass == null) {
+                    JOptionPane.showMessageDialog(this, "Filter selection failed.\nReport this error.", "Error - Unknown Error", 0);
                 } else {
-                    
-                    chosenClass.Class_Students.forEach(s -> {
-                        classDropdown.addItem(s.getId()+" ("+s.getName()+")");
-                    });
                     
                     studentDropdown.addItem("None");
                     studentDropdown.setSelectedItem("None");
+                    
+                    chosenClass.Class_Students.forEach(s -> {
+                        studentDropdown.addItem(s.getId()+" ("+s.getName()+")");
+                    });
+                    
                     studentDropdown.setEnabled(true);
                     
                 }
@@ -405,8 +490,8 @@ public class EnterAssessmentMarks0 extends FrameFormat {
                     }
                 });
                 
-                if (chosenStudent != null) {
-                    JOptionPane.showMessageDialog(this, "Assessment edit failed.\nReport this error.", "Error - Unknown Error", 0);
+                if (chosenStudent == null) {
+                    JOptionPane.showMessageDialog(this, "Filter selection failed.\nReport this error.", "Error - Unknown Error", 0);
                 } 
             }
         } catch (java.lang.NullPointerException e) {
@@ -416,7 +501,6 @@ public class EnterAssessmentMarks0 extends FrameFormat {
 
     private void mainTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_mainTableKeyReleased
         // TODO add your handling code here:
-        System.out.println("In progress!");
     }//GEN-LAST:event_mainTableKeyReleased
 
     private void mainTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mainTableMouseReleased
@@ -429,6 +513,56 @@ public class EnterAssessmentMarks0 extends FrameFormat {
         String gpa = String.valueOf(model.getValueAt(row, 3));
 
         System.out.println(stuId+" "+stuName+" "+classId+" "+gpa);
+        
+        Student clickedStudent = InteractTxt.checkStuID(stuId);
+        //+chosenIM
+        
+        ArrayList<StudentScore> relevantScores = new ArrayList<>();
+        ArrayList<String> assIds = new ArrayList<>();
+        
+        chosenIM.IM_Assessments.forEach(a ->{
+            assIds.add(a.getAssId());
+        });
+        
+        for (StudentScore ss : clickedStudent.Stu_Scores) {
+            String assId = ss.getAssessment().getAssId();
+            if (assIds.contains(assId)) {
+                relevantScores.add(ss);
+            }
+        }
+        
+        if (relevantScores.size() != chosenIM.IM_Assessments.size()) {
+            JOptionPane.showMessageDialog(this, "Student selection failed.\nReport this error.", "Error - Unknown Error", 0);
+        } else {
+            //LIKELY correct (not concrete...), if got time use more concrete solution
+            
+            ArrayList<JTextField> scoreFields = new ArrayList<>();
+            ArrayList<String> fullMarksFields = new ArrayList<>();
+
+            JPanel panel = new JPanel();
+            panel.setLayout(new GridLayout(0, 3, 5, 5));
+            
+            panel.add(new JLabel("Assessment Type"));
+            panel.add(new JLabel("Score"));
+            panel.add(new JLabel("Full Score"));
+            for (StudentScore ss : relevantScores) {
+                panel.add(new JLabel(ss.getAssessment().getAssName()));
+                JTextField field = new JTextField(10);
+                panel.add(field);
+                scoreFields.add(field);
+                String fullMarks = ss.getAssessment().getAssFullMarks();
+                panel.add(new JLabel(fullMarks));
+                fullMarksFields.add(fullMarks);
+            }
+            
+            for (JTextField j : scoreFields) {
+                System.out.println(j.getText());
+            }
+            
+            int userInput = JOptionPane.showConfirmDialog(this, panel, "Input Student Scores", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        
+        }
+        
     }//GEN-LAST:event_mainTableMouseReleased
 
     /**
@@ -468,17 +602,22 @@ public class EnterAssessmentMarks0 extends FrameFormat {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> classDropdown;
     private javax.swing.JComboBox<String> intakeDropdown;
+    private javax.swing.JLabel intakeLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable mainTable;
     private javax.swing.JComboBox<String> moduleDropdown;
+    private javax.swing.JLabel moduleLabel;
     private javax.swing.JButton searchStudentsButt;
+    private javax.swing.JLabel studentCountLabel;
     private javax.swing.JComboBox<String> studentDropdown;
     private javax.swing.JLabel textForUser;
     // End of variables declaration//GEN-END:variables

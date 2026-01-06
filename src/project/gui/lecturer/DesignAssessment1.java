@@ -4,13 +4,14 @@
  */
 package project.gui.lecturer;
 
+import project.utils.exceptions.IntegerRangeException;
+import project.utils.exceptions.ItemNameLengthException;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import project.roles.*;
 import project.utils.*;
 import javax.swing.*;
-import project.utils.Exceptions.*;
 /**
  *
  * @author Khoo Guo Hao

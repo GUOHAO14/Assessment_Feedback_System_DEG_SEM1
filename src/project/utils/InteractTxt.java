@@ -381,7 +381,9 @@ public class InteractTxt {
                         b.println(y.getAssessment().getAssId());
                         b.println(y.getFinalScore());
                         b.println(y.getOrginalScore());
-                        b.println(y.getOrginalfullMarks());
+                        b.println(y.getOriginalFullMarks());
+                        b.println(y.getFeedback());
+                        b.println();
                     }
                 }
             }
@@ -413,8 +415,11 @@ public class InteractTxt {
                 String finalScore = s2.nextLine();
                 String originalScore = s2.nextLine();
                 String originalFullMarks = s2.nextLine();
+                String feedback = s2.nextLine();
                 s2.nextLine();
-                InteractTxt.checkStuID(stuId).Stu_Scores.add(new StudentScore(InteractTxt.checkAssID(assId), finalScore, originalScore, originalFullMarks));
+                
+                if (stuId.isEmpty()) System.out.println("gay");
+                InteractTxt.checkStuID(stuId).Stu_Scores.add(new StudentScore(InteractTxt.checkAssID(assId), finalScore, originalScore, originalFullMarks, feedback));
             } 
         }catch(Exception e){
             System.out.println("Error in read ..........");
