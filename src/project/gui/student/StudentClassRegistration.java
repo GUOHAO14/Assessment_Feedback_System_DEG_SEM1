@@ -59,10 +59,10 @@ public class StudentClassRegistration extends FrameFormat {
 
     for (project.roles.Module m : intake.Int_Modules) {
 
-        // 🔒 Skip modules already registered
-        if (isModuleAlreadyRegistered(m.getModuleId())) {
-            continue;
-        }
+//        // 🔒 Skip modules already registered
+//        if (isModuleAlreadyRegistered(m.getModuleId())) {
+//            continue;
+//        }
 
         model1.addRow(new Object[]{
             m.getModuleId(),
@@ -95,23 +95,23 @@ private void populateClassTable(String moduleId) {
         }
     }
 }
-private boolean isModuleAlreadyRegistered(String moduleId) {
-
-    // Loop through student's registered classes
-    for (project.roles.Class registeredClass : sessionStudent.Stu_Classes) {
-
-        // Find which IntakeModule this class belongs to
-        for (IntakeModule im : InteractTxt.allIntakeModule) {
-
-            if (im.IM_Classes.contains(registeredClass)
-                && im.getModuleId().equals(moduleId)) {
-
-                return true; // already registered
-            }
-        }
-    }
-    return false;
-}
+//private boolean isModuleAlreadyRegistered(String moduleId) {
+//
+//    // Loop through student's registered classes
+//    for (project.roles.Class registeredClass : sessionStudent.Stu_Classes) {
+//
+//        // Find which IntakeModule this class belongs to
+//        for (IntakeModule im : InteractTxt.allIntakeModule) {
+//
+//            if (im.IM_Classes.contains(registeredClass)
+//                && im.getModuleId().equals(moduleId)) {
+//
+//                return true; // already registered
+//            }
+//        }
+//    }
+//    return false;
+//}
 
 private void refreshPage() {
     // clear class table
