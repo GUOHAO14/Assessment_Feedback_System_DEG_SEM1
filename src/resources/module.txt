@@ -10,8 +10,9 @@ C++
 Mod4
 Intro to Cyber
 
-Mod5
-King Guozilla
+M001
+Object Oriented Programming
 
-Mod6
-King Kongwyn
+M002
+Data Structures
+

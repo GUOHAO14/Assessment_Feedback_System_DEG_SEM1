@@ -45,3 +45,20 @@ lc789
 Class12
 test4
 lc789
+
+C001
+OOP - Group A
+LEC001
+
+C002
+OOP - Group B
+LEC001
+
+C003
+DS - Group A
+LEC001
+
+C004
+DS - Group B
+LEC001
+
