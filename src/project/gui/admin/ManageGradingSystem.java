@@ -12,6 +12,7 @@ public class ManageGradingSystem extends FrameFormat {
     
     public ManageGradingSystem() {
         initComponents();
+        InteractTxt.initDatabase();
         for(Grading x : InteractTxt.allGrading){
             model.addRow(new String[]{x.getGrade(), x.getMarksFrom(), x.getMarksTo()});
         }
