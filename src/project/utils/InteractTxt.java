@@ -436,12 +436,48 @@ public class InteractTxt {
         return null;
     }
     
+    public static ArrayList<Grading> allGrading = new ArrayList<Grading>();
+    
+    public static void writeGrade(){
+        try{
+            PrintWriter a = new PrintWriter("src/resources/grading.txt");
+            for(Grading x : allGrading){
+                a.println(x.getGrade());
+                a.println(x.getMarksFrom());
+                a.println(x.getMarksTo());
+                a.println();
+            }
+            a.close();
+            
+        }catch(Exception e){
+            System.out.println("Error in write ..........");
+            e.printStackTrace();
+        }
+    }
+    
+    public static void readGrade(){
+        try{
+            Scanner s1 = new Scanner(new File("src/resources/grading.txt"));
+            while(s1.hasNext()){
+                String Grade = s1.nextLine();
+                String MarksFrom = s1.nextLine();
+                String MarksTo = s1.nextLine();
+                s1.nextLine();
+                allGrading.add(new Grading(Grade, MarksFrom, MarksTo));
+            } 
+        }catch(Exception e){
+            System.out.println("Error in read ..........");
+            e.printStackTrace();
+        }
+    }
+    
     public static void initDatabase() {
         InteractTxt.readUser();
         InteractTxt.readIntake();
         InteractTxt.readModuleTaught();
         InteractTxt.readClass();
         InteractTxt.readAssessment();
+        InteractTxt.readGrade();
     }
     
     public static void saveDatabase() {
@@ -450,5 +486,6 @@ public class InteractTxt {
         InteractTxt.writeModuleTaught();
         InteractTxt.writeClass();
         InteractTxt.writeAssessment();
+        InteractTxt.writeGrade();
     }
 }
