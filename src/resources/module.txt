@@ -10,3 +10,8 @@ C++
 Mod4
 Intro to Cyber
 
+Mod5
+King Guozilla
+
+Mod6
+King Kongwyn
