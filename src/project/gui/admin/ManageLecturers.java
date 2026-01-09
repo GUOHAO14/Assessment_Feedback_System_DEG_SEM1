@@ -2,7 +2,7 @@ package project.gui.admin;
 
 import project.utils.FrameFormat;
 
-public class ManageLecturers extends FrameFormat {
+public class ManageLecturers extends javax.swing.JFrame {
 
     /**
      * Creates new form ManageLecturers

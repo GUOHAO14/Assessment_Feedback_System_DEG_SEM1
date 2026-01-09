@@ -2,7 +2,7 @@ package project.gui.admin;
 
 import project.utils.FrameFormat;
 
-public class ManageAcademicLeaders extends FrameFormat {
+public class ManageAcademicLeaders extends javax.swing.JFrame {
 
     /**
      * Creates new form ManageAcademicLeaders

@@ -2,7 +2,7 @@ package project.gui.admin;
 
 import project.utils.FrameFormat;
 
-public class Dashboard extends FrameFormat {
+public class Dashboard extends javax.swing.JFrame {
 
     public Dashboard() {
         initComponents();

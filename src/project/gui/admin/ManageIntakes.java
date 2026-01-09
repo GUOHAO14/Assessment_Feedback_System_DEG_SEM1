@@ -2,7 +2,7 @@ package project.gui.admin;
 
 import project.utils.FrameFormat;
 
-public class ManageIntakes extends FrameFormat {
+public class ManageIntakes extends javax.swing.JFrame {
 
     /**
      * Creates new form ManageIntakes

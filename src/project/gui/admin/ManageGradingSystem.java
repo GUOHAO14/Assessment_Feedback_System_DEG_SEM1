@@ -4,7 +4,7 @@ import javax.swing.table.DefaultTableModel;
 import project.roles.*;
 import project.utils.*;
 
-public class ManageGradingSystem extends FrameFormat {
+public class ManageGradingSystem extends javax.swing.JFrame {
 
     private DefaultTableModel model = new DefaultTableModel(
         new String[]{"Grade", "Marks From", "Marks To"}, 0
