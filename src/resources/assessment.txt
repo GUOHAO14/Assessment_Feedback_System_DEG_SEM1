@@ -1,21 +1,21 @@
 Ass1
 Group Assignment
 Assignment
-20
 60
+20
 IMID1
 
 Ass2
 Individual Assignment
 Assignment
-50
 10
+50
 IMID1
 
 Ass3
 Test Skills
 Class Test
-30
 100
+30
 IMID1
 

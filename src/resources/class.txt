@@ -48,17 +48,17 @@ lc789
 
 C001
 OOP - Group A
-LEC001
+lc789
 
 C002
 OOP - Group B
-LEC001
+lc789
 
 C003
 DS - Group A
-LEC001
+lc789
 
 C004
 DS - Group B
-LEC001
+lc789
 
