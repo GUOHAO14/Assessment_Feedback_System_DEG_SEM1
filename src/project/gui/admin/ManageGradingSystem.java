@@ -12,10 +12,11 @@ public class ManageGradingSystem extends javax.swing.JFrame {
     
     public ManageGradingSystem() {
         initComponents();
-        InteractTxt.initDatabase();
+        InteractTxt.readGrade();
         for(Grading x : InteractTxt.allGrading){
             model.addRow(new String[]{x.getGrade(), x.getMarksFrom(), x.getMarksTo()});
         }
+        InteractTxt.writeGrade();
     }
 
     /**
