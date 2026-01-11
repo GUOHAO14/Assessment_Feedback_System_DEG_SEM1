@@ -28,7 +28,7 @@ abstract public class FrameFormat extends JFrame {
                 
                 // when 'X' button is clicked, this method runs
                 // ask for confirmation when exit (excluding login pages)
-                if (!frameClassName.contains("LoginPage")) {
+                if (!frameClassName.contains("LoginPage") || !frameClassName.contains("Homepage")) {
                     
                     int choice = JOptionPane.showConfirmDialog(
                         windowEvent.getComponent(), 

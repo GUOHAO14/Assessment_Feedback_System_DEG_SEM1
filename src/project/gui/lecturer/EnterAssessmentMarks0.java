@@ -561,8 +561,8 @@ public class EnterAssessmentMarks0 extends FrameFormat {
             
             int userInput = JOptionPane.showConfirmDialog(this, panel, "Input Student Scores", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         
+//            if (userInput)
         }
-        
     }//GEN-LAST:event_mainTableMouseReleased
 
     /**
