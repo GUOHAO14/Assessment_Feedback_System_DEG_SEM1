@@ -5,7 +5,6 @@
 package project.gui.lecturer;
 import project.utils.*;
 import project.roles.*;
-
 /**
  *
  * @author Khoo Guo Hao
@@ -37,6 +36,7 @@ public class LecturerDashboard extends FrameFormat {
         welcomeText = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         designAssessment1 = new javax.swing.JButton();
+        logout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,35 +47,41 @@ public class LecturerDashboard extends FrameFormat {
         welcomeText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         welcomeText.setText("Welcome back, ");
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("APU Assessment Feedback System");
 
         designAssessment1.setText("<html><p style=\"text-align: center;\">Student Assessment Marks</p></html>");
         designAssessment1.addActionListener(this::designAssessment1ActionPerformed);
 
+        logout.setText("Logout");
+        logout.addActionListener(this::logoutActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(65, 65, 65)
+                .addGap(100, 100, 100)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(welcomeText, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(designAssessment, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(designAssessment1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(100, Short.MAX_VALUE))
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(41, Short.MAX_VALUE)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(logout)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(36, 36, 36)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addGap(42, 42, 42)
                 .addComponent(welcomeText)
@@ -83,7 +89,7 @@ public class LecturerDashboard extends FrameFormat {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(designAssessment, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(designAssessment1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(66, 66, 66))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
 
         pack();
@@ -100,6 +106,11 @@ public class LecturerDashboard extends FrameFormat {
         new EnterAssessmentMarks0(sessionUser).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_designAssessment1ActionPerformed
+
+    private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
+        // TODO add your handling code here:
+        Tools.logout(this, sessionUser);
+    }//GEN-LAST:event_logoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -138,6 +149,7 @@ public class LecturerDashboard extends FrameFormat {
     private javax.swing.JButton designAssessment;
     private javax.swing.JButton designAssessment1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton logout;
     private javax.swing.JLabel welcomeText;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,40 +1,4 @@
-Application terminated gracefully at Wed Dec 24 16:29:37 GMT+08:00 2025
-Application terminated gracefully at Wed Dec 24 16:31:05 GMT+08:00 2025
-Application terminated gracefully at Wed Dec 24 16:37:50 GMT+08:00 2025
-Application terminated gracefully at Wed Dec 24 16:38:42 GMT+08:00 2025
-Application terminated gracefully at Wed Dec 24 18:12:20 GMT+08:00 2025
-Application terminated gracefully at Wed Dec 24 18:18:19 GMT+08:00 2025
-Application terminated gracefully at Wed Dec 24 18:21:54 GMT+08:00 2025
-Application terminated gracefully at Wed Dec 24 18:22:23 GMT+08:00 2025
-Application terminated gracefully at Wed Dec 24 18:22:45 GMT+08:00 2025
-Application terminated gracefully at Wed Dec 24 18:28:34 GMT+08:00 2025
-Application terminated gracefully at Wed Dec 24 18:52:02 GMT+08:00 2025
-Application terminated gracefully at Sun Jan 04 23:34:40 GMT+08:00 2026
-Application terminated gracefully at Sun Jan 04 23:35:45 GMT+08:00 2026
-Application terminated gracefully at Sun Jan 04 23:38:29 GMT+08:00 2026
-Application terminated gracefully at Mon Jan 05 18:38:51 GMT+08:00 2026
-Application terminated gracefully at Mon Jan 05 18:44:08 GMT+08:00 2026
-Application terminated gracefully at Fri Jan 09 10:53:25 MYT 2026
-Application terminated gracefully at Fri Jan 09 15:58:05 MYT 2026
-Application terminated gracefully at Fri Jan 09 17:39:42 MYT 2026
-Application terminated gracefully at Fri Jan 09 23:43:49 MYT 2026
-Application terminated gracefully at Fri Jan 09 23:44:54 MYT 2026
-Application terminated gracefully at Sat Jan 10 00:09:35 MYT 2026
-Application terminated gracefully at Sat Jan 10 00:10:47 MYT 2026
-Application terminated gracefully at Sat Jan 10 00:13:28 MYT 2026
-Application terminated gracefully at Sat Jan 10 00:37:20 MYT 2026
-Application terminated gracefully at Sat Jan 10 00:46:06 MYT 2026
-Application terminated gracefully at Sat Jan 10 00:53:03 MYT 2026
-Application terminated gracefully at Sat Jan 10 01:01:21 MYT 2026
-Application terminated gracefully at Sat Jan 10 01:10:56 MYT 2026
-Application terminated gracefully at Sat Jan 10 01:15:27 MYT 2026
-Application terminated gracefully at Sat Jan 10 01:19:39 MYT 2026
-Application terminated gracefully at Sat Jan 10 01:20:47 MYT 2026
-Application terminated gracefully at Sat Jan 10 01:27:43 MYT 2026
-Application terminated gracefully at Sun Jan 11 18:47:22 GMT+08:00 2026
-Application terminated gracefully at Sun Jan 11 19:28:04 GMT+08:00 2026
-Application terminated gracefully at Sun Jan 11 19:31:19 GMT+08:00 2026
-Application terminated gracefully at Sun Jan 11 21:03:40 GMT+08:00 2026
-Application terminated gracefully at Sun Jan 11 21:06:43 GMT+08:00 2026
-Application terminated gracefully at Sun Jan 11 21:09:02 GMT+08:00 2026
-Application terminated gracefully at Sun Jan 11 21:28:06 GMT+08:00 2026
+Application logged out by lc076206 at Sun Jan 11 23:12:06 GMT+08:00 2026
+Application logged out by lc076206 at Sun Jan 11 23:29:05 GMT+08:00 2026
+Application logged out by lc076206 at Sun Jan 11 23:29:21 GMT+08:00 2026
+Application logged out by lc076206 at Sun Jan 11 23:30:10 GMT+08:00 2026
