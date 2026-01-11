@@ -4,11 +4,7 @@
  */
 package project.gui.lecturer;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.JOptionPane;
@@ -25,9 +21,9 @@ import project.utils.exceptions.*;
 public class EnterAssessmentMarks0 extends FrameFormat {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(EnterAssessmentMarks0.class.getName());
-    private Lecturer sessionUser;
-    private DefaultTableModel model = new DefaultTableModel();
-    private String [] columnName = {"Student ID", "Student Name", "Class", "GPA"};
+    private final Lecturer sessionUser;
+    private final DefaultTableModel model = new DefaultTableModel();
+    private final String [] columnName = {"Student ID", "Student Name", "Class", "GPA"};
     private int row = -1;
     
     private ArrayList<String> ownMods = new ArrayList<>();
@@ -39,10 +35,7 @@ public class EnterAssessmentMarks0 extends FrameFormat {
     private String intakeFullName;
     private String moduleFullName;
     
-    /**
-     * Creates new form EnterAssessmentMarks0
-     */
-    
+    //utility methods
     private void disableModuleDropdown() {
         moduleDropdown.setEnabled(false);
         AutoCompleteDecorator.decorate(moduleDropdown);
@@ -87,6 +80,7 @@ public class EnterAssessmentMarks0 extends FrameFormat {
         return finalScore;
     }
     
+    //nested class used for input tracking
     private class scoreInputGroup {
         private String assId;
         private JTextField score; 
@@ -124,6 +118,7 @@ public class EnterAssessmentMarks0 extends FrameFormat {
         
     }
     
+    // constructor
     public EnterAssessmentMarks0(Lecturer sessionUser) {
         model.setColumnIdentifiers(columnName);
         initComponents();
@@ -194,6 +189,7 @@ public class EnterAssessmentMarks0 extends FrameFormat {
         intakeLabel = new javax.swing.JLabel();
         moduleLabel = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        backButton = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -262,20 +258,14 @@ public class EnterAssessmentMarks0 extends FrameFormat {
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Enter Student Assessment Marks");
 
+        backButton.setText("Back");
+        backButton.addActionListener(this::backButtonActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator1)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(348, 348, 348)
-                        .addComponent(searchStudentsButt, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(163, 163, 163)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 453, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(41, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -312,11 +302,25 @@ public class EnterAssessmentMarks0 extends FrameFormat {
                                     .addComponent(moduleDropdown, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(studentDropdown, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(58, 58, 58))))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(348, 348, 348)
+                        .addComponent(searchStudentsButt, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(163, 163, 163)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 453, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
+                .addContainerGap()
+                .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(textForUser)
@@ -346,7 +350,7 @@ public class EnterAssessmentMarks0 extends FrameFormat {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(studentCountLabel)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -770,9 +774,7 @@ public class EnterAssessmentMarks0 extends FrameFormat {
                         System.out.println(Tools.getSpecificGrade(InteractTxt.checkClassID(classId), clickedStudent));
                         
                     }
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, e.getMessage(), "Error - Invalid Value", 0);
-                } catch (IntegerRangeException e) {
+                } catch (NumberFormatException | IntegerRangeException e) {
                     JOptionPane.showMessageDialog(this, e.getMessage(), "Error - Invalid Value", 0);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(this, "Assessment edit failed.\nReport this error.", "Error - Unknown Error", 0);
@@ -780,6 +782,12 @@ public class EnterAssessmentMarks0 extends FrameFormat {
             }
         }
     }//GEN-LAST:event_mainTableMouseReleased
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        // TODO add your handling code here:
+        new LecturerDashboard(sessionUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_backButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -816,6 +824,7 @@ public class EnterAssessmentMarks0 extends FrameFormat {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backButton;
     private javax.swing.JComboBox<String> classDropdown;
     private javax.swing.JComboBox<String> intakeDropdown;
     private javax.swing.JLabel intakeLabel;

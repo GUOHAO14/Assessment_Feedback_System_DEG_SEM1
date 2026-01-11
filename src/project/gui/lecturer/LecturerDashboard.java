@@ -13,23 +13,15 @@ import project.roles.*;
 public class LecturerDashboard extends FrameFormat {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LecturerDashboard.class.getName());
-    private Lecturer sessionUser;
-    /**
-     * Creates new form LecturerDashboard
-     */
+    private final Lecturer sessionUser;
+   
     public LecturerDashboard(Lecturer sessionUser) {
         initComponents();
         super.formatWindow("Lecturer Dashboard");
         this.sessionUser = sessionUser;
         this.sessionUser.printFullLecturerData();
         
-        sessionUser.Lec_Classes.forEach(he -> {
-            System.out.println(he.getClassId()); 
-        });
-        
-        sessionUser.Lec_Modules.forEach(he -> {
-            System.out.println(he.getModuleId()); 
-        });
+        welcomeText.setText("Welcome back, "+sessionUser.getName()+"!");
     }
 
     /**
@@ -42,51 +34,72 @@ public class LecturerDashboard extends FrameFormat {
     private void initComponents() {
 
         designAssessment = new javax.swing.JButton();
-        enterAssessmentMarks = new javax.swing.JButton();
+        welcomeText = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        designAssessment1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        designAssessment.setText("Design Assessment");
+        designAssessment.setText("<html><p style=\"text-align: center;\">Module Assessment Design</p></html>");
         designAssessment.addActionListener(this::designAssessmentActionPerformed);
 
-        enterAssessmentMarks.setText("Enter Marks");
-        enterAssessmentMarks.addActionListener(this::enterAssessmentMarksActionPerformed);
+        welcomeText.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        welcomeText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        welcomeText.setText("Welcome back, ");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("APU Assessment Feedback System");
+
+        designAssessment1.setText("<html><p style=\"text-align: center;\">Student Assessment Marks</p></html>");
+        designAssessment1.addActionListener(this::designAssessment1ActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(117, 117, 117)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(designAssessment, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(enterAssessmentMarks, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(156, Short.MAX_VALUE))
+                .addGap(65, 65, 65)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(welcomeText, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(designAssessment, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(designAssessment1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(41, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(61, 61, 61)
-                .addComponent(designAssessment, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(61, 61, 61)
-                .addComponent(enterAssessmentMarks, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(98, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(jLabel2)
+                .addGap(42, 42, 42)
+                .addComponent(welcomeText)
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(designAssessment, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(designAssessment1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(66, 66, 66))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void enterAssessmentMarksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterAssessmentMarksActionPerformed
-        // TODO add your handling code here:
-        new EnterAssessmentMarks0(sessionUser).setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_enterAssessmentMarksActionPerformed
 
     private void designAssessmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_designAssessmentActionPerformed
         // TODO add your handling code here:
         new DesignAssessment0(sessionUser).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_designAssessmentActionPerformed
+
+    private void designAssessment1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_designAssessment1ActionPerformed
+        // TODO add your handling code here:
+        new EnterAssessmentMarks0(sessionUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_designAssessment1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -123,6 +136,8 @@ public class LecturerDashboard extends FrameFormat {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton designAssessment;
-    private javax.swing.JButton enterAssessmentMarks;
+    private javax.swing.JButton designAssessment1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel welcomeText;
     // End of variables declaration//GEN-END:variables
 }
