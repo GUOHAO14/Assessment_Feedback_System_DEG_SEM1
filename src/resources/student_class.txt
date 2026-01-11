@@ -1,5 +1,25 @@
+tp076267
+Class1
+A
+NA
+
+tp076267
+Class3
+NA
+NA
+
 tp076266
 Class3
-null
-B
+C
+NA
+
+tp076266
+Class5
+NA
+NA
+
+tp076266
+Class4
+NA
+NA
 

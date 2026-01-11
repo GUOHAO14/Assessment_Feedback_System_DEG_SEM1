@@ -9,6 +9,8 @@ package project.utils;
  * @author Khoo Guo Hao
  */
 public class Constants {
-    
-    public static final int ITEM_NAME_LENGTH = 50;
+    public static final int ITEM_NAME_MIN_LENGTH = 2;
+    public static final int ITEM_NAME_MAX_LENGTH = 50;
+    public static final int FEEDBACK_MIN_LENGTH = 3;
+    public static final int FEEDBACK_MAX_LENGTH = 175;
 }

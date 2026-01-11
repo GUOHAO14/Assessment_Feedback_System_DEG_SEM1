@@ -4,8 +4,7 @@
  */
 package project.gui.lecturer;
 
-import project.utils.exceptions.IntegerRangeException;
-import project.utils.exceptions.ItemNameLengthException;
+import project.utils.exceptions.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -122,7 +121,7 @@ public class DesignAssessment1 extends FrameFormat {
                         int intPercent = Integer.parseInt(percent);
                         int intFullMarks = Integer.parseInt(fullMarks);
                         
-                        if (name.length() > Constants.ITEM_NAME_LENGTH) throw new ItemNameLengthException("Assessment");
+                        if (name.length() > Constants.ITEM_NAME_MAX_LENGTH) throw new ItemNameMaxLengthException("Assessment");
                         if (intPercent < 1 || intPercent > 100) throw new IntegerRangeException("Score Percentage", 1, 100);
                         if (intFullMarks < 1 || intFullMarks > 100) throw new IntegerRangeException("Full Marks", 10, 100);
                         
@@ -135,7 +134,7 @@ public class DesignAssessment1 extends FrameFormat {
                         System.out.println(total);
                         if (total <= 100) {
                             if (createSignal) {
-                                String newId = "Ass"+String.valueOf(designIM.IM_Assessments.size() + 1);
+                                String newId = "Ass"+String.valueOf(InteractTxt.allAssessment.size() + 1);
                                 Assessment newAssessment = new Assessment(newId, name, type, percent, fullMarks, designIM);
 
                                 designIM.IM_Assessments.add(newAssessment);
@@ -158,7 +157,7 @@ public class DesignAssessment1 extends FrameFormat {
                         }
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(this, "Assessment edit failed.\nScore Percentage input must be an integer.", "Error - Invalid Value", 0);
-                    } catch (ItemNameLengthException e) {
+                    } catch (ItemNameMaxLengthException e) {
                         JOptionPane.showMessageDialog(this, e.getMessage(), "Error - Invalid Value", 0);
                     } catch (IntegerRangeException e) {
                         JOptionPane.showMessageDialog(this, e.getMessage(), "Error - Invalid Value", 0);

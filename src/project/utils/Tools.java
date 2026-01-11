@@ -20,7 +20,6 @@ public class Tools {
     }
     
     public static String calcStuScore(IntakeModule im, Student stu) {
-        ArrayList<Assessment> assessments = new ArrayList<>();
         ArrayList<String> assIds = new ArrayList<>();
         int score = 0;
         int count = 0;
@@ -33,51 +32,68 @@ public class Tools {
             String assId = ss.getAssessment().getAssId();
            
             if (assIds.contains(assId)) {
-                score += Integer.parseInt(ss.getFinalScore());
+                score += Float.parseFloat(ss.getFinalScore());
                 count++;
             }
         }
         
-        if (assIds.size() == 0) return "NA";
+        System.out.println(count);
+        System.out.println(assIds.size());
+        
+        if (assIds.isEmpty()) return "NA";
         if (count != assIds.size()) return "Incomp.";
         else return String.valueOf(score);
     }
     
-    public static String calcStuGPA(String input) {
+    public static String calcStuGrade(String input) {
         String grade = null;
         try {
             if (input.equals("NA") || input.equals("NA")) return input;
             
-            int num = Integer.parseInt(input);
+            float num = Float.parseFloat(input);
             
             if (num < 0 || num > 100) {
                 throw new IntegerRangeException("Score input", 1, 100);
             } else {
                 
-                if (num >= 0 && num < 20) grade = "F-";
-                else if (num >= 20 && num < 30) grade = "F";
-                else if (num >= 30 && num < 40) grade = "F+";
-                else if (num >= 40 && num < 50) grade = "D";
-                else if (num >= 50 && num < 55) grade = "C-";
-                else if (num >= 55 && num < 60) grade = "C";
-                else if (num >= 60 && num < 65) grade = "C+";
-                else if (num >= 65 && num < 70) grade = "B-";
-                else if (num >= 70 && num < 75) grade = "B";
-                else if (num >= 75 && num < 80) grade = "B+";
-                else if (num >= 80 && num < 85) grade = "A-";
-                else if (num >= 85 && num < 90) grade = "A";
-                else if (num >= 90 && num <= 100) grade = "A+";
+                System.out.println(num);
+                for (Grading g : InteractTxt.allGrading) {
+                    System.out.println(g.getMarksFrom()+"-"+g.getMarksTo());
+                    if (num >= Float.parseFloat(g.getMarksFrom()) && num <= Float.parseFloat(g.getMarksTo())) {
+                        System.out.println("hit");
+                        grade = g.getGrade();
+                    }
+                }
             }
-            
         } catch (NumberFormatException e) {
-            grade = "Number format exception";
+            grade = "NA";
             System.out.println("calcStuGPA: "+grade);
         } catch (IntegerRangeException e) {
-            grade = "Integer range exception";
+            grade = "NA";
             System.out.println("calcStuGPA: "+grade);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "GPA calculation failed.\nReport this error.", "Error - Unknown Error", 0);
-            grade = "General exception";
+            grade = "NA";
+        }
+        return grade;
+    }
+    
+    public static String getSpecificGrade(project.roles.Class c, Student s) {
+        String grade = "NA";
+        for (StudentGradeAndComment gc : s.GradesAndComments) {
+            if (c.getClassId().equals(gc.getStuClass().getClassId())) {
+                grade = gc.getGrade();
+            }
+        }
+        return grade;
+    }
+    
+    public static String getSpecificComment(project.roles.Class c, Student s) {
+        String grade = "NA";
+        for (StudentGradeAndComment gc : s.GradesAndComments) {
+            if (c.getClassId().equals(gc.getStuClass().getClassId())) {
+                grade = gc.getComment();
+            }
         }
         return grade;
     }

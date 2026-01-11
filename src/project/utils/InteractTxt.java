@@ -306,6 +306,8 @@ public class InteractTxt {
                 for(Class y : x.Stu_Classes){
                     c.println(x.getId());
                     c.println(y.getClassId());
+                    c.println(Tools.getSpecificGrade(y, x));
+                    c.println(Tools.getSpecificComment(y, x));
                     c.println();
                 }   
             }
@@ -410,7 +412,7 @@ public class InteractTxt {
                 String percentage = s1.nextLine();
                 String IMID = s1.nextLine();
                 s1.nextLine();
-                allAssessment.add(new Assessment(id, name, type, fullMarks, percentage,checkIMID(IMID)));
+                allAssessment.add(new Assessment(id, name, type, percentage,fullMarks, checkIMID(IMID)));
                 InteractTxt.checkIMID(IMID).IM_Assessments.add(InteractTxt.checkAssID(id));
             } 
             Scanner s2 = new Scanner(new File("src/resources/student_assessment.txt"));

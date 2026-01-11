@@ -4,14 +4,20 @@
  */
 package project.gui.lecturer;
 
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.JOptionPane;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import project.roles.*;
 import project.utils.*;
+import project.utils.exceptions.*;
 /**
  *
  * @author Khoo Guo Hao
@@ -53,6 +59,69 @@ public class EnterAssessmentMarks0 extends FrameFormat {
         studentDropdown.setEnabled(false);
         AutoCompleteDecorator.decorate(studentDropdown);
         chosenStudent = null;
+    }
+    
+    private String finalScoreCalc(String oriScore, String fullMarks, String assPercent) {
+        String finalScore;
+        try {
+            if (oriScore.isEmpty()) {
+                return "0";
+            }
+            float score = Float.parseFloat(oriScore);
+            float fullScore = Float.parseFloat(fullMarks);
+            
+            if (score > fullScore) {
+                return "Error - Range";
+            }
+            float percent = Float.parseFloat(assPercent);
+            
+            float floatFinalScore = score / fullScore * percent;
+            
+            finalScore = String.format("%.1f", floatFinalScore);
+            
+        } catch (NumberFormatException e) {
+            finalScore = "Error - NFE";
+        } catch (Exception e) {
+            finalScore = "Error";
+        } 
+        return finalScore;
+    }
+    
+    private class scoreInputGroup {
+        private String assId;
+        private JTextField score; 
+        private JTextArea feedback; 
+
+        private scoreInputGroup(String assId, JTextField score, JTextArea feedback) {
+            this.assId = assId;
+            this.score = score;
+            this.feedback = feedback;
+        }
+
+        public String getAssId() {
+            return assId;
+        }
+
+        public void setAssId(String assId) {
+            this.assId = assId;
+        }
+
+        public JTextField getScore() {
+            return score;
+        }
+
+        public void setScore(JTextField score) {
+            this.score = score;
+        }
+
+        public JTextArea getFeedback() {
+            return feedback;
+        }
+
+        public void setFeedback(JTextArea feedback) {
+            this.feedback = feedback;
+        }
+        
     }
     
     public EnterAssessmentMarks0(Lecturer sessionUser) {
@@ -383,12 +452,16 @@ public class EnterAssessmentMarks0 extends FrameFormat {
             if (chosenClass == null && chosenStudent != null) JOptionPane.showMessageDialog(this, "Student selection failed.\nReport this error.", "Error - Unknown Error", 0);
             else if (chosenClass == null && chosenStudent == null) {
                 // only choose intake module - show everyone in the intake module who is under the session user
+                
                 for (project.roles.Class c : chosenIM.IM_Classes) {
                     String tableClassId = c.getClassId();
-                    for (Student s : c.Class_Students) {
-                        String [] record = {s.getId(), s.getName(), tableClassId, Tools.calcStuGPA(Tools.calcStuScore(chosenIM, s))};
-                        model.addRow(record);
-                        total++;
+                    if (ownClasses.contains(tableClassId)) {
+                        for (Student s : c.Class_Students) {
+                            String grade = Tools.getSpecificGrade(c, s);
+                            String [] record = {s.getId(), s.getName(), tableClassId, grade};
+                            model.addRow(record);
+                            total++;
+                        }
                     }
                 }
             } else if (chosenClass != null && chosenStudent == null) {
@@ -397,7 +470,8 @@ public class EnterAssessmentMarks0 extends FrameFormat {
                     String tableClassId = c.getClassId();
                     if (tableClassId.equals(chosenClass.getClassId())) {
                         for (Student s : c.Class_Students) {
-                            String [] record = {s.getId(), s.getName(), tableClassId, Tools.calcStuGPA(Tools.calcStuScore(chosenIM, s))};
+                            String grade = Tools.getSpecificGrade(c, s);
+                            String [] record = {s.getId(), s.getName(), tableClassId, grade};
                             model.addRow(record);
                             total++;
                         }
@@ -411,7 +485,8 @@ public class EnterAssessmentMarks0 extends FrameFormat {
                         for (Student s : c.Class_Students) {
                             String tableStuId = s.getId();
                             if (tableStuId.equals(chosenStudent.getId())) {
-                                String [] record = {s.getId(), s.getName(), tableClassId, Tools.calcStuGPA(Tools.calcStuScore(chosenIM, s))};
+                                String grade = Tools.getSpecificGrade(c, s);
+                                String [] record = {s.getId(), s.getName(), tableClassId, grade};
                                 model.addRow(record);
                                 total++;
                             }
@@ -517,12 +592,15 @@ public class EnterAssessmentMarks0 extends FrameFormat {
         Student clickedStudent = InteractTxt.checkStuID(stuId);
         //+chosenIM
         
+        // find student's scores related to this module
         ArrayList<StudentScore> relevantScores = new ArrayList<>();
         ArrayList<String> assIds = new ArrayList<>();
         
+        // find amount of assessments for this module
         chosenIM.IM_Assessments.forEach(a ->{
             assIds.add(a.getAssId());
         });
+        
         
         for (StudentScore ss : clickedStudent.Stu_Scores) {
             String assId = ss.getAssessment().getAssId();
@@ -531,37 +609,175 @@ public class EnterAssessmentMarks0 extends FrameFormat {
             }
         }
         
-        if (relevantScores.size() != chosenIM.IM_Assessments.size()) {
-            JOptionPane.showMessageDialog(this, "Student selection failed.\nReport this error.", "Error - Unknown Error", 0);
+        
+        ArrayList<StudentScore> newStuScores = new ArrayList<>();
+        
+        if (chosenIM.IM_Assessments.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Assessment format unset for this module and class.\nGo to Design Assessment page.", "Error - Void Action", 0);
         } else {
             //LIKELY correct (not concrete...), if got time use more concrete solution
             
-            ArrayList<JTextField> scoreFields = new ArrayList<>();
-            ArrayList<String> fullMarksFields = new ArrayList<>();
+            ArrayList<scoreInputGroup> userInputs = new ArrayList<>();
 
             JPanel panel = new JPanel();
-            panel.setLayout(new GridLayout(0, 3, 5, 5));
+            panel.setLayout(new GridBagLayout());
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(5, 5, 5, 5);
+            gbc.fill = GridBagConstraints.HORIZONTAL;
             
-            panel.add(new JLabel("Assessment Type"));
-            panel.add(new JLabel("Score"));
-            panel.add(new JLabel("Full Score"));
-            for (StudentScore ss : relevantScores) {
-                panel.add(new JLabel(ss.getAssessment().getAssName()));
-                JTextField field = new JTextField(10);
-                panel.add(field);
-                scoreFields.add(field);
-                String fullMarks = ss.getAssessment().getAssFullMarks();
-                panel.add(new JLabel(fullMarks));
-                fullMarksFields.add(fullMarks);
+            gbc.gridx = 0;
+            gbc.weightx = 0.0;
+            panel.add(new JLabel("Assessment Type"), gbc);
+            
+            gbc.gridx = 1;
+            gbc.weightx = 0.0;
+            panel.add(new JLabel("Score"), gbc);
+            
+            gbc.gridx = 2;
+            gbc.weightx = 0.0;
+            panel.add(new JLabel("Full Score"), gbc);
+            
+            gbc.gridx = 3;
+            gbc.weightx = 1.0;
+            panel.add(new JLabel("Feedback"), gbc);
+            
+            for (Assessment a : chosenIM.IM_Assessments) {
+                String assId = a.getAssId();
+                gbc.gridx = 0;
+                gbc.weightx = 0.0;
+                panel.add(new JLabel(a.getAssName()), gbc);
+                
+                JTextField scoreField = new JTextField(10);
+                JTextArea feedbackField = new JTextArea(10, 30);
+                feedbackField.setLineWrap(true); // Enable wrapping
+                feedbackField.setWrapStyleWord(true);
+                JScrollPane scrollPane = new JScrollPane(feedbackField);
+                
+                scoreField.setText("");
+                feedbackField.setText("");
+                for (StudentScore ss : relevantScores) {
+                    if (ss.getAssessment().getAssId().equals(assId)) {
+                        scoreField.setText(ss.getOrginalScore());
+                        feedbackField.setText(ss.getFeedback());
+                    }
+                }
+                gbc.gridx = 1;
+                gbc.weightx = 0.0;
+                panel.add(scoreField, gbc);
+                
+                String fullMarks = a.getAssFullMarks();
+                gbc.gridx = 2;
+                gbc.weightx = 0.0;
+                panel.add(new JLabel(fullMarks), gbc);
+                
+                gbc.gridx = 3;
+                gbc.weightx = 1.0;
+                panel.add(scrollPane, gbc);
+                
+                userInputs.add(new scoreInputGroup(assId, scoreField, feedbackField));
+                System.out.println(scoreField.getText());
+                System.out.println(fullMarks);
+                System.out.println(a.getAssPercentage());
+                // StudentScore(Assessment assessment, String finalScore, String originalScore, String originalFullMarks, String feedback)
+                String finalScore = finalScoreCalc(scoreField.getText(), fullMarks, a.getAssPercentage());
+                
+                System.out.println("HELLO: "+finalScore);
+                
+                if (!finalScore.contains("Error")) {
+                    newStuScores.add(new StudentScore(a, finalScore, scoreField.getText(), fullMarks, feedbackField.getText()));
+                } else {
+                    // error
+//                    JOptionPane.showMessageDialog(this, "Assessment format unset for this module and class.\nGo to Design Assessment page.", "Error - Void Action", 0);
+                }
             }
             
-            for (JTextField j : scoreFields) {
-                System.out.println(j.getText());
-            }
+            JScrollPane scrollableContainer = new JScrollPane(panel);
             
-            int userInput = JOptionPane.showConfirmDialog(this, panel, "Input Student Scores", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            int maxWidth = 690;
+            int maxHeight = 500;
+            Dimension maxScrollPaneSize = new Dimension(maxWidth, maxHeight);
+            scrollableContainer.setPreferredSize(maxScrollPaneSize);
+                        
+            int userInput = JOptionPane.showConfirmDialog(this, scrollableContainer, "Input Student Scores", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         
-//            if (userInput)
+            if (userInput == JOptionPane.OK_OPTION) {
+                try {
+                    int userConfirm = JOptionPane.showConfirmDialog(
+                            this, 
+                            "Save the changes?", 
+                            "Confirm Creation", 
+                            JOptionPane.YES_NO_OPTION);
+                    
+                    if (userConfirm == JOptionPane.YES_OPTION) {
+                        for (scoreInputGroup sig : userInputs) {
+                            String scoreInput = sig.getScore().getText();
+                            String feedbackInput = sig.getFeedback().getText();
+                            for (StudentScore ss : newStuScores) {
+                                if (sig.getAssId().equals(ss.getAssessment().getAssId())) {
+                                    String finalScoreInput = finalScoreCalc(scoreInput, ss.getAssessment().getAssFullMarks(), ss.getAssessment().getAssPercentage());
+                                    if (finalScoreInput.contains("Range")) { 
+                                        throw new IntegerRangeException(ss.getAssessment().getAssName()+" score", "0", ss.getAssessment().getAssFullMarks());
+                                    } 
+                                    if (finalScoreInput.contains("NFE")) { 
+                                        throw new NumberFormatException();
+                                    } 
+                                    if (finalScoreInput.equals("Error")) {
+                                        throw new Exception();
+                                    }
+                                    if (feedbackInput.length() < Constants.FEEDBACK_MIN_LENGTH || feedbackInput.length() > Constants.FEEDBACK_MAX_LENGTH) {
+                                        throw new IntegerRangeException("Feedback", Constants.FEEDBACK_MIN_LENGTH, Constants.FEEDBACK_MAX_LENGTH);
+                                    } 
+                                    ss.setOrginalScore(scoreInput);
+                                    ss.setFinalScore(finalScoreInput);
+                                    ss.setFeedback(feedbackInput);
+                                    break;
+                                } 
+                            }
+                        }
+                                    
+                        // modify InteractTxt arrays to be saved
+
+                        // Get the Iterator for the collection you want to modify
+                        Iterator<StudentScore> scoreIterator = clickedStudent.Stu_Scores.iterator();
+
+                        // Loop using the iterator's methods
+                        while (scoreIterator.hasNext()) {
+                            StudentScore ss = scoreIterator.next();
+
+                            // Check your condition
+                            if (assIds.contains(ss.getAssessment().getAssId())) {
+
+                                // Use the iterator's remove() method for safe structural modification
+                                scoreIterator.remove(); 
+                            }
+                        }
+                        
+                        for (StudentScore ss : newStuScores) {
+                            System.out.println(ss.getFinalScore());
+                            clickedStudent.Stu_Scores.add(ss);
+                        }
+                        
+                        for (StudentGradeAndComment gc : clickedStudent.GradesAndComments) {
+                            if (gc.getStuClass().getClassId().equals(classId)) {
+                                String finalScore = Tools.calcStuScore(chosenIM, clickedStudent);
+                                System.out.println(finalScore);
+                                gc.setGrade(Tools.calcStuGrade(finalScore));
+                                System.out.println(Tools.calcStuGrade(finalScore));
+                            }
+                        }
+                        
+                        System.out.println("Now: "+classId);
+                        System.out.println(Tools.getSpecificGrade(InteractTxt.checkClassID(classId), clickedStudent));
+                        
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, e.getMessage(), "Error - Invalid Value", 0);
+                } catch (IntegerRangeException e) {
+                    JOptionPane.showMessageDialog(this, e.getMessage(), "Error - Invalid Value", 0);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Assessment edit failed.\nReport this error.", "Error - Unknown Error", 0);
+                }
+            }
         }
     }//GEN-LAST:event_mainTableMouseReleased
 
