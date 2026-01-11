@@ -201,62 +201,81 @@ private void refreshPage() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+int selectedRow = jTable2.getSelectedRow();
 
-    int selectedRow = jTable2.getSelectedRow();
-
-    // 1️⃣ No class selected
-    if (selectedRow == -1) {
-        JOptionPane.showMessageDialog(
-            this,
-            "Unable to register.\nPlease select a class.",
-            "Error",
-            JOptionPane.ERROR_MESSAGE
-        );
-        return;
-    }
-
-    // 2️⃣ Confirmation
-    int confirm = JOptionPane.showConfirmDialog(
-        this,
-        "Confirm class registration?",
-        "Confirmation",
-        JOptionPane.YES_NO_OPTION
-    );
-
-    if (confirm != JOptionPane.YES_OPTION) {
-        return;
-    }
-
-    // 3️⃣ Get classId from JTable
-    String classId = jTable2.getValueAt(selectedRow, 0).toString();
-
-    // 4️⃣ Get Class object from database
-    project.roles.Class selectedClass = InteractTxt.checkClassID(classId);
-
-    // 5️⃣ Prevent duplicate registration
-    if (sessionStudent.Stu_Classes.contains(selectedClass)) {
-        JOptionPane.showMessageDialog(
-            this,
-            "You are already registered for this class.",
-            "Duplicate",
-            JOptionPane.WARNING_MESSAGE
-        );
-        return;
-    }
-
-    // 6️⃣ Add class to student
-    sessionStudent.Stu_Classes.add(selectedClass);
-
-    // 7️⃣ Save database (THIS DOES EVERYTHING)
-    InteractTxt.saveDatabase();
-    refreshPage();
-
+// 1️⃣ No class selected
+if (selectedRow == -1) {
     JOptionPane.showMessageDialog(
         this,
-        "Class registered successfully!",
-        "Success",
-        JOptionPane.INFORMATION_MESSAGE
+        "Unable to register.\nPlease select a class.",
+        "Error",
+        JOptionPane.ERROR_MESSAGE
     );
+    return;
+}
+
+// 2️⃣ Confirmation
+int confirm = JOptionPane.showConfirmDialog(
+    this,
+    "Confirm class registration?",
+    "Confirmation",
+    JOptionPane.YES_NO_OPTION
+);
+
+if (confirm != JOptionPane.YES_OPTION) return;
+
+// 3️⃣ Get classId
+String classId = jTable2.getValueAt(selectedRow, 0).toString();
+
+project.roles.Class selectedClass =
+        InteractTxt.checkClassID(classId);
+
+
+// 4️⃣ Duplicate check (using existing memory data)
+if (sessionStudent.Stu_Classes.contains(selectedClass)) {
+    JOptionPane.showMessageDialog(
+        this,
+        "You are already registered for this class.",
+        "Duplicate",
+        JOptionPane.WARNING_MESSAGE
+    );
+    return;
+}
+
+// 5️⃣ Add to memory (so UI updates work)
+sessionStudent.Stu_Classes.add(selectedClass);
+
+// 6️⃣ Append directly to student_class.txt
+try (java.io.PrintWriter pw = new java.io.PrintWriter(
+        new java.io.FileWriter("src/resources/student_class.txt", true))) {
+
+    pw.println(sessionStudent.getId());
+    pw.println(classId);
+    pw.println("null"); // comment
+    pw.println("null"); // grade
+    pw.println();
+
+} catch (Exception ex) {
+    JOptionPane.showMessageDialog(
+        this,
+        "Failed to save registration.",
+        "File Error",
+        JOptionPane.ERROR_MESSAGE
+    );
+    ex.printStackTrace();
+    return;
+}
+
+// 7️⃣ Refresh UI
+refreshPage();
+
+JOptionPane.showMessageDialog(
+    this,
+    "Class registered successfully!",
+    "Success",
+    JOptionPane.INFORMATION_MESSAGE
+);
+
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
