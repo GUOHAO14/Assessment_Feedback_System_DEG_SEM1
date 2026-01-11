@@ -122,9 +122,6 @@ public class ManageGradingSystem extends javax.swing.JFrame {
                         ProgramUpdate = false;
                     }
                 }
-                
-                //First row and last row how? 0 and 100?
-                //check between 0 to 100
             }
         });
     }
