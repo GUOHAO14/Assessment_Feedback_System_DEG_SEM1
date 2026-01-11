@@ -338,8 +338,13 @@ public class InteractTxt {
             while(s3.hasNext()){
                 String studentId = s3.nextLine();
                 String classId = s3.nextLine();
+                String grade = s3.nextLine();
+                String comment = s3.nextLine();
                 s3.nextLine();
-                InteractTxt.checkStuID(studentId).Stu_Classes.add(InteractTxt.checkClassID(classId));
+                Student targetStu = InteractTxt.checkStuID(studentId);
+                Class targetClass = InteractTxt.checkClassID(classId);
+                targetStu.Stu_Classes.add(targetClass);
+                targetStu.GradesAndComments.add(new StudentGradeAndComment(targetClass, grade, comment));
                 InteractTxt.checkClassID(classId).Class_Students.add(InteractTxt.checkStuID(studentId));
             }
         }catch(Exception e){
