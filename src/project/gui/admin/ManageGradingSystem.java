@@ -1,5 +1,6 @@
 package project.gui.admin;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import project.roles.*;
 import project.utils.*;
@@ -10,13 +11,122 @@ public class ManageGradingSystem extends javax.swing.JFrame {
         new String[]{"Grade", "Marks From", "Marks To"}, 0
     );
     
+    private boolean ProgramUpdate = false;
+    private boolean abc = true;
+    
     public ManageGradingSystem() {
         initComponents();
         InteractTxt.readGrade();
         for(Grading x : InteractTxt.allGrading){
             model.addRow(new String[]{x.getGrade(), x.getMarksFrom(), x.getMarksTo()});
         }
-        InteractTxt.writeGrade();
+        
+        model.addTableModelListener(e -> {
+            if (ProgramUpdate) return;
+            
+            if (e.getType() == javax.swing.event.TableModelEvent.UPDATE) {
+                int row = e.getFirstRow();
+                int col = e.getColumn();
+                Object NewV = model.getValueAt(row, col);
+                System.out.println("Changed at row " + row + ", col " + col + ": " + NewV);
+                
+                if(col == 0){
+                    
+                } else if (col == 1){
+                    if (row == (InteractTxt.allGrading.size()-1)) {
+                        JOptionPane.showMessageDialog(this, "Cannot edit", "Error", JOptionPane.ERROR_MESSAGE);
+                        ProgramUpdate = true;
+                        model.setValueAt(InteractTxt.allGrading.get(row).getMarksFrom(), row, col);
+                        ProgramUpdate = false;
+                        return;
+                    }
+                    
+                    try {
+                        int NewValue = Integer.parseInt(String.valueOf(NewV));
+                        
+                        if(NewValue < 0+((InteractTxt.allGrading.size()-1)-row)*2){
+                            JOptionPane.showMessageDialog(this, "Too Small", "Error", JOptionPane.ERROR_MESSAGE);
+                            ProgramUpdate = true;
+                            model.setValueAt(InteractTxt.allGrading.get(row).getMarksFrom(), row, col);
+                            ProgramUpdate = false;
+                            return;
+                        } else if (NewValue > 100-((row*2)+1)){
+                            JOptionPane.showMessageDialog(this, "Too Big", "Error", JOptionPane.ERROR_MESSAGE);
+                            ProgramUpdate = true;
+                            model.setValueAt(InteractTxt.allGrading.get(row).getMarksFrom(), row, col);
+                            ProgramUpdate = false;
+                            return;
+                        }
+                        
+                        if(abc){
+                            InteractTxt.allGrading.get(row).setMarksFrom(String.valueOf(NewValue));
+                            InteractTxt.allGrading.get(row+1).setMarksTo(String.valueOf(NewValue - 1));
+                            abc = false;
+                            model.setValueAt(InteractTxt.allGrading.get(row+1).getMarksTo(), (row+1), 2);
+                        }
+                        abc = true;
+                        
+                        if (NewValue >= Integer.parseInt(InteractTxt.allGrading.get(row).getMarksTo())){
+                            InteractTxt.allGrading.get(row).setMarksTo(String.valueOf(NewValue + 1));
+                            model.setValueAt(InteractTxt.allGrading.get(row).getMarksTo(), row, 2);
+                        }
+                    } catch (Exception f) {
+                        JOptionPane.showMessageDialog(this, "Must be Number", "Error", JOptionPane.ERROR_MESSAGE);
+                        ProgramUpdate = true;
+                        model.setValueAt(InteractTxt.allGrading.get(row).getMarksFrom(), row, col);
+                        ProgramUpdate = false;
+                    }
+                    
+                } else if (col == 2){
+                    if (row == 0) {
+                        JOptionPane.showMessageDialog(this, "Cannot edit", "Error", JOptionPane.ERROR_MESSAGE);
+                        ProgramUpdate = true;
+                        model.setValueAt(InteractTxt.allGrading.get(row).getMarksTo(), row, col);
+                        ProgramUpdate = false;
+                        return;
+                    }
+                    
+                    try {
+                        int NewValue = Integer.parseInt(String.valueOf(NewV));
+                        
+                        if(NewValue < 0+(((InteractTxt.allGrading.size()-1)-row)*2)+1){
+                            JOptionPane.showMessageDialog(this, "Too Small", "Error", JOptionPane.ERROR_MESSAGE);
+                            ProgramUpdate = true;
+                            model.setValueAt(InteractTxt.allGrading.get(row).getMarksTo(), row, col);
+                            ProgramUpdate = false;
+                            return;
+                        } else if (NewValue > 100-(row*2)){
+                            JOptionPane.showMessageDialog(this, "Too Big", "Error", JOptionPane.ERROR_MESSAGE);
+                            ProgramUpdate = true;
+                            model.setValueAt(InteractTxt.allGrading.get(row).getMarksTo(), row, col);
+                            ProgramUpdate = false;
+                            return;
+                        }
+                        
+                        if(abc){
+                            InteractTxt.allGrading.get(row).setMarksTo(String.valueOf(NewValue));
+                            InteractTxt.allGrading.get(row-1).setMarksFrom(String.valueOf(NewValue + 1));
+                            abc = false;
+                            model.setValueAt(InteractTxt.allGrading.get(row-1).getMarksFrom(), (row-1), 1);
+                        }
+                        abc = true;
+                        
+                        if (NewValue <= Integer.parseInt(InteractTxt.allGrading.get(row).getMarksFrom())){
+                            InteractTxt.allGrading.get(row).setMarksFrom(String.valueOf(NewValue - 1));
+                            model.setValueAt(InteractTxt.allGrading.get(row).getMarksFrom(), row, 1);
+                        }
+                    } catch (Exception f) {
+                        JOptionPane.showMessageDialog(this, "Must be Number", "Error", JOptionPane.ERROR_MESSAGE);
+                        ProgramUpdate = true;
+                        model.setValueAt(InteractTxt.allGrading.get(row).getMarksTo(), row, col);
+                        ProgramUpdate = false;
+                    }
+                }
+                
+                //First row and last row how? 0 and 100?
+                //check between 0 to 100
+            }
+        });
     }
 
     /**
