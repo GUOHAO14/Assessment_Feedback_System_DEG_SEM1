@@ -18,11 +18,9 @@ public class ManageLecturers extends javax.swing.JFrame {
         initComponents();
         InteractTxt.readUser();
         for(Lecturer x : InteractTxt.allLecturer){
-            model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), x.getLeader().getId()});
+                model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), x.getLeader().getId()});
+            }
         }
-        
-
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
