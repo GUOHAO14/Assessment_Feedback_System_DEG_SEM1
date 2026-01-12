@@ -215,10 +215,14 @@ public class ManageGradingSystem extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        InteractTxt.allGrading.clear();
-        InteractTxt.readGrade();
-        new Dashboard().setVisible(true);
-        this.dispose();
+        int result = JOptionPane.showConfirmDialog(this, "Do you sure you want to exit?", "Confirm", JOptionPane.YES_NO_CANCEL_OPTION);
+
+        if (result == JOptionPane.YES_OPTION) {
+            InteractTxt.allGrading.clear();
+            InteractTxt.readGrade();
+            new Dashboard().setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
