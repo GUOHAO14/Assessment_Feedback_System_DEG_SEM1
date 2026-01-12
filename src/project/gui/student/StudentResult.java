@@ -4,8 +4,16 @@
  */
 package project.gui.student;
 
+import java.util.Scanner;
+import javax.swing.table.DefaultTableModel;
+import project.roles.Assessment;
+import project.roles.IntakeModule;
+import project.roles.Lecturer;
 import project.roles.Student;
+import project.roles.StudentScore;
 import project.utils.FrameFormat;
+import project.utils.InteractTxt;
+import project.utils.Tools;
 
 /**
  *
@@ -21,7 +29,137 @@ public class StudentResult extends FrameFormat {
         initComponents();
         this.sessionStudent = student;
         this.intakeId = student.getIntakeId();
+        
+        setupTables();
+        loadRegisteredClasses();
+        setupClassSelectionListener();
     }
+   private void setupTables() {
+
+    // Class table
+    jTable1.setModel(new DefaultTableModel(
+    new Object[][] {},
+    new String[] { "Class", "Lecturer", "Comment", "Grade", "Score" }
+) {
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return false;
+    }
+});
+
+
+    // Assessment table
+    jTable2.setModel(new DefaultTableModel(
+        new Object[][]{},
+        new String[]{"Assessment", "Marks", "Total Marks"}
+    ) {
+        public boolean isCellEditable(int r, int c) { return false; }
+    });
+}
+
+private void loadRegisteredClasses() {
+
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    model.setRowCount(0);
+
+    for (project.roles.Class cls : sessionStudent.Stu_Classes) {
+
+        Lecturer lec = InteractTxt.checkLecID(cls.getLecId());
+
+        String comment = "NA";
+        String grade = "NA";
+
+        // OPTIONAL: if you later store grade/comment in object
+        // StudentGradeAndComment sgc = ...
+
+        // find IntakeModule
+        IntakeModule matchedIM = null;
+        for (IntakeModule im : InteractTxt.allIntakeModule) {
+            if (im.IM_Classes.contains(cls)) {
+                matchedIM = im;
+                break;
+            }
+        }
+
+        String score = "NA";
+        if (matchedIM != null) {
+            score = Tools.calcStuScore(matchedIM, sessionStudent);
+        }
+
+        model.addRow(new Object[]{
+            cls.getClassName(),
+            lec != null ? lec.getName() : "N/A",
+            comment,
+            grade,
+            score
+        });
+    }
+}
+
+private void setupClassSelectionListener() {
+
+    jTable1.getSelectionModel().addListSelectionListener(e -> {
+
+        if (!e.getValueIsAdjusting()) {
+
+            int row = jTable1.getSelectedRow();
+            if (row == -1) return;
+
+            String className =
+                    jTable1.getValueAt(row, 0).toString();
+
+            loadAssessmentsForClass(className);
+        }
+    });
+}
+private void loadAssessmentsForClass(String className) {
+
+    DefaultTableModel model =
+            (DefaultTableModel) jTable2.getModel();
+
+    model.setRowCount(0);
+
+    project.roles.Class selectedClass = null;
+
+    for (project.roles.Class c : InteractTxt.allClass) {
+        if (c.getClassName().equals(className)) {
+            selectedClass = c;
+            break;
+        }
+    }
+
+    if (selectedClass == null) return;
+
+    IntakeModule im = null;
+
+    for (IntakeModule x : InteractTxt.allIntakeModule) {
+        if (x.IM_Classes.contains(selectedClass)) {
+            im = x;
+            break;
+        }
+    }
+
+    if (im == null) return;
+
+    for (Assessment ass : im.IM_Assessments) {
+
+        StudentScore score = null;
+
+        for (StudentScore s : sessionStudent.Stu_Scores) {
+            if (s.getAssessment().equals(ass)) {
+                score = s;
+                break;
+            }
+        }
+
+        model.addRow(new Object[]{
+            ass.getAssName(),
+            score != null ? score.getOrginalScore() : "-",
+            ass.getAssFullMarks()
+        });
+    }
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,13 +171,13 @@ public class StudentResult extends FrameFormat {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        ClassTable = new javax.swing.JTable();
+        jTable1 = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        AssessmentTable = new javax.swing.JTable();
+        jTable2 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        ClassTable.setModel(new javax.swing.table.DefaultTableModel(
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -50,9 +188,9 @@ public class StudentResult extends FrameFormat {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(ClassTable);
+        jScrollPane1.setViewportView(jTable1);
 
-        AssessmentTable.setModel(new javax.swing.table.DefaultTableModel(
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -63,7 +201,7 @@ public class StudentResult extends FrameFormat {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(AssessmentTable);
+        jScrollPane2.setViewportView(jTable2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -72,9 +210,9 @@ public class StudentResult extends FrameFormat {
             .addGroup(layout.createSequentialGroup()
                 .addGap(57, 57, 57)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(77, 77, 77)
+                .addGap(70, 70, 70)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(93, Short.MAX_VALUE))
+                .addContainerGap(100, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -92,9 +230,9 @@ public class StudentResult extends FrameFormat {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable AssessmentTable;
-    private javax.swing.JTable ClassTable;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
     // End of variables declaration//GEN-END:variables
 }

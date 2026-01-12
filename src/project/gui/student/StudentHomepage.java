@@ -132,13 +132,13 @@ public static void main(String args[]) {
         InteractTxt.initDatabase();
 
         // Retrieve the student using their ID from the saved user/student files
-        Student sessionStudent = InteractTxt.checkStuID("tp076266");
+        Student sessionStudent = InteractTxt.checkStuID("tp076267");
 
         if (sessionStudent != null) {
             // Open the StudentHomepage with the real session student
             new StudentHomepage(sessionStudent).setVisible(true);
         } else {
-            System.err.println("Student with ID 'tp076266' not found!");
+            System.err.println("Student with ID 'tp076267' not found!");
         }
     });
 }
