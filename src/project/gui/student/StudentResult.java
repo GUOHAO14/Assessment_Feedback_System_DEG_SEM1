@@ -4,8 +4,11 @@
  */
 package project.gui.student;
 
-import java.util.Scanner;
+import java.awt.Component;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import project.roles.Assessment;
 import project.roles.IntakeModule;
 import project.roles.Lecturer;
@@ -25,6 +28,45 @@ public class StudentResult extends FrameFormat {
     /**
      * Creates new form StudentScore
      */
+public class MultiLineTableCellRenderer extends JTextArea
+        implements TableCellRenderer {
+
+    public MultiLineTableCellRenderer() {
+        super();                // important
+        setLineWrap(true);      // ✅ valid
+        setWrapStyleWord(true); // ✅ valid
+        setOpaque(true);
+    }
+
+    @Override
+    public Component getTableCellRendererComponent(
+            JTable table, Object value,
+            boolean isSelected, boolean hasFocus,
+            int row, int column) {
+
+        setText(value == null ? "" : value.toString());
+
+        if (isSelected) {
+            setBackground(table.getSelectionBackground());
+            setForeground(table.getSelectionForeground());
+        } else {
+            setBackground(table.getBackground());
+            setForeground(table.getForeground());
+        }
+
+        setSize(
+            table.getColumnModel().getColumn(column).getWidth(),
+            getPreferredSize().height
+        );
+
+        int rowHeight = getPreferredSize().height;
+        if (table.getRowHeight(row) != rowHeight) {
+            table.setRowHeight(row, rowHeight);
+        }
+
+        return this;
+    }
+}
     public StudentResult(Student student) {
         initComponents();
         this.sessionStudent = student;
@@ -36,26 +78,62 @@ public class StudentResult extends FrameFormat {
     }
    private void setupTables() {
 
-    // Class table
+    /* ===============================
+       CLASS TABLE (jTable1)
+       =============================== */
     jTable1.setModel(new DefaultTableModel(
-    new Object[][] {},
-    new String[] { "Class", "Lecturer", "Comment", "Grade", "Score" }
-) {
-    @Override
-    public boolean isCellEditable(int row, int column) {
-        return false;
+        new Object[][]{},
+        new String[]{"Class", "Lecturer", "Comment", "Grade", "Score"}
+    ) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    });
+
+    jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+    jTable1.getTableHeader().setReorderingAllowed(false);
+
+    // Disable column resizing
+    for (int i = 0; i < jTable1.getColumnModel().getColumnCount(); i++) {
+        jTable1.getColumnModel().getColumn(i).setResizable(false);
     }
-});
 
-
-    // Assessment table
+    /* ===============================
+       ASSESSMENT TABLE (jTable2)
+       =============================== */
     jTable2.setModel(new DefaultTableModel(
         new Object[][]{},
-        new String[]{"Assessment", "Marks", "Total Marks"}
+        new String[]{"Assessment", "Marks", "Full Marks", "Feedback"}
     ) {
-        public boolean isCellEditable(int r, int c) { return false; }
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
     });
+
+    jTable2.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+    jTable2.getTableHeader().setReorderingAllowed(false);
+
+    // Disable column resizing
+    for (int i = 0; i < jTable2.getColumnModel().getColumnCount(); i++) {
+        jTable2.getColumnModel().getColumn(i).setResizable(false);
+    }
+
+    /* ===============================
+       MULTI-LINE RENDERER
+       =============================== */
+    MultiLineTableCellRenderer renderer = new MultiLineTableCellRenderer();
+
+    // jTable1 multiline columns
+    jTable1.getColumnModel().getColumn(2).setCellRenderer(renderer); // Comment
+    jTable1.getColumnModel().getColumn(3).setCellRenderer(renderer); // Grade
+    jTable1.getColumnModel().getColumn(4).setCellRenderer(renderer); // Score
+
+    // jTable2 multiline column
+    jTable2.getColumnModel().getColumn(3).setCellRenderer(renderer); // Feedback
 }
+
 
 private void loadRegisteredClasses() {
 
@@ -143,22 +221,43 @@ private void loadAssessmentsForClass(String className) {
 
     for (Assessment ass : im.IM_Assessments) {
 
-        StudentScore score = null;
+        StudentScore ss = null;
 
         for (StudentScore s : sessionStudent.Stu_Scores) {
             if (s.getAssessment().equals(ass)) {
-                score = s;
+                ss = s;
                 break;
             }
         }
 
+        String marks = "-";
+        String fullMarks = "-";
+        String feedback = "-";
+
+        // Marks2 and FullMarks2 from Assessment
+        String marks2 = extractNumber(ass.getAssFullMarks());
+        String fullMarks2 = extractNumber(ass.getAssPercentage());
+
+        if (ss != null) {
+            marks = ss.getOrginalScore() + "/" + marks2;
+            fullMarks = ss.getOriginalFullMarks() + "/" + fullMarks2;
+            feedback = ss.getFeedback();
+        }
+
         model.addRow(new Object[]{
             ass.getAssName(),
-            score != null ? score.getOrginalScore() : "-",
-            ass.getAssFullMarks()
+            marks,
+            fullMarks,
+            feedback
         });
     }
 }
+
+private String extractNumber(String text) {
+    if (text == null) return "-";
+    return text.split(" ")[0]; // gets "60" from "60 (Marks 2)"
+}
+
 
 
     /**
@@ -208,11 +307,11 @@ private void loadAssessmentsForClass(String className) {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(57, 57, 57)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(70, 70, 70)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(100, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 541, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 541, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
