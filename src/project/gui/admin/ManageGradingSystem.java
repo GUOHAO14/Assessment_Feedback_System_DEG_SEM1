@@ -12,7 +12,7 @@ public class ManageGradingSystem extends javax.swing.JFrame {
     );
     
     private boolean ProgramUpdate = false;
-    private boolean abc = true;
+    private boolean Loop = true;
     
     public ManageGradingSystem() {
         initComponents();
@@ -63,13 +63,13 @@ public class ManageGradingSystem extends javax.swing.JFrame {
                             return;
                         }
                         
-                        if(abc){
+                        if(Loop){
                             InteractTxt.allGrading.get(row).setMarksFrom(String.valueOf(NewValue));
                             InteractTxt.allGrading.get(row+1).setMarksTo(String.valueOf(NewValue - 1));
-                            abc = false;
+                            Loop = false;
                             model.setValueAt(InteractTxt.allGrading.get(row+1).getMarksTo(), (row+1), 2);
                         }
-                        abc = true;
+                        Loop = true;
                         
                         if (NewValue >= Integer.parseInt(InteractTxt.allGrading.get(row).getMarksTo())){
                             InteractTxt.allGrading.get(row).setMarksTo(String.valueOf(NewValue + 1));
@@ -108,13 +108,13 @@ public class ManageGradingSystem extends javax.swing.JFrame {
                             return;
                         }
                         
-                        if(abc){
+                        if(Loop){
                             InteractTxt.allGrading.get(row).setMarksTo(String.valueOf(NewValue));
                             InteractTxt.allGrading.get(row-1).setMarksFrom(String.valueOf(NewValue + 1));
-                            abc = false;
+                            Loop = false;
                             model.setValueAt(InteractTxt.allGrading.get(row-1).getMarksFrom(), (row-1), 1);
                         }
-                        abc = true;
+                        Loop = true;
                         
                         if (NewValue <= Integer.parseInt(InteractTxt.allGrading.get(row).getMarksFrom())){
                             InteractTxt.allGrading.get(row).setMarksFrom(String.valueOf(NewValue - 1));
