@@ -53,6 +53,27 @@ public class ErrorChecking {
             return "not email";
         }
         
+        for (Student x : InteractTxt.allStudent){
+            if(input.equals(x.getEmail())){
+                return "same";
+            }
+        }
+        for (Lecturer x : InteractTxt.allLecturer){
+            if(input.equals(x.getEmail())){
+                return "same";
+            }
+        }
+        for (Leader x : InteractTxt.allLeader){
+            if(input.equals(x.getEmail())){
+                return "same";
+            }
+        }
+        for (Admin x : InteractTxt.allAdmin){
+            if(input.equals(x.getEmail())){
+                return "same";
+            }
+        }
+        
         return "String";
     }
 }
