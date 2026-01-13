@@ -30,4 +30,29 @@ public class ErrorChecking {
     public static void checkEmptyLine() {
         
     }
+    
+    public static String checkInput(String input) {
+        if (input.isEmpty()) {
+            return "null";
+        }
+        
+        try {
+            Integer.parseInt(input);
+            return "number";
+        } catch (Exception e) {
+            return "String";
+        }
+    }
+    
+    public static String checkEmail(String input) {
+        if (input.isEmpty()) {
+            return "null";
+        }
+        
+        if (!input.contains("@")){
+            return "not email";
+        }
+        
+        return "String";
+    }
 }
