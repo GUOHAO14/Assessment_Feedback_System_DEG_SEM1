@@ -4,6 +4,7 @@
  */
 package project.gui.student;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import project.roles.*;
@@ -11,43 +12,118 @@ import project.utils.*;
 import project.utils.FrameFormat;
 
 
+
 public class StudentClassRegistration extends FrameFormat {
-private Student sessionUser;
-private Intake chosenIntake;
-private DefaultTableModel tableModel;
+    private Student sessionStudent;
+    private String intakeId;
+    private DefaultTableModel tableModel;
 
     /**
      * Creates new form StudentClassRegistration
      */
     public StudentClassRegistration(Student student) {        
         initComponents();
-       this.sessionUser = student;
+        
+        this.sessionStudent = student;
+        this.intakeId = student.getIntakeId();
+        
+        setupTables();
+        populateModuleTable();
+        setupModuleSelectionListener();
 
-    // Get the table model from jTable1
-    tableModel = (DefaultTableModel) jTable1.getModel();
-
-    // Load modules into the table
-    loadModulesForStudent();
     }
     
+    private void setupTables() {
+    // Module table
+    jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        new Object[][] {},
+        new String[] { "Module ID", "Module Name" }
+    ) {
+        public boolean isCellEditable(int row, int column) { return false; }
+    });
+
+    // Class table
+    jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        new Object[][] {},
+        new String[] { "Class ID", "Class Name" }
+    ) {
+        public boolean isCellEditable(int row, int column) { return false; }
+    });
+}
+    private void populateModuleTable() {
+    DefaultTableModel model1 = (DefaultTableModel) jTable1.getModel();
+    model1.setRowCount(0);
+
+    Intake intake = InteractTxt.checkIntID(intakeId);
+    if (intake == null) return;
+
+    for (project.roles.Module m : intake.Int_Modules) {
+
+        // 🔒 Skip modules already registered
+        if (isModuleAlreadyRegistered(m.getModuleId())) {
+            continue;
+        }
+
+        model1.addRow(new Object[]{
+            m.getModuleId(),
+            m.getModuleName()
+        });
+    }
+}
+private void setupModuleSelectionListener() {
+    jTable1.getSelectionModel().addListSelectionListener(e -> {
+        if (!e.getValueIsAdjusting()) {
+            int selectedRow = jTable1.getSelectedRow();
+            if (selectedRow != -1) {
+                String moduleId = jTable1.getValueAt(selectedRow, 0).toString();
+                populateClassTable(moduleId);
+            }
+        }
+    });
+}
+
+private void populateClassTable(String moduleId) {
+    DefaultTableModel model2 = (DefaultTableModel) jTable2.getModel();
+    model2.setRowCount(0); // clear old data
+
+    // Loop through all IntakeModule objects
+    for (IntakeModule im : InteractTxt.allIntakeModule) {
+        if (im.getIntakeId().equals(intakeId) && im.getModuleId().equals(moduleId)) {
+            for (project.roles.Class c : im.IM_Classes) {
+                model2.addRow(new Object[]{ c.getClassId(), c.getClassName() });
+            }
+        }
+    }
+}
+private boolean isModuleAlreadyRegistered(String moduleId) {
+
+    // Loop through student's registered classes
+    for (project.roles.Class registeredClass : sessionStudent.Stu_Classes) {
+
+        // Find which IntakeModule this class belongs to
+        for (IntakeModule im : InteractTxt.allIntakeModule) {
+
+            if (im.IM_Classes.contains(registeredClass)
+                && im.getModuleId().equals(moduleId)) {
+
+                return true; // already registered
+            }
+        }
+    }
+    return false;
+}
+
+private void refreshPage() {
+    // clear class table
+    ((DefaultTableModel) jTable2.getModel()).setRowCount(0);
+
+    // reload module table
+    populateModuleTable();
+}
 
     /**
      * Load all modules for this student based on IntakeID
      */
-    private void loadModulesForStudent() {
-        tableModel.setRowCount(0); // clear table first
-
-        String intakeId = sessionUser.getIntakeId();
-
-        for (IntakeModule im : InteractTxt.allIntakeModule) {
-        if (im.getIntakeId().equals(intakeId)) {
-            project.roles.Module mod = InteractTxt.checkModID(im.getModuleId());
-            if (mod != null) {
-                tableModel.addRow(new Object[] { mod.getModuleName() });
-            }
-        }
-    }
-    }
 
 
     /**
@@ -61,80 +137,160 @@ private DefaultTableModel tableModel;
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null}
+                {null, null}
             },
             new String [] {
-                "Module"
+                "Module", "Status"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null}
+            },
+            new String [] {
+                "Class"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable2);
+
+        jButton1.setText("Register");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Home");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(60, 60, 60)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(63, 63, 63))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(444, 444, 444))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addComponent(jButton2)
+                .addGap(84, 84, 84)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
+                .addComponent(jButton1)
+                .addContainerGap(114, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+int selectedRow = jTable2.getSelectedRow();
+
+// 1️⃣ No class selected
+if (selectedRow == -1) {
+    JOptionPane.showMessageDialog(
+        this,
+        "Unable to register.\nPlease select a class.",
+        "Error",
+        JOptionPane.ERROR_MESSAGE
+    );
+    return;
+}
+
+// 2️⃣ Confirmation
+int confirm = JOptionPane.showConfirmDialog(
+    this,
+    "Confirm class registration?",
+    "Confirmation",
+    JOptionPane.YES_NO_OPTION
+);
+
+if (confirm != JOptionPane.YES_OPTION) {
+    return;
+}
+
+// 3️⃣ Get classId from JTable
+String classId = jTable2.getValueAt(selectedRow, 0).toString();
+
+// 4️⃣ Get Class object from database
+project.roles.Class selectedClass = InteractTxt.checkClassID(classId);
+
+// 5️⃣ Prevent duplicate registration
+if (sessionStudent.Stu_Classes.contains(selectedClass)) {
+    JOptionPane.showMessageDialog(
+        this,
+        "You are already registered for this class.",
+        "Duplicate",
+        JOptionPane.WARNING_MESSAGE
+    );
+    return;
+}
+
+// 6️⃣ Add class to student
+sessionStudent.Stu_Classes.add(selectedClass);
+
+// 7️⃣ Save database (THIS DOES EVERYTHING)
+InteractTxt.saveDatabase();
+refreshPage();
+
+JOptionPane.showMessageDialog(
+    this,
+    "Class registered successfully!",
+    "Success",
+    JOptionPane.INFORMATION_MESSAGE
+);
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    new StudentHomepage(sessionStudent).setVisible(true);
+
+    // close current page
+    this.dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StudentClassRegistration.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StudentClassRegistration.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StudentClassRegistration.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(StudentClassRegistration.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        InteractTxt.initDatabase();
-
-        // Create dummy student for testing
-        Student dummy = new Student(new String[]{"S001","Test Student","test@email.com","1234","student"});
-        dummy.setIntakeId("INT01"); // ensure INT01 exists in intake_module.txt
-
-        java.awt.EventQueue.invokeLater(() -> {
-            new StudentClassRegistration(dummy).setVisible(true);
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
     // End of variables declaration//GEN-END:variables
 }

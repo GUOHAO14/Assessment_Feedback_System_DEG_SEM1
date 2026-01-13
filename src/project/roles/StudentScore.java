@@ -9,33 +9,61 @@ package project.roles;
  * @author Khoo Guo Hao
  */
 public class StudentScore {
-    private Assessment assessment;
-    private String score;
-    private String fullMarks;
+    private final Assessment assessment;
+    private String finalScore;
+    private String orginalScore;
+    private String originalFullMarks;
+    private String feedback;
     
-    public StudentScore(Assessment assessment, String score, String fullMarks) {
+    public StudentScore(Assessment assessment, String finalScore, String originalScore, String originalFullMarks, String feedback) {
         this.assessment = assessment;
-        this.score = score;
-        this.fullMarks = fullMarks;
+        this.finalScore = finalScore;
+        this.orginalScore = originalScore;
+        this.originalFullMarks = originalFullMarks;
+        this.feedback = feedback;
+    }
+    
+    public StudentScore(StudentScore other) {
+        this.assessment = other.assessment;
+        this.finalScore = other.finalScore;
+        this.orginalScore = other.orginalScore;
+        this.originalFullMarks = other.originalFullMarks;
+        this.feedback = other.feedback;
     }
 
     public Assessment getAssessment() {
         return assessment;
     }
 
-    public String getScore() {
-        return score;
+    public String getFinalScore() {
+        return finalScore;
     }
 
-    public void setScore(String score) {
-        this.score = score;
+    public void setFinalScore(String finalScore) {
+        this.finalScore = finalScore;
     }
 
-    public String getFullMarks() {
-        return fullMarks;
+    public String getOrginalScore() {
+        return orginalScore;
     }
 
-    public void setFullMarks(String fullMarks) {
-        this.fullMarks = fullMarks;
+    public void setOrginalScore(String orginalScore) {
+        this.orginalScore = orginalScore;
+    }
+
+    public String getOriginalFullMarks() {
+        return originalFullMarks;
+    }
+
+    public void setOirginalFullMarks(String originalFullMarks) {
+        this.originalFullMarks = originalFullMarks;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
     }
 }

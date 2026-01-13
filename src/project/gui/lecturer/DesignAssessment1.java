@@ -4,13 +4,12 @@
  */
 package project.gui.lecturer;
 
+import project.utils.exceptions.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 import project.roles.*;
 import project.utils.*;
 import javax.swing.*;
-import project.utils.Exceptions.*;
 /**
  *
  * @author Khoo Guo Hao
@@ -18,10 +17,11 @@ import project.utils.Exceptions.*;
 public class DesignAssessment1 extends FrameFormat {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DesignAssessment1.class.getName());
-    private Lecturer sessionUser;
-    private IntakeModule designIM;
+    private final Lecturer sessionUser;
+    private final IntakeModule designIM;
     String [] assessmentTypes = {"Assignment", "Class Test", "Examination", "Presentation"};
-    private ArrayList<Assessment> originalAssessments;
+    
+    // utility methods
     
     private void generateAssessmentList() {
         assessmentContainer.removeAll();
@@ -121,7 +121,7 @@ public class DesignAssessment1 extends FrameFormat {
                         int intPercent = Integer.parseInt(percent);
                         int intFullMarks = Integer.parseInt(fullMarks);
                         
-                        if (name.length() > Constants.ITEM_NAME_LENGTH) throw new ItemNameLengthException("Assessment");
+                        if (name.length() > Constants.ITEM_NAME_MAX_LENGTH) throw new ItemNameMaxLengthException("Assessment");
                         if (intPercent < 1 || intPercent > 100) throw new IntegerRangeException("Score Percentage", 1, 100);
                         if (intFullMarks < 1 || intFullMarks > 100) throw new IntegerRangeException("Full Marks", 10, 100);
                         
@@ -134,7 +134,7 @@ public class DesignAssessment1 extends FrameFormat {
                         System.out.println(total);
                         if (total <= 100) {
                             if (createSignal) {
-                                String newId = "Ass"+String.valueOf(designIM.IM_Assessments.size() + 1);
+                                String newId = "Ass"+String.valueOf(InteractTxt.allAssessment.size() + 1);
                                 Assessment newAssessment = new Assessment(newId, name, type, percent, fullMarks, designIM);
 
                                 designIM.IM_Assessments.add(newAssessment);
@@ -157,9 +157,7 @@ public class DesignAssessment1 extends FrameFormat {
                         }
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(this, "Assessment edit failed.\nScore Percentage input must be an integer.", "Error - Invalid Value", 0);
-                    } catch (ItemNameLengthException e) {
-                        JOptionPane.showMessageDialog(this, e.getMessage(), "Error - Invalid Value", 0);
-                    } catch (IntegerRangeException e) {
+                    } catch (ItemNameMaxLengthException | IntegerRangeException e) {
                         JOptionPane.showMessageDialog(this, e.getMessage(), "Error - Invalid Value", 0);
                     } catch (Exception e) {
                         JOptionPane.showMessageDialog(this, "Assessment edit failed.\nReport this error.", "Error - Unknown Error", 0);
@@ -173,16 +171,12 @@ public class DesignAssessment1 extends FrameFormat {
         }
     }
     
-
-    /**
-     * Creates new form DesignAssessment1
-     */
+    // constructor
     public DesignAssessment1(Lecturer sessionUser, IntakeModule designIM) {
         initComponents();
-        super.formatWindow("Design Module Assessment");
+        super.formatWindow("Design Module Assessment - Page 2");
         this.sessionUser = sessionUser;
         this.designIM = designIM;
-        this.originalAssessments = designIM.IM_Assessments;
         
         System.out.println(this.designIM.getIntakeId());
         System.out.println(this.designIM.getModuleId());
@@ -190,21 +184,9 @@ public class DesignAssessment1 extends FrameFormat {
             new BoxLayout(assessmentContainer, BoxLayout.Y_AXIS)
         );
         generateAssessmentList();
-
-
-
         
-        designIM.IM_Assessments.forEach(a ->{
-            System.out.println(a.getAssName() + ": "+a.getAssPercentage());
-        });
-    }
-    
-    public DesignAssessment1() {
-        initComponents();
-        super.formatWindow("Design Module Assessment");
-        assessmentContainer.setLayout(
-            new BoxLayout(assessmentContainer, BoxLayout.Y_AXIS)
-        );
+        intakeText.setText("Intake: "+designIM.getIntakeId()+" ("+InteractTxt.checkIntID(designIM.getIntakeId()).getIntakeName());
+        moduleText.setText("Module: "+designIM.getModuleId()+" ("+InteractTxt.checkModID(designIM.getModuleId()).getModuleName());
     }
 
     /**
@@ -221,6 +203,11 @@ public class DesignAssessment1 extends FrameFormat {
         assessmentScroll = new javax.swing.JScrollPane();
         assessmentContainer = new javax.swing.JPanel();
         saveChanges = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        intakeText = new javax.swing.JLabel();
+        moduleText = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        backButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -233,7 +220,7 @@ public class DesignAssessment1 extends FrameFormat {
         assessmentContainer.setLayout(assessmentContainerLayout);
         assessmentContainerLayout.setHorizontalGroup(
             assessmentContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 404, Short.MAX_VALUE)
+            .addGap(0, 467, Short.MAX_VALUE)
         );
         assessmentContainerLayout.setVerticalGroup(
             assessmentContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -245,38 +232,87 @@ public class DesignAssessment1 extends FrameFormat {
         saveChanges.setText("Save");
         saveChanges.addActionListener(this::saveChangesActionPerformed);
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Update Module Assessment Design");
+
+        intakeText.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        intakeText.setText("Intake: ");
+
+        moduleText.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        moduleText.setText("Module:");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 6, Short.MAX_VALUE)
+        );
+
+        backButton.setText("Back");
+        backButton.addActionListener(this::backButtonActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(399, 399, 399))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(64, 64, 64)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(112, 112, 112)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(29, 29, 29)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(moduleText, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+                                    .addComponent(intakeText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(94, 94, 94)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(99, 99, 99)
-                        .addComponent(assessmentScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(263, 263, 263)
+                        .addComponent(saveChanges, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(212, 212, 212)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(262, 262, 262)
-                        .addComponent(saveChanges, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(99, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(backButton)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(71, Short.MAX_VALUE)
+                .addComponent(assessmentScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(71, 71, 71))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(76, 76, 76)
-                .addComponent(jButton1)
+                .addGap(7, 7, 7)
+                .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel1)
+                .addGap(28, 28, 28)
+                .addComponent(intakeText)
+                .addGap(28, 28, 28)
+                .addComponent(moduleText)
+                .addGap(19, 19, 19)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
                 .addGap(18, 18, 18)
                 .addComponent(assessmentScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(saveChanges)
-                .addGap(29, 29, 29))
+                .addGap(47, 47, 47))
         );
 
         pack();
@@ -293,6 +329,12 @@ public class DesignAssessment1 extends FrameFormat {
         // TODO add your handling code here:
         ErrorChecking.checkIM_Assessments();
     }//GEN-LAST:event_saveChangesActionPerformed
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        // TODO add your handling code here:
+        new DesignAssessment0(sessionUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_backButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -316,14 +358,19 @@ public class DesignAssessment1 extends FrameFormat {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new DesignAssessment1().setVisible(true));
+//        java.awt.EventQueue.invokeLater(() -> new DesignAssessment1().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel assessmentContainer;
     private javax.swing.JScrollPane assessmentScroll;
+    private javax.swing.JButton backButton;
+    private javax.swing.JLabel intakeText;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel moduleText;
     private javax.swing.JButton saveChanges;
     // End of variables declaration//GEN-END:variables
 }

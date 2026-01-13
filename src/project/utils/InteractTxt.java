@@ -306,6 +306,8 @@ public class InteractTxt {
                 for(Class y : x.Stu_Classes){
                     c.println(x.getId());
                     c.println(y.getClassId());
+                    c.println(Tools.getSpecificGrade(y, x));
+                    c.println(Tools.getSpecificComment(y, x));
                     c.println();
                 }   
             }
@@ -338,8 +340,13 @@ public class InteractTxt {
             while(s3.hasNext()){
                 String studentId = s3.nextLine();
                 String classId = s3.nextLine();
+                String grade = s3.nextLine();
+                String comment = s3.nextLine();
                 s3.nextLine();
-                InteractTxt.checkStuID(studentId).Stu_Classes.add(InteractTxt.checkClassID(classId));
+                Student targetStu = InteractTxt.checkStuID(studentId);
+                Class targetClass = InteractTxt.checkClassID(classId);
+                targetStu.Stu_Classes.add(targetClass);
+                targetStu.GradesAndComments.add(new StudentGradeAndComment(targetClass, grade, comment));
                 InteractTxt.checkClassID(classId).Class_Students.add(InteractTxt.checkStuID(studentId));
             }
         }catch(Exception e){
@@ -366,6 +373,7 @@ public class InteractTxt {
                 a.println(x.getAssId());
                 a.println(x.getAssName());
                 a.println(x.getAssType());
+                a.println(x.getAssFullMarks());
                 a.println(x.getAssPercentage());
                 a.println(x.getAssIM().getIMID());
                 a.println();
@@ -378,8 +386,11 @@ public class InteractTxt {
                     for (StudentScore y : x.Stu_Scores) {
                         b.println(x.getId());
                         b.println(y.getAssessment().getAssId());
-                        b.println(y.getScore());
-                        b.println(y.getFullMarks());
+                        b.println(y.getFinalScore());
+                        b.println(y.getOrginalScore());
+                        b.println(y.getOriginalFullMarks());
+                        b.println(y.getFeedback());
+                        b.println();
                     }
                 }
             }
@@ -401,17 +412,21 @@ public class InteractTxt {
                 String percentage = s1.nextLine();
                 String IMID = s1.nextLine();
                 s1.nextLine();
-                allAssessment.add(new Assessment(id, name, type, fullMarks, percentage,checkIMID(IMID)));
+                allAssessment.add(new Assessment(id, name, type, percentage,fullMarks, checkIMID(IMID)));
                 InteractTxt.checkIMID(IMID).IM_Assessments.add(InteractTxt.checkAssID(id));
             } 
             Scanner s2 = new Scanner(new File("src/resources/student_assessment.txt"));
             while(s2.hasNext()){
                 String stuId = s2.nextLine();
                 String assId = s2.nextLine();
-                String score = s2.nextLine();
-                String fullMarks = s2.nextLine();
+                String finalScore = s2.nextLine();
+                String originalScore = s2.nextLine();
+                String originalFullMarks = s2.nextLine();
+                String feedback = s2.nextLine();
                 s2.nextLine();
-                InteractTxt.checkStuID(stuId).Stu_Scores.add(new StudentScore(InteractTxt.checkAssID(assId), score, fullMarks));
+                
+                if (stuId.isEmpty()) System.out.println("gay");
+                InteractTxt.checkStuID(stuId).Stu_Scores.add(new StudentScore(InteractTxt.checkAssID(assId), finalScore, originalScore, originalFullMarks, feedback));
             } 
         }catch(Exception e){
             System.out.println("Error in read ..........");
@@ -428,12 +443,48 @@ public class InteractTxt {
         return null;
     }
     
+    public static ArrayList<Grading> allGrading = new ArrayList<Grading>();
+    
+    public static void writeGrade(){
+        try{
+            PrintWriter a = new PrintWriter("src/resources/grading.txt");
+            for(Grading x : allGrading){
+                a.println(x.getGrade());
+                a.println(x.getMarksFrom());
+                a.println(x.getMarksTo());
+                a.println();
+            }
+            a.close();
+            
+        }catch(Exception e){
+            System.out.println("Error in write ..........");
+            e.printStackTrace();
+        }
+    }
+    
+    public static void readGrade(){
+        try{
+            Scanner s1 = new Scanner(new File("src/resources/grading.txt"));
+            while(s1.hasNext()){
+                String Grade = s1.nextLine();
+                String MarksFrom = s1.nextLine();
+                String MarksTo = s1.nextLine();
+                s1.nextLine();
+                allGrading.add(new Grading(Grade, MarksFrom, MarksTo));
+            } 
+        }catch(Exception e){
+            System.out.println("Error in read ..........");
+            e.printStackTrace();
+        }
+    }
+    
     public static void initDatabase() {
         InteractTxt.readUser();
         InteractTxt.readIntake();
         InteractTxt.readModuleTaught();
         InteractTxt.readClass();
         InteractTxt.readAssessment();
+        InteractTxt.readGrade();
     }
     
     public static void saveDatabase() {
@@ -442,5 +493,6 @@ public class InteractTxt {
         InteractTxt.writeModuleTaught();
         InteractTxt.writeClass();
         InteractTxt.writeAssessment();
+        InteractTxt.writeGrade();
     }
 }

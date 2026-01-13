@@ -16,7 +16,7 @@ import project.utils.*;
 public class DesignAssessment0 extends FrameFormat {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DesignAssessment0.class.getName());
-    private Lecturer sessionUser;
+    private final Lecturer sessionUser;
     private Intake chosenIntake;
     private IntakeModule chosenIM = null;
     
@@ -44,61 +44,19 @@ public class DesignAssessment0 extends FrameFormat {
         this.sessionUser = sessionUser;
         
         intakeDropdown.setEditable(true);
+        intakeDropdown.addItem("None");
+        intakeDropdown.setSelectedItem("None");
+        
         InteractTxt.allIntake.forEach(i -> {
             String item = i.getIntakeId() + " (" + i.getIntakeName() + ")";
             intakeDropdown.addItem(item);
         });
-        
-        intakeDropdown.addItem("None");
-        intakeDropdown.setSelectedItem("None");
         
         AutoCompleteDecorator.decorate(intakeDropdown);
         intakeDropdown.setMaximumRowCount(6);
         
         disableModuleDropdown();
         moduleDropdown.setMaximumRowCount(6);
-        
-//        InteractTxt.initDatabase();
-//        for (IntakeModule x : InteractTxt.allIntakeModule) {
-//            x.getAllIMDetails();
-//            String y = x.getIMID();
-//            System.out.println("Intake id = "+y);
-//            
-//            for (Assessment i : x.IM_Assessments) {
-//                System.out.println("Ass = "+i);
-//                i.getAllAssDetails();
-//            }
-//            if (y.equals("gayyyyyyy")) {
-//                System.out.println("Hit! = "+ y);
-//                x.setIMID("IMID1");
-//            }
-//        }
-//        for (Assessment x : InteractTxt.allAssessment) {
-//            x.getAllAssDetails();
-//        }
-        
-        
-
-//        for (Lecturer x : InteractTxt.allLecturer) {
-//            System.out.println(x.getLeader().getName());
-//        }
-//        
-//        for (Leader x : InteractTxt.allLeader) {
-//            x.getFullUserData();
-//            if (x.getName().equals("keewenyew")) {
-//                x.setName("wenyew");
-//            }
-//        }
-//        
-//        for (Leader x : InteractTxt.allLeader) {
-//            System.out.println(x.getFullUserData());
-//        }
-//        
-//        for (Lecturer x : InteractTxt.allLecturer) {
-//            System.out.println(x.getLeader().getName());
-//        }
-
-            
     }
 
     /**
@@ -117,6 +75,10 @@ public class DesignAssessment0 extends FrameFormat {
         jLabel2 = new javax.swing.JLabel();
         editClassButt = new javax.swing.JButton();
         textForUser = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        backButton = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -135,6 +97,17 @@ public class DesignAssessment0 extends FrameFormat {
         textForUser.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         textForUser.setText("Choose a module");
 
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Module Assessment Designs");
+
+        backButton.setText("Back");
+        backButton.addActionListener(this::backButtonActionPerformed);
+
+        jLabel4.setText(":");
+
+        jLabel5.setText(":");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -142,38 +115,55 @@ public class DesignAssessment0 extends FrameFormat {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(231, 231, 231)
+                        .addGap(66, 66, 66)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(textForUser, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(intakeDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(moduleDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(34, 34, 34))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(236, 236, 236)
                         .addComponent(editClassButt, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(63, 63, 63)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(textForUser, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(intakeDropdown, 0, 316, Short.MAX_VALUE)
-                                    .addComponent(moduleDropdown, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
-                .addContainerGap(69, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(102, 102, 102)
+                .addContainerGap()
+                .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addGap(64, 64, 64)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(intakeDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel4))
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(moduleDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(31, 31, 31)
-                .addComponent(textForUser, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
-                .addGap(31, 31, 31)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel5))
+                .addGap(41, 41, 41)
+                .addComponent(textForUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(39, 39, 39)
                 .addComponent(editClassButt)
-                .addGap(44, 44, 44))
+                .addGap(63, 63, 63))
         );
 
         pack();
@@ -211,13 +201,14 @@ public class DesignAssessment0 extends FrameFormat {
                 ownMods.add(m.getModuleId());
             });
 
+            moduleDropdown.addItem("None");
+            moduleDropdown.setSelectedItem("None");
+            
             chosenIntake.Int_Modules.forEach(m -> {
                 String modId = m.getModuleId();
                 if (ownMods.contains(modId)) moduleDropdown.addItem(modId+" ("+m.getModuleName()+")");
             });
 
-            moduleDropdown.addItem("None");
-            moduleDropdown.setSelectedItem("None");
             moduleDropdown.setEnabled(true);
         }
     }//GEN-LAST:event_intakeDropdownActionPerformed
@@ -264,6 +255,12 @@ public class DesignAssessment0 extends FrameFormat {
         }
     }//GEN-LAST:event_editClassButtActionPerformed
 
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        // TODO add your handling code here:
+        new LecturerDashboard(sessionUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_backButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -298,10 +295,14 @@ public class DesignAssessment0 extends FrameFormat {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backButton;
     private javax.swing.JButton editClassButt;
     private javax.swing.JComboBox<String> intakeDropdown;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JComboBox<String> moduleDropdown;
     private javax.swing.JLabel textForUser;

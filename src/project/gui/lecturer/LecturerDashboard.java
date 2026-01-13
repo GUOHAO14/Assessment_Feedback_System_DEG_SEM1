@@ -5,7 +5,6 @@
 package project.gui.lecturer;
 import project.utils.*;
 import project.roles.*;
-
 /**
  *
  * @author Khoo Guo Hao
@@ -13,23 +12,15 @@ import project.roles.*;
 public class LecturerDashboard extends FrameFormat {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LecturerDashboard.class.getName());
-    private Lecturer sessionUser;
-    /**
-     * Creates new form LecturerDashboard
-     */
+    private final Lecturer sessionUser;
+   
     public LecturerDashboard(Lecturer sessionUser) {
         initComponents();
         super.formatWindow("Lecturer Dashboard");
         this.sessionUser = sessionUser;
         this.sessionUser.printFullLecturerData();
         
-        sessionUser.Lec_Classes.forEach(he -> {
-            System.out.println(he.getClassId()); 
-        });
-        
-        sessionUser.Lec_Modules.forEach(he -> {
-            System.out.println(he.getModuleId()); 
-        });
+        welcomeText.setText("Welcome back, "+sessionUser.getName()+"!");
     }
 
     /**
@@ -41,31 +32,85 @@ public class LecturerDashboard extends FrameFormat {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        designAssessment = new javax.swing.JButton();
+        welcomeText = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        designAssessment1 = new javax.swing.JButton();
+        logout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("jButton1");
+        designAssessment.setText("<html><p style=\"text-align: center;\">Module Assessment Design</p></html>");
+        designAssessment.addActionListener(this::designAssessmentActionPerformed);
+
+        welcomeText.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        welcomeText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        welcomeText.setText("Welcome back, ");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("APU Assessment Feedback System");
+
+        designAssessment1.setText("<html><p style=\"text-align: center;\">Student Assessment Marks</p></html>");
+        designAssessment1.addActionListener(this::designAssessment1ActionPerformed);
+
+        logout.setText("Logout");
+        logout.addActionListener(this::logoutActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(100, 100, 100)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(welcomeText, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(designAssessment, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(designAssessment1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(100, Short.MAX_VALUE))
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(165, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(133, 133, 133))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(logout)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(64, 64, 64)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(196, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addGap(42, 42, 42)
+                .addComponent(welcomeText)
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(designAssessment, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(designAssessment1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void designAssessmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_designAssessmentActionPerformed
+        // TODO add your handling code here:
+        new DesignAssessment0(sessionUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_designAssessmentActionPerformed
+
+    private void designAssessment1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_designAssessment1ActionPerformed
+        // TODO add your handling code here:
+        new EnterAssessmentMarks0(sessionUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_designAssessment1ActionPerformed
+
+    private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
+        // TODO add your handling code here:
+        Tools.logout(this, sessionUser);
+    }//GEN-LAST:event_logoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -101,6 +146,10 @@ public class LecturerDashboard extends FrameFormat {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton designAssessment;
+    private javax.swing.JButton designAssessment1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton logout;
+    private javax.swing.JLabel welcomeText;
     // End of variables declaration//GEN-END:variables
 }

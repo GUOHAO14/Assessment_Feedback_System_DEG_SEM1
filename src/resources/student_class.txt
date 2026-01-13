@@ -1,12 +1,35 @@
 tp076267
 Class1
+A
+kinda mid
 
 tp076267
 Class3
+NA
+sucks
 
 tp076266
 Class3
+C
+NA
 
 tp076266
 Class5
+NA
+NA
+
+tp076266
+Class4
+NA
+NA
+
+tp076266
+C001
+null
+null
+
+tp076266
+C003
+NA
+NA
 
