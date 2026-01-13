@@ -1,14 +1,47 @@
 package project.gui.admin;
 
-import project.utils.FrameFormat;
+import java.awt.*;
+import java.security.SecureRandom;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import project.roles.*;
+import project.utils.*;
 
 public class ManageAcademicLeaders extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ManageAcademicLeaders
-     */
+    private DefaultTableModel model = new DefaultTableModel(
+        new String[]{"Leader ID", "Name", "Email", "Lecturers Assigned"}, 0
+    );
+    
     public ManageAcademicLeaders() {
         initComponents();
+        InteractTxt.readUser();
+        for(Leader x : InteractTxt.allLeader){
+            String Lecturers = "";
+            for(int i=0; i < x.leaderTeam.size(); i++){
+                if(i == (x.leaderTeam.size()-1)){
+                    Lecturers += x.leaderTeam.get(i).getId();
+                }else{
+                    Lecturers += x.leaderTeam.get(i).getId() + ", ";
+                }
+            }
+            model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), Lecturers});
+        }
+        
+        LeaderTable.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(java.awt.event.MouseEvent e) {
+                int row = LeaderTable.rowAtPoint(e.getPoint());
+                int col = LeaderTable.columnAtPoint(e.getPoint());
+                if (row > -1 && col == 3) {
+                    Object value = LeaderTable.getValueAt(row, col);
+                    LeaderTable.setToolTipText(value == null ? null : value.toString());
+                } else {
+                    LeaderTable.setToolTipText(null);
+                }
+            }
+        });
     }
 
     /**
@@ -23,7 +56,7 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        LeaderTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -38,18 +71,13 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setText("Academic Leaders");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+        LeaderTable.setModel(model);
+        LeaderTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                LeaderTableMouseClicked(evt);
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        });
+        jScrollPane1.setViewportView(LeaderTable);
 
         jButton1.setText("Create");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -74,7 +102,7 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jButton2)))))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addGap(30, 30, 30))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,25 +129,18 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         JTextField nameField = new JTextField(25);
         JTextField emailField = new JTextField(25);
-        JComboBox<String> leaderList = new JComboBox<>();
-        for(Leader x : InteractTxt.allLeader){
-            leaderList.addItem(x.getId());
-        }
 
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.add(new JLabel("Name:"));
         panel.add(nameField);
         panel.add(new JLabel("Email:"));
         panel.add(emailField);
-        panel.add(new JLabel("Leader:"));
-        panel.add(leaderList);
 
-        int result = JOptionPane.showConfirmDialog(this, panel, "New Lecturer", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        int result = JOptionPane.showConfirmDialog(this, panel, "New Academic Leader", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
             String name = nameField.getText();
             String email = emailField.getText();
-            String leaderId = (String) leaderList.getSelectedItem();
 
             int max = 0;
             for(Lecturer x : InteractTxt.allLecturer){
@@ -158,18 +179,46 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
             }
             String password = builder.toString();
 
-            String [] userdata = {id, name, email, password, "lecturer"};
-            InteractTxt.allLecturer.add(new Lecturer(userdata));
-
-            InteractTxt.checkLecID(id).setLeader(InteractTxt.checkLeaID(leaderId));
-            InteractTxt.checkLeaID(leaderId).leaderTeam.add(InteractTxt.checkLecID(id));
+            String [] userdata = {id, name, email, password, "leader"};
+            InteractTxt.allLeader.add(new Leader(userdata));
 
             InteractTxt.writeUser();
-            Lecturer New = InteractTxt.checkLecID(id);
-            model.addRow(new String[]{New.getId(), New.getName(), New.getEmail(), New.getLeader().getId()});
+            Leader New = InteractTxt.checkLeaID(id);
+            model.addRow(new String[]{New.getId(), New.getName(), New.getEmail()});
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void LeaderTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LeaderTableMouseClicked
+        int row = LeaderTable.getSelectedRow();
+        Leader Lea = InteractTxt.allLeader.get(row);
+
+        JTextField nameField = new JTextField(25);
+        nameField.setText(Lea.getName());
+        JTextField emailField = new JTextField(25);
+        emailField.setText(Lea.getEmail());
+
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        panel.add(new JLabel("Name:"));
+        panel.add(nameField);
+        panel.add(new JLabel("Email:"));
+        panel.add(emailField);
+
+        int result = JOptionPane.showConfirmDialog(this, panel, Lea.getId(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (result == JOptionPane.OK_OPTION) {
+            String name = nameField.getText();
+            String email = emailField.getText();
+
+            Lea.setName(name);
+            Lea.setEmail(email);
+
+            InteractTxt.writeUser();
+
+            model.setValueAt(name, row, 1);
+            model.setValueAt(email, row, 2);
+        }
+    }//GEN-LAST:event_LeaderTableMouseClicked
 
     /**
      * @param args the command line arguments
@@ -207,10 +256,10 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable LeaderTable;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
