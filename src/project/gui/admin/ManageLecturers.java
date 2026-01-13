@@ -184,8 +184,7 @@ public class ManageLecturers extends javax.swing.JFrame {
     private void LecturerTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LecturerTableMouseClicked
         int row = LecturerTable.getSelectedRow();
         Lecturer Lec = InteractTxt.allLecturer.get(row);
-        
-        
+
         JTextField nameField = new JTextField(25);
         nameField.setText(Lec.getName());
         JTextField emailField = new JTextField(25);
@@ -205,20 +204,20 @@ public class ManageLecturers extends javax.swing.JFrame {
         panel.add(leaderList);
 
         int result = JOptionPane.showConfirmDialog(this, panel, Lec.getId(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-        
+
         if (result == JOptionPane.OK_OPTION) {
             String name = nameField.getText();
             String email = emailField.getText();
             String leaderId = (String) leaderList.getSelectedItem();
-            
+
             Lec.setName(name);
             Lec.setEmail(email);
             Lec.getLeader().leaderTeam.remove(Lec);
             Lec.setLeader(InteractTxt.checkLeaID(leaderId));
             Lec.getLeader().leaderTeam.add(Lec);
-            
+
             InteractTxt.writeUser();
-            
+
             model.setValueAt(name, row, 1);
             model.setValueAt(email, row, 2);
             model.setValueAt(leaderId, row, 3);

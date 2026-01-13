@@ -20,21 +20,156 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton2 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jButton2.setText("Back");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel1.setText("Academic Leaders");
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        jButton1.setText("Create");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(151, 151, 151)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton1)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton2)))))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(jButton2)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addContainerGap(108, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        new Dashboard().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        JTextField nameField = new JTextField(25);
+        JTextField emailField = new JTextField(25);
+        JComboBox<String> leaderList = new JComboBox<>();
+        for(Leader x : InteractTxt.allLeader){
+            leaderList.addItem(x.getId());
+        }
+
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        panel.add(new JLabel("Name:"));
+        panel.add(nameField);
+        panel.add(new JLabel("Email:"));
+        panel.add(emailField);
+        panel.add(new JLabel("Leader:"));
+        panel.add(leaderList);
+
+        int result = JOptionPane.showConfirmDialog(this, panel, "New Lecturer", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (result == JOptionPane.OK_OPTION) {
+            String name = nameField.getText();
+            String email = emailField.getText();
+            String leaderId = (String) leaderList.getSelectedItem();
+
+            int max = 0;
+            for(Lecturer x : InteractTxt.allLecturer){
+                String numPart = x.getId().substring(2);
+                int num = Integer.parseInt(numPart);
+                if (num > max) {
+                    max = num;
+                }
+            }
+            for(Leader x : InteractTxt.allLeader){
+                String numPart = x.getId().substring(2);
+                int num = Integer.parseInt(numPart);
+                if (num > max) {
+                    max = num;
+                }
+            }
+            String id = "lc" + (max + 1);
+
+            String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            String lower = "abcdefghijklmnopqrstuvwxyz";
+            String number = "0123456789";
+            String symbol = "!@#$%^&*()-_=+[]{};:,.<>?/";
+            SecureRandom random = new SecureRandom();
+            ArrayList<Character> pw = new ArrayList<>();
+            pw.add(upper.charAt(random.nextInt(upper.length())));
+            pw.add(lower.charAt(random.nextInt(lower.length())));
+            pw.add(number.charAt(random.nextInt(number.length())));
+            pw.add(symbol.charAt(random.nextInt(symbol.length())));
+            String all = upper + lower + number + symbol;
+            for (int i = 4; i < 12; i++) {
+                pw.add(all.charAt(random.nextInt(all.length())));
+            }
+            StringBuilder builder = new StringBuilder();
+            for (char c : pw) {
+                builder.append(c);
+            }
+            String password = builder.toString();
+
+            String [] userdata = {id, name, email, password, "lecturer"};
+            InteractTxt.allLecturer.add(new Lecturer(userdata));
+
+            InteractTxt.checkLecID(id).setLeader(InteractTxt.checkLeaID(leaderId));
+            InteractTxt.checkLeaID(leaderId).leaderTeam.add(InteractTxt.checkLecID(id));
+
+            InteractTxt.writeUser();
+            Lecturer New = InteractTxt.checkLecID(id);
+            model.addRow(new String[]{New.getId(), New.getName(), New.getEmail(), New.getLeader().getId()});
+        }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -72,5 +207,10 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
