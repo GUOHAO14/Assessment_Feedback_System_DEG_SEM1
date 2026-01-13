@@ -136,56 +136,73 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
         panel.add(new JLabel("Email:"));
         panel.add(emailField);
 
-        int result = JOptionPane.showConfirmDialog(this, panel, "New Academic Leader", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        while(true){
+            int result = JOptionPane.showConfirmDialog(this, panel, "New Academic Leader", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (result != JOptionPane.OK_OPTION) break;
+            
+            if (result == JOptionPane.OK_OPTION) {
+                String name = nameField.getText().trim();
+                String email = emailField.getText().trim();
+                
+                if(ErrorChecking.checkInput(name).equals("null")){
+                    JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkInput(name).equals("number")){
+                    JOptionPane.showMessageDialog(this, "Name cannot in number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkEmail(email).equals("null")){
+                    JOptionPane.showMessageDialog(this, "Email is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkEmail(email).equals("not email")){
+                    JOptionPane.showMessageDialog(this, "Email must be in email format", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkEmail(email).equals("same")){
+                    JOptionPane.showMessageDialog(this, "Email must be Unique", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkInput(name).equals("String") && ErrorChecking.checkEmail(email).equals("String")){
+                    int max = 0;
+                    for(Lecturer x : InteractTxt.allLecturer){
+                        String numPart = x.getId().substring(2);
+                        int num = Integer.parseInt(numPart);
+                        if (num > max) {
+                            max = num;
+                        }
+                    }
+                    for(Leader x : InteractTxt.allLeader){
+                        String numPart = x.getId().substring(2);
+                        int num = Integer.parseInt(numPart);
+                        if (num > max) {
+                            max = num;
+                        }
+                    }
+                    String id = "lc" + (max + 1);
 
-        if (result == JOptionPane.OK_OPTION) {
-            String name = nameField.getText();
-            String email = emailField.getText();
+                    String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                    String lower = "abcdefghijklmnopqrstuvwxyz";
+                    String number = "0123456789";
+                    String symbol = "!@#$%^&*()-_=+[]{};:,.<>?/";
+                    SecureRandom random = new SecureRandom();
+                    ArrayList<Character> pw = new ArrayList<>();
+                    pw.add(upper.charAt(random.nextInt(upper.length())));
+                    pw.add(lower.charAt(random.nextInt(lower.length())));
+                    pw.add(number.charAt(random.nextInt(number.length())));
+                    pw.add(symbol.charAt(random.nextInt(symbol.length())));
+                    String all = upper + lower + number + symbol;
+                    for (int i = 4; i < 12; i++) {
+                        pw.add(all.charAt(random.nextInt(all.length())));
+                    }
+                    StringBuilder builder = new StringBuilder();
+                    for (char c : pw) {
+                        builder.append(c);
+                    }
+                    String password = builder.toString();
 
-            int max = 0;
-            for(Lecturer x : InteractTxt.allLecturer){
-                String numPart = x.getId().substring(2);
-                int num = Integer.parseInt(numPart);
-                if (num > max) {
-                    max = num;
+                    String [] userdata = {id, name, email, password, "leader"};
+                    InteractTxt.allLeader.add(new Leader(userdata));
+
+                    InteractTxt.writeUser();
+                    Leader New = InteractTxt.checkLeaID(id);
+                    model.addRow(new String[]{New.getId(), New.getName(), New.getEmail()});
+                    break;
                 }
             }
-            for(Leader x : InteractTxt.allLeader){
-                String numPart = x.getId().substring(2);
-                int num = Integer.parseInt(numPart);
-                if (num > max) {
-                    max = num;
-                }
-            }
-            String id = "lc" + (max + 1);
-
-            String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            String lower = "abcdefghijklmnopqrstuvwxyz";
-            String number = "0123456789";
-            String symbol = "!@#$%^&*()-_=+[]{};:,.<>?/";
-            SecureRandom random = new SecureRandom();
-            ArrayList<Character> pw = new ArrayList<>();
-            pw.add(upper.charAt(random.nextInt(upper.length())));
-            pw.add(lower.charAt(random.nextInt(lower.length())));
-            pw.add(number.charAt(random.nextInt(number.length())));
-            pw.add(symbol.charAt(random.nextInt(symbol.length())));
-            String all = upper + lower + number + symbol;
-            for (int i = 4; i < 12; i++) {
-                pw.add(all.charAt(random.nextInt(all.length())));
-            }
-            StringBuilder builder = new StringBuilder();
-            for (char c : pw) {
-                builder.append(c);
-            }
-            String password = builder.toString();
-
-            String [] userdata = {id, name, email, password, "leader"};
-            InteractTxt.allLeader.add(new Leader(userdata));
-
-            InteractTxt.writeUser();
-            Leader New = InteractTxt.checkLeaID(id);
-            model.addRow(new String[]{New.getId(), New.getName(), New.getEmail()});
         }
+        
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -204,20 +221,37 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
         panel.add(new JLabel("Email:"));
         panel.add(emailField);
 
-        int result = JOptionPane.showConfirmDialog(this, panel, Lea.getId(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        while(true){
+            int result = JOptionPane.showConfirmDialog(this, panel, Lea.getId(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (result != JOptionPane.OK_OPTION) break;
+            
+            if (result == JOptionPane.OK_OPTION) {
+                String name = nameField.getText().trim();
+                String email = emailField.getText().trim();
+                
+                if(ErrorChecking.checkInput(name).equals("null")){
+                    JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkInput(name).equals("number")){
+                    JOptionPane.showMessageDialog(this, "Name cannot in number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkEmail(email).equals("null")){
+                    JOptionPane.showMessageDialog(this, "Email is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkEmail(email).equals("not email")){
+                    JOptionPane.showMessageDialog(this, "Email must be in email format", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkEmail(email).equals("same")){
+                    JOptionPane.showMessageDialog(this, "Email must be Unique", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkInput(name).equals("String") && ErrorChecking.checkEmail(email).equals("String")){
+                    Lea.setName(name);
+                    Lea.setEmail(email);
 
-        if (result == JOptionPane.OK_OPTION) {
-            String name = nameField.getText();
-            String email = emailField.getText();
+                    InteractTxt.writeUser();
 
-            Lea.setName(name);
-            Lea.setEmail(email);
-
-            InteractTxt.writeUser();
-
-            model.setValueAt(name, row, 1);
-            model.setValueAt(email, row, 2);
+                    model.setValueAt(name, row, 1);
+                    model.setValueAt(email, row, 2);
+                    break;
+                }
+            }
         }
+        
     }//GEN-LAST:event_LeaderTableMouseClicked
 
     /**
