@@ -53,6 +53,11 @@ public class ManageLecturers extends javax.swing.JFrame {
         jLabel1.setText("Lecturers");
 
         LecturerTable.setModel(model);
+        LecturerTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                LecturerTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(LecturerTable);
 
         jButton1.setText("Create");
@@ -175,6 +180,50 @@ public class ManageLecturers extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void LecturerTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LecturerTableMouseClicked
+        int row = LecturerTable.getSelectedRow();
+        Lecturer Lec = InteractTxt.allLecturer.get(row);
+        
+        
+        JTextField nameField = new JTextField(25);
+        nameField.setText(Lec.getName());
+        JTextField emailField = new JTextField(25);
+        emailField.setText(Lec.getEmail());
+        JComboBox<String> leaderList = new JComboBox<>();
+        for(Leader x : InteractTxt.allLeader){
+            leaderList.addItem(x.getId());
+        }
+        leaderList.setSelectedItem(Lec.getLeader().getId());
+
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        panel.add(new JLabel("Name:"));
+        panel.add(nameField);
+        panel.add(new JLabel("Email:"));
+        panel.add(emailField);
+        panel.add(new JLabel("Leader:"));
+        panel.add(leaderList);
+
+        int result = JOptionPane.showConfirmDialog(this, panel, Lec.getId(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        
+        if (result == JOptionPane.OK_OPTION) {
+            String name = nameField.getText();
+            String email = emailField.getText();
+            String leaderId = (String) leaderList.getSelectedItem();
+            
+            Lec.setName(name);
+            Lec.setEmail(email);
+            Lec.getLeader().leaderTeam.remove(Lec);
+            Lec.setLeader(InteractTxt.checkLeaID(leaderId));
+            Lec.getLeader().leaderTeam.add(Lec);
+            
+            InteractTxt.writeUser();
+            
+            model.setValueAt(name, row, 1);
+            model.setValueAt(email, row, 2);
+            model.setValueAt(leaderId, row, 3);
+        }
+    }//GEN-LAST:event_LecturerTableMouseClicked
 
     /**
      * @param args the command line arguments
