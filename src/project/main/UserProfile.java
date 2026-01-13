@@ -3,40 +3,41 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package project.main;
+
 import javax.swing.JOptionPane;
 import project.utils.*;
 import project.roles.*;
 import java.lang.Class;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
  *
  * @author US
  */
 public class UserProfile extends FrameFormat {
-    private static final java.util.logging.Logger logger =  java.util.logging.Logger.getLogger(UserProfile.class.getName()); 
-    private User sessionUser; // Base class for all roles
+
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UserProfile.class.getName());
+    private User sessionUser;
     private String dashboardClassName;
 //     * Creates new form UserProfile
 //     */
+
     public UserProfile(User sessionUser) {
         initComponents();
         this.sessionUser = sessionUser;
-        
-        // Set appropriate title based on role
-        String roleTitle = sessionUser.getRole();
-        super.formatWindow(roleTitle + " Profile");
-        jLabel1.setText(roleTitle + " Profile");
-        
+        super.formatWindow("User Profile");
+        jLabel1.setText("User Profile");
         // Determine dashboard class for back navigation
         determineDashboardClass();
-        
-        // Load user data
+        displayStudentFields();
         loadUserData();
     }
-    
-         private void determineDashboardClass() {
-        String role = sessionUser.getRole().toLowerCase();
-        switch(role) {
+
+    private void determineDashboardClass() {
+        String role = sessionUser.getRole();
+        switch (role) {
             case "leader":
                 dashboardClassName = "project.gui.leader.LeaderDashboard";
                 break;
@@ -44,64 +45,82 @@ public class UserProfile extends FrameFormat {
                 dashboardClassName = "project.gui.lecturer.LecturerDashboard";
                 break;
             case "student":
-                dashboardClassName = "project.gui.student.StudentDashboard";
+                dashboardClassName = "project.gui.student.StudentHomepage";
                 break;
             case "admin":
-                dashboardClassName = "project.gui.admin.AdminDashboard";
+                dashboardClassName = "project.gui.admin.Dashboard";
                 break;
         }
     }
-         private void loadUserData() {
-        // Display user information in fields
-        idField.setText(sessionUser.getId());       
-        nameField.setText(sessionUser.getName());       
-        emailField.setText(sessionUser.getEmail());     
+
+    private void loadUserData() {
+        idField.setText(sessionUser.getId());
+        nameField.setText(sessionUser.getName());
+        emailField.setText(sessionUser.getEmail());
         pwField.setText(sessionUser.getPW());
-        roleField.setText(sessionUser.getRole());       
+        roleField.setText(sessionUser.getRole());
+
+        if (sessionUser instanceof Student) {
+            Student student = (Student) sessionUser;
+
+            String intakeId = student.getIntakeId();
+            if (intakeId != null && !intakeId.isEmpty()) {
+                Intake intake = InteractTxt.checkIntID(intakeId);
+                if (intake != null) {
+                    intakeField.setText(intakeId + " - " + intake.getIntakeName());
+                } else {
+                    intakeField.setText(intakeId);
+                }
+            }
+            String dob = student.getDob();
+            dobField.setText(dob);
+
+        }
     }
-    
-    private void saveUserData() {
-        String newName = nameField.getText().trim();
-        String newEmail = emailField.getText().trim().toLowerCase();
-        String newPassword = new String(pwField.getPassword());
-   
-        // Validate input
-        if (newName.isEmpty()) {
-            JOptionPane.showMessageDialog(this,"Please fill in your name!","Validation Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        if (newEmail.isEmpty() || !newEmail.contains("@")) {
-            JOptionPane.showMessageDialog(this,"Please enter a valid email","Validation Error",JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        if (newPassword.isEmpty()) {
-            JOptionPane.showMessageDialog(this,"Please enter a password","Validation Error",JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        // Update user profile (Only saved in Object NOT Database)
-        sessionUser.setName(newName);
-        sessionUser.setEmail(newEmail);
-        sessionUser.setPW(newPassword);
-        
-        JOptionPane.showMessageDialog(this,"Profile will be saved when you logged out.","Success",JOptionPane.INFORMATION_MESSAGE);
+
+    private void displayStudentFields() {
+        boolean isStudent = sessionUser instanceof Student;
+
+        dobLabel.setVisible(isStudent);
+        dobField.setVisible(isStudent);
+        intakeLabel.setVisible(isStudent);
+        intakeField.setVisible(isStudent);
     }
-    
+
     private void navigateBackToDashboard() {
         try {
             // Use reflection to create the appropriate dashboard instance
             Class<?> dashboardClass = Class.forName(dashboardClassName);
             Object dashboard = dashboardClass.getConstructor(sessionUser.getClass()).newInstance(sessionUser);
-            
+
             // Make dashboard visible
             ((javax.swing.JFrame) dashboard).setVisible(true);
             this.dispose();
-            
+
         } catch (Exception e) {
             logger.log(java.util.logging.Level.SEVERE, "Error navigating to dashboard", e);
-            JOptionPane.showMessageDialog(this,"Error returning to dashboard: " + e.getMessage(),"Navigation Error",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error returning to dashboard: " + e.getMessage(), "Navigation Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private boolean isValidDOB(String dob) {
+        if (dob == null || dob.isEmpty()) {
+            return false;
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        try {
+            LocalDate parsedDate = LocalDate.parse(dob, formatter);
+
+            // Block future dates
+            if (parsedDate.isAfter(LocalDate.now())) {
+                return false;
+            }
+
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
         }
     }
 
@@ -128,6 +147,10 @@ public class UserProfile extends FrameFormat {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        dobLabel = new javax.swing.JLabel();
+        dobField = new javax.swing.JTextField();
+        intakeLabel = new javax.swing.JLabel();
+        intakeField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -168,6 +191,7 @@ public class UserProfile extends FrameFormat {
 
         pwField.setText("jPasswordField1");
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setText("User Profile");
 
         jLabel2.setText("ID");
@@ -176,6 +200,15 @@ public class UserProfile extends FrameFormat {
 
         jLabel4.setText("Email");
 
+        dobLabel.setText("DOB");
+
+        dobField.setText("jTextField1");
+
+        intakeLabel.setText("Intake");
+
+        intakeField.setEditable(false);
+        intakeField.setText("jTextField2");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -183,70 +216,90 @@ public class UserProfile extends FrameFormat {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton1))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(6, 6, 6))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(passwordDisplayControl)
-                                .addGap(0, 111, Short.MAX_VALUE))
-                            .addComponent(pwField)
-                            .addComponent(emailField)
-                            .addComponent(nameField)
-                            .addComponent(idField)
-                            .addComponent(roleField))))
-                .addGap(72, 72, 72))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(165, 165, 165))
+                        .addGap(70, 70, 70)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jLabel2)
+                                                .addComponent(jLabel3)
+                                                .addComponent(jLabel4)
+                                                .addComponent(jLabel6)
+                                                .addComponent(intakeLabel))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(dobLabel)
+                                                .addGap(9, 9, 9)))
+                                        .addGap(24, 24, 24))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(intakeField)
+                                    .addComponent(pwField)
+                                    .addComponent(emailField)
+                                    .addComponent(nameField)
+                                    .addComponent(idField)
+                                    .addComponent(roleField)
+                                    .addComponent(dobField)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(passwordDisplayControl)
+                                        .addGap(0, 237, Short.MAX_VALUE)))))))
+                .addGap(51, 51, 51))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(jLabel1)
+                .addContainerGap()
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(emailField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(emailField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
                 .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(pwField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(passwordDisplayControl)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(roleField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
-                        .addContainerGap(45, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2))
-                        .addContainerGap())))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(passwordDisplayControl)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(roleField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dobField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dobLabel))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(intakeLabel)
+                    .addComponent(intakeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         pack();
@@ -255,7 +308,7 @@ public class UserProfile extends FrameFormat {
     private void passwordDisplayControlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordDisplayControlActionPerformed
         // TODO add your handling code here:
         if (passwordDisplayControl.isSelected()) {
-            pwField.setEchoChar((char)0);
+            pwField.setEchoChar((char) 0);
         } else {
             pwField.setEchoChar('*');
         }
@@ -263,12 +316,44 @@ public class UserProfile extends FrameFormat {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        saveUserData();
+        String newName = nameField.getText().trim();
+        String newEmail = emailField.getText().trim().toLowerCase();
+        String newPassword = new String(pwField.getPassword());
+
+        // Validate input
+        if (newName.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter your name.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (newEmail.isEmpty() || !newEmail.contains("@")) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid email.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (newPassword.isEmpty() || newPassword.length() < 7) {
+            JOptionPane.showMessageDialog(this, "Please enter a password with at least 8 characters.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        sessionUser.setName(newName);
+        sessionUser.setEmail(newEmail);
+        sessionUser.setPW(newPassword);
+
+        String dob = dobField.getText().trim();
+
+        if (!isValidDOB(dob)) {
+            JOptionPane.showMessageDialog(this, "Invalid Date of Birth!\nFormat: YYYY-MM-DD\nExample: 2005-02-14", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        JOptionPane.showMessageDialog(this, "Profile will be saved when you logged out.", "Success", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         navigateBackToDashboard();
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -301,14 +386,31 @@ public class UserProfile extends FrameFormat {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-//                new UserProfile().setVisible(true);
+//                test student
+//                InteractTxt.initDatabase();
+//              
+//                String testId = "tp076267";   
+//             
+//                InteractTxt.allStudent.forEach(s -> {
+//                    if (s.getId().equalsIgnoreCase(testId)) {
+//
+//                        java.awt.EventQueue.invokeLater(() -> {
+//                            new UserProfile(s).setVisible(true);
+//                        });
+//
+//                    }
+//                });
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField dobField;
+    private javax.swing.JLabel dobLabel;
     private javax.swing.JTextField emailField;
     private javax.swing.JTextField idField;
+    private javax.swing.JTextField intakeField;
+    private javax.swing.JLabel intakeLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
