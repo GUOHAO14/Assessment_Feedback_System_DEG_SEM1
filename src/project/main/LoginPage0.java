@@ -102,7 +102,7 @@ public class LoginPage0 extends FrameFormat {
 
     private void leaderLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leaderLoginActionPerformed
         // TODO add your handling code here:
-        new LoginPage1(InteractTxt.allLeader, "Academic Leader").setVisible(true);
+        new LoginPage1(InteractTxt.allLeader, "Leader").setVisible(true); //Changed usertype from Academic Leader to Leader
         this.dispose();
     }//GEN-LAST:event_leaderLoginActionPerformed
 
