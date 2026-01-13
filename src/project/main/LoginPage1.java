@@ -222,8 +222,8 @@ public class LoginPage1 extends FrameFormat {
 
             } else if (sessionUser instanceof Leader) {
                 Leader leader = (Leader) sessionUser;
-//                new project.gui.leader.LeaderDashboard().setVisible(true);
-//                this.dispose();
+                new project.gui.leader.LeaderDashboard(leader).setVisible(true);
+                this.dispose();
 
             } else if (sessionUser instanceof Admin) {
                 Admin admin = (Admin) sessionUser;
