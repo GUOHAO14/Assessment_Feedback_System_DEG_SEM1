@@ -1,7 +1,6 @@
 package project.gui.admin;
 
 import java.awt.*;
-import java.security.SecureRandom;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -219,9 +218,9 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Email is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
                 } else if (ErrorChecking.checkEmail(email).equals("not email")){
                     JOptionPane.showMessageDialog(this, "Email must be in email format", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkEmail(email).equals("same")){
+                } else if (ErrorChecking.checkEmail(email).equals("same") && !email.equals(Lea.getEmail())){
                     JOptionPane.showMessageDialog(this, "Email must be Unique", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkInput(name).equals("String") && ErrorChecking.checkEmail(email).equals("String")){
+                } else if (ErrorChecking.checkInput(name).equals("String") && (ErrorChecking.checkEmail(email).equals("String") || email.equals(Lea.getEmail()))){
                     Lea.setName(name);
                     Lea.setEmail(email);
 

@@ -2,7 +2,6 @@ package project.gui.admin;
 
 import java.awt.*;
 import javax.swing.table.DefaultTableModel;
-import java.security.SecureRandom;
 import java.util.*;
 import javax.swing.*;
 import project.roles.*;
@@ -21,7 +20,7 @@ public class ManageStudents extends javax.swing.JFrame {
             model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), x.getIntakeId(), x.getDob()});
         }
     }
-    //DOB, combine password generator into tools, email error checking error
+    //DOB, email error checking error, delete
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -149,9 +148,9 @@ public class ManageStudents extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Email is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
                 } else if (ErrorChecking.checkEmail(email).equals("not email")){
                     JOptionPane.showMessageDialog(this, "Email must be in email format", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkEmail(email).equals("same")){
+                } else if (ErrorChecking.checkEmail(email).equals("same") && !email.equals(Stu.getEmail())){
                     JOptionPane.showMessageDialog(this, "Email must be Unique", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkInput(name).equals("String") && ErrorChecking.checkEmail(email).equals("String")){
+                } else if (ErrorChecking.checkInput(name).equals("String") && (ErrorChecking.checkEmail(email).equals("String") || email.equals(Stu.getEmail()))){
                     Stu.setName(name);
                     Stu.setEmail(email);
                     Stu.setIntakeId(intakeId);
