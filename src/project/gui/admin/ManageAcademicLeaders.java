@@ -15,7 +15,6 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
     
     public ManageAcademicLeaders() {
         initComponents();
-        InteractTxt.readUser();
         for(Leader x : InteractTxt.allLeader){
             String Lecturers = "";
             for(int i=0; i < x.leaderTeam.size(); i++){

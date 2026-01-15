@@ -17,7 +17,6 @@ public class ManageStudents extends javax.swing.JFrame {
     
     public ManageStudents() {
         initComponents();
-        InteractTxt.initDatabase();
         for(Student x : InteractTxt.allStudent){
             model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), x.getIntakeId(), x.getDob()});
         }

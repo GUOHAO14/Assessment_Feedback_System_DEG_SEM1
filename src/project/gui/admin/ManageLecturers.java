@@ -15,7 +15,6 @@ public class ManageLecturers extends javax.swing.JFrame {
     
     public ManageLecturers() {
         initComponents();
-        InteractTxt.readUser();
         for(Lecturer x : InteractTxt.allLecturer){
             model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), x.getLeader().getId()});
         }

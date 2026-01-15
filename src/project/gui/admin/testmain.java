@@ -4,12 +4,15 @@
  */
 package project.gui.admin;
 
+import project.utils.*;
+
 /**
  *
  * @author User
  */
 public class testmain {
     public static void main(String[]args) {
+        InteractTxt.initDatabase();
         new Dashboard().setVisible(true);
     }
 }
