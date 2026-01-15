@@ -1,6 +1,8 @@
 package project.gui.admin;
 
 import java.awt.*;
+import java.text.*;
+import java.time.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.*;
 import javax.swing.*;
@@ -20,7 +22,7 @@ public class ManageStudents extends javax.swing.JFrame {
             model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), x.getIntakeId(), x.getDob()});
         }
     }
-    //DOB, email error checking error, delete
+    //delete
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -122,6 +124,12 @@ public class ManageStudents extends javax.swing.JFrame {
         if(!Stu.Stu_Classes.isEmpty()){
             intakeList.setEnabled(false);
         }
+        SpinnerDateModel dobModel = new SpinnerDateModel(new Date(), null, new Date(), Calendar.DAY_OF_MONTH);
+        JSpinner dobSpinner = new JSpinner(dobModel);
+        JSpinner.DateEditor editor = new JSpinner.DateEditor(dobSpinner, "yyyy-MM-dd");
+        dobSpinner.setEditor(editor);
+        editor.getTextField().setEditable(false);
+        dobSpinner.setValue(Date.from(LocalDate.parse(Stu.getDob()).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.add(new JLabel("Name:"));
@@ -130,6 +138,8 @@ public class ManageStudents extends javax.swing.JFrame {
         panel.add(emailField);
         panel.add(new JLabel("Intake:"));
         panel.add(intakeList);
+        panel.add(new JLabel("Date Of Birth:"));
+        panel.add(dobSpinner);
 
         while(true){
             int result = JOptionPane.showConfirmDialog(this, panel, Stu.getId(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -139,6 +149,7 @@ public class ManageStudents extends javax.swing.JFrame {
                 String name = nameField.getText().trim();
                 String email = emailField.getText().trim();
                 String intakeId = (String) intakeList.getSelectedItem();
+                String dob = new SimpleDateFormat("yyyy-MM-dd").format((Date) dobSpinner.getValue());
 
                 if(ErrorChecking.checkInput(name).equals("null")){
                     JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
@@ -154,12 +165,14 @@ public class ManageStudents extends javax.swing.JFrame {
                     Stu.setName(name);
                     Stu.setEmail(email);
                     Stu.setIntakeId(intakeId);
+                    Stu.setDob(dob);
 
                     InteractTxt.writeUser();
 
                     model.setValueAt(name, row, 1);
                     model.setValueAt(email, row, 2);
                     model.setValueAt(intakeId, row, 3);
+                    model.setValueAt(dob, row, 4);
                     break;
                 }
             }
@@ -174,6 +187,11 @@ public class ManageStudents extends javax.swing.JFrame {
         for(Intake x : InteractTxt.allIntake){
             intakeList.addItem(x.getIntakeId());
         }
+        SpinnerDateModel dobModel = new SpinnerDateModel(new Date(), null, new Date(), Calendar.DAY_OF_MONTH);
+        JSpinner dobSpinner = new JSpinner(dobModel);
+        JSpinner.DateEditor editor = new JSpinner.DateEditor(dobSpinner, "yyyy-MM-dd");
+        dobSpinner.setEditor(editor);
+        editor.getTextField().setEditable(false);
 
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.add(new JLabel("Name:"));
@@ -182,6 +200,8 @@ public class ManageStudents extends javax.swing.JFrame {
         panel.add(emailField);
         panel.add(new JLabel("Intake:"));
         panel.add(intakeList);
+        panel.add(new JLabel("Date Of Birth:"));
+        panel.add(dobSpinner);
 
         while(true){
             int result = JOptionPane.showConfirmDialog(this, panel, "New Student", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -191,6 +211,7 @@ public class ManageStudents extends javax.swing.JFrame {
                 String name = nameField.getText().trim();
                 String email = emailField.getText().trim();
                 String intakeId = (String) intakeList.getSelectedItem();
+                String dob = new SimpleDateFormat("yyyy-MM-dd").format((Date) dobSpinner.getValue());
 
                 if(ErrorChecking.checkInput(name).equals("null")){
                     JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
@@ -220,7 +241,7 @@ public class ManageStudents extends javax.swing.JFrame {
                     
                     Student New = InteractTxt.checkStuID(id);
                     New.setIntakeId(intakeId);
-//                    New.setDob(intakeId);
+                    New.setDob(dob);
 
                     InteractTxt.writeUser();
                     
