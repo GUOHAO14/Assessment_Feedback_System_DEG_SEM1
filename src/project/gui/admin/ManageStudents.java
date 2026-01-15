@@ -16,13 +16,12 @@ public class ManageStudents extends javax.swing.JFrame {
     
     public ManageStudents() {
         initComponents();
-        InteractTxt.readUser();
-        InteractTxt.readIntake();
+        InteractTxt.initDatabase();
         for(Student x : InteractTxt.allStudent){
             model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), x.getIntakeId(), x.getDob()});
         }
     }
-    //DOB, update intake, combine password generator into tools
+    //DOB, combine password generator into tools, email error checking error
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -121,6 +120,9 @@ public class ManageStudents extends javax.swing.JFrame {
             intakeList.addItem(x.getIntakeId());
         }
         intakeList.setSelectedItem(Stu.getIntakeId());
+        if(!Stu.Stu_Classes.isEmpty()){
+            intakeList.setEnabled(false);
+        }
 
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.add(new JLabel("Name:"));
@@ -212,25 +214,7 @@ public class ManageStudents extends javax.swing.JFrame {
                     }
                     String id = "tp" + (max + 1);
 
-                    String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                    String lower = "abcdefghijklmnopqrstuvwxyz";
-                    String number = "0123456789";
-                    String symbol = "!@#$%^&*()-_=+[]{};:,.<>?/";
-                    SecureRandom random = new SecureRandom();
-                    ArrayList<Character> pw = new ArrayList<>();
-                    pw.add(upper.charAt(random.nextInt(upper.length())));
-                    pw.add(lower.charAt(random.nextInt(lower.length())));
-                    pw.add(number.charAt(random.nextInt(number.length())));
-                    pw.add(symbol.charAt(random.nextInt(symbol.length())));
-                    String all = upper + lower + number + symbol;
-                    for (int i = 4; i < 12; i++) {
-                        pw.add(all.charAt(random.nextInt(all.length())));
-                    }
-                    StringBuilder builder = new StringBuilder();
-                    for (char c : pw) {
-                        builder.append(c);
-                    }
-                    String password = builder.toString();
+                    String password = Tools.GeneratePW();
 
                     String [] userdata = {id, name, email, password, "student"};
                     InteractTxt.allStudent.add(new Student(userdata));
