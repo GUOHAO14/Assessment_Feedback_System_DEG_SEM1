@@ -21,7 +21,6 @@ public class ManageStudents extends javax.swing.JFrame {
             model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), x.getIntakeId(), x.getDob()});
         }
     }
-    //delete
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -141,10 +140,11 @@ public class ManageStudents extends javax.swing.JFrame {
         panel.add(dobSpinner);
 
         while(true){
-            int result = JOptionPane.showConfirmDialog(this, panel, Stu.getId(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            if (result != JOptionPane.OK_OPTION) break;
+            Object[] options = {"OK", "Delete", "Cancel"};
+            int result = JOptionPane.showOptionDialog(this,panel,Stu.getId(),JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[2]);
+            if (result != 0 && result != 1) break;
 
-            if (result == JOptionPane.OK_OPTION) {
+            if (result == 0) {
                 String name = nameField.getText().trim();
                 String email = emailField.getText().trim();
                 String intakeId = (String) intakeList.getSelectedItem();
@@ -174,6 +174,17 @@ public class ManageStudents extends javax.swing.JFrame {
                     model.setValueAt(dob, row, 4);
                     break;
                 }
+            }
+            
+            if (result == 1) {
+                InteractTxt.allStudent.remove(Stu);
+                for (project.roles.Class x : Stu.Stu_Classes){
+                    x.Class_Students.remove(Stu);
+                }
+                
+                InteractTxt.saveDatabase();
+                model.removeRow(row);
+                break;
             }
         }
 

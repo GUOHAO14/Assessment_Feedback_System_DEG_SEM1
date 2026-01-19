@@ -201,10 +201,11 @@ public class ManageLecturers extends javax.swing.JFrame {
         panel.add(leaderList);
 
         while (true) {
-            int result = JOptionPane.showConfirmDialog(this, panel, Lec.getId(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            if (result != JOptionPane.OK_OPTION) break;
+            Object[] options = {"OK", "Delete", "Cancel"};
+            int result = JOptionPane.showOptionDialog(this,panel,Lec.getId(),JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[2]);
+            if (result != 0 && result != 1) break;
 
-            if (result == JOptionPane.OK_OPTION) {
+            if (result == 0) {
                 String name = nameField.getText().trim();
                 String email = emailField.getText().trim();
                 String leaderId = (String) leaderList.getSelectedItem();
@@ -233,6 +234,14 @@ public class ManageLecturers extends javax.swing.JFrame {
                     model.setValueAt(leaderId, row, 3);
                     break;
                 }
+            }
+            
+            if (result == 1) {
+//                InteractTxt.allLecturer.remove(Lec);
+//                
+//                InteractTxt.saveDatabase();
+//                model.removeRow(row);
+//                break;
             }
         }
         
