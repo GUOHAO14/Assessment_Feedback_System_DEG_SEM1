@@ -22,15 +22,12 @@ public class UserProfile extends FrameFormat {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UserProfile.class.getName());
     private User sessionUser;
     private String dashboardClassName;
-//     * Creates new form UserProfile
-//     */
 
     public UserProfile(User sessionUser) {
         initComponents();
         this.sessionUser = sessionUser;
         super.formatWindow("User Profile");
         jLabel1.setText("User Profile");
-        // Determine dashboard class for back navigation
         displayStudentFields();
         loadUserData();
     }
@@ -297,7 +294,7 @@ public class UserProfile extends FrameFormat {
             return;
         }
 
-        if (newPassword.isEmpty() || newPassword.length() < 7) {
+        if (newPassword.isEmpty() || newPassword.length() < 8) {
             JOptionPane.showMessageDialog(this, "Please enter a password with at least 8 characters.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -316,7 +313,7 @@ public class UserProfile extends FrameFormat {
 
         }
         InteractTxt.saveDatabase();
-        JOptionPane.showMessageDialog(this, "User profile is saved", "Success", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Profile is saved.", "Success", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
