@@ -25,21 +25,16 @@ public class LeaderModule extends FrameFormat {
     private String[] columnName = {"Module ID", "Module Name"};
     private JPopupMenu popupMenu;
 
-    /**
-     * Creates new form LeaderModule
-     */
     public LeaderModule(Leader sessionUser) {
         initComponents();
         super.formatWindow("Leader Module");
         this.sessionUser = sessionUser;
-
         model.setColumnIdentifiers(columnName);
+        
         sessionUser.printLeaderTeam();
-
-        // Initialize popup menu
+        
         createPopupMenu();
-
-        // Then load data
+        
         loadModuleData();
     }
 
