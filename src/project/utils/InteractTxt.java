@@ -327,7 +327,7 @@ public class InteractTxt {
                 String lecId = s1.nextLine();
                 s1.nextLine();
                 allClass.add(new Class(id, name, lecId));
-                if(lecId != "NA"){
+                if(lecId.equals("NA")){
                     InteractTxt.checkLecID(lecId).Lec_Classes.add(InteractTxt.checkClassID(id));
                 }
             }
