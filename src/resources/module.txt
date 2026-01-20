@@ -1,18 +1,24 @@
 Mod1
 Java
+lc076357
 
 Mod2
 Python
+lc076357
 
 Mod3
 C++
+lc456
 
 Mod4
 Intro to Cyber
+lc456
 
 M001
 Object Oriented Programming
+lc76364
 
 M002
 Data Structures
+lc76364
 
