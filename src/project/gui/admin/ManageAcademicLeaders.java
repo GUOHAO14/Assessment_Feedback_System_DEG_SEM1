@@ -1,14 +1,45 @@
 package project.gui.admin;
 
-import project.utils.FrameFormat;
+import java.awt.*;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import project.roles.*;
+import project.utils.*;
 
 public class ManageAcademicLeaders extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ManageAcademicLeaders
-     */
+    private DefaultTableModel model = new DefaultTableModel(
+        new String[]{"Leader ID", "Name", "Email", "Lecturers Assigned"}, 0
+    );
+    
     public ManageAcademicLeaders() {
         initComponents();
+        for(Leader x : InteractTxt.allLeader){
+            String Lecturers = "";
+            for(int i=0; i < x.leaderTeam.size(); i++){
+                if(i == (x.leaderTeam.size()-1)){
+                    Lecturers += x.leaderTeam.get(i).getId();
+                }else{
+                    Lecturers += x.leaderTeam.get(i).getId() + ", ";
+                }
+            }
+            model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), Lecturers});
+        }
+        
+        LeaderTable.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(java.awt.event.MouseEvent e) {
+                int row = LeaderTable.rowAtPoint(e.getPoint());
+                int col = LeaderTable.columnAtPoint(e.getPoint());
+                if (row > -1 && col == 3) {
+                    Object value = LeaderTable.getValueAt(row, col);
+                    LeaderTable.setToolTipText(value == null ? null : value.toString());
+                } else {
+                    LeaderTable.setToolTipText(null);
+                }
+            }
+        });
     }
 
     /**
@@ -23,7 +54,7 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        LeaderTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -38,18 +69,13 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setText("Academic Leaders");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+        LeaderTable.setModel(model);
+        LeaderTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                LeaderTableMouseClicked(evt);
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        });
+        jScrollPane1.setViewportView(LeaderTable);
 
         jButton1.setText("Create");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -74,7 +100,7 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jButton2)))))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addGap(30, 30, 30))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,75 +127,142 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         JTextField nameField = new JTextField(25);
         JTextField emailField = new JTextField(25);
-        JComboBox<String> leaderList = new JComboBox<>();
-        for(Leader x : InteractTxt.allLeader){
-            leaderList.addItem(x.getId());
-        }
 
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.add(new JLabel("Name:"));
         panel.add(nameField);
         panel.add(new JLabel("Email:"));
         panel.add(emailField);
-        panel.add(new JLabel("Leader:"));
-        panel.add(leaderList);
 
-        int result = JOptionPane.showConfirmDialog(this, panel, "New Lecturer", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        while(true){
+            int result = JOptionPane.showConfirmDialog(this, panel, "New Academic Leader", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (result != JOptionPane.OK_OPTION) break;
+            
+            if (result == JOptionPane.OK_OPTION) {
+                String name = nameField.getText().trim();
+                String email = emailField.getText().trim();
+                
+                if(ErrorChecking.checkInput(name).equals("null")){
+                    JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkInput(name).equals("number")){
+                    JOptionPane.showMessageDialog(this, "Name cannot in number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkEmail(email).equals("null")){
+                    JOptionPane.showMessageDialog(this, "Email is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkEmail(email).equals("not email")){
+                    JOptionPane.showMessageDialog(this, "Email must be in email format", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkEmail(email).equals("same")){
+                    JOptionPane.showMessageDialog(this, "Email must be Unique", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkInput(name).equals("String") && ErrorChecking.checkEmail(email).equals("String")){
+                    int max = 0;
+                    for(Lecturer x : InteractTxt.allLecturer){
+                        String numPart = x.getId().substring(2);
+                        int num = Integer.parseInt(numPart);
+                        if (num > max) {
+                            max = num;
+                        }
+                    }
+                    for(Leader x : InteractTxt.allLeader){
+                        String numPart = x.getId().substring(2);
+                        int num = Integer.parseInt(numPart);
+                        if (num > max) {
+                            max = num;
+                        }
+                    }
+                    String id = "lc" + (max + 1);
 
-        if (result == JOptionPane.OK_OPTION) {
-            String name = nameField.getText();
-            String email = emailField.getText();
-            String leaderId = (String) leaderList.getSelectedItem();
+                    String password = Tools.GeneratePW();
 
-            int max = 0;
-            for(Lecturer x : InteractTxt.allLecturer){
-                String numPart = x.getId().substring(2);
-                int num = Integer.parseInt(numPart);
-                if (num > max) {
-                    max = num;
+                    String [] userdata = {id, name, email, password, "leader"};
+                    InteractTxt.allLeader.add(new Leader(userdata));
+
+                    InteractTxt.writeUser();
+                    Leader New = InteractTxt.checkLeaID(id);
+                    model.addRow(new String[]{New.getId(), New.getName(), New.getEmail()});
+                    break;
                 }
             }
-            for(Leader x : InteractTxt.allLeader){
-                String numPart = x.getId().substring(2);
-                int num = Integer.parseInt(numPart);
-                if (num > max) {
-                    max = num;
-                }
-            }
-            String id = "lc" + (max + 1);
-
-            String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            String lower = "abcdefghijklmnopqrstuvwxyz";
-            String number = "0123456789";
-            String symbol = "!@#$%^&*()-_=+[]{};:,.<>?/";
-            SecureRandom random = new SecureRandom();
-            ArrayList<Character> pw = new ArrayList<>();
-            pw.add(upper.charAt(random.nextInt(upper.length())));
-            pw.add(lower.charAt(random.nextInt(lower.length())));
-            pw.add(number.charAt(random.nextInt(number.length())));
-            pw.add(symbol.charAt(random.nextInt(symbol.length())));
-            String all = upper + lower + number + symbol;
-            for (int i = 4; i < 12; i++) {
-                pw.add(all.charAt(random.nextInt(all.length())));
-            }
-            StringBuilder builder = new StringBuilder();
-            for (char c : pw) {
-                builder.append(c);
-            }
-            String password = builder.toString();
-
-            String [] userdata = {id, name, email, password, "lecturer"};
-            InteractTxt.allLecturer.add(new Lecturer(userdata));
-
-            InteractTxt.checkLecID(id).setLeader(InteractTxt.checkLeaID(leaderId));
-            InteractTxt.checkLeaID(leaderId).leaderTeam.add(InteractTxt.checkLecID(id));
-
-            InteractTxt.writeUser();
-            Lecturer New = InteractTxt.checkLecID(id);
-            model.addRow(new String[]{New.getId(), New.getName(), New.getEmail(), New.getLeader().getId()});
         }
+        
 
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void LeaderTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LeaderTableMouseClicked
+        int row = LeaderTable.getSelectedRow();
+        Leader Lea = InteractTxt.allLeader.get(row);
+
+        JTextField nameField = new JTextField(25);
+        nameField.setText(Lea.getName());
+        JTextField emailField = new JTextField(25);
+        emailField.setText(Lea.getEmail());
+
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        panel.add(new JLabel("Name:"));
+        panel.add(nameField);
+        panel.add(new JLabel("Email:"));
+        panel.add(emailField);
+
+        while(true){
+            Object[] options = {"OK", "Delete", "Cancel"};
+            int result = JOptionPane.showOptionDialog(this,panel,Lea.getId(),JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[2]);
+            if (result != 0 && result != 1) break;
+            
+            if (result == 0) {
+                String name = nameField.getText().trim();
+                String email = emailField.getText().trim();
+                
+                if(ErrorChecking.checkInput(name).equals("null")){
+                    JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkInput(name).equals("number")){
+                    JOptionPane.showMessageDialog(this, "Name cannot in number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkEmail(email).equals("null")){
+                    JOptionPane.showMessageDialog(this, "Email is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkEmail(email).equals("not email")){
+                    JOptionPane.showMessageDialog(this, "Email must be in email format", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkEmail(email).equals("same") && !email.equals(Lea.getEmail())){
+                    JOptionPane.showMessageDialog(this, "Email must be Unique", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkInput(name).equals("String") && (ErrorChecking.checkEmail(email).equals("String") || email.equals(Lea.getEmail()))){
+                    Lea.setName(name);
+                    Lea.setEmail(email);
+
+                    InteractTxt.writeUser();
+
+                    model.setValueAt(name, row, 1);
+                    model.setValueAt(email, row, 2);
+                    break;
+                }
+            }
+            
+            if (result == 1) {
+//                int confirm = JOptionPane.showConfirmDialog(this, "Do you sure to delete the Leader?", "Confirm", JOptionPane.YES_NO_CANCEL_OPTION);
+//                if (confirm == JOptionPane.OK_OPTION) {
+//                    InteractTxt.allLeader.remove(Lea);
+//                    for (Lecturer x : Lea.leaderTeam){
+//                        x.setLeader(null);
+//                    }
+//
+//                    Lea.leaderTeam.clear();
+//
+//                    InteractTxt.saveDatabase();
+//                    model.removeRow(row);
+//                    break;
+//                }
+
+                if(Lea.leaderTeam.isEmpty()){
+                    int confirm = JOptionPane.showConfirmDialog(this, "Do you sure to delete the Leader?", "Confirm", JOptionPane.YES_NO_OPTION);
+                    if (confirm == JOptionPane.OK_OPTION) {
+                        InteractTxt.allLeader.remove(Lea);
+
+                        InteractTxt.saveDatabase();
+                        model.removeRow(row);
+                        break;
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(this, "Cannot Delete", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        
+    }//GEN-LAST:event_LeaderTableMouseClicked
 
     /**
      * @param args the command line arguments
@@ -207,10 +300,10 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable LeaderTable;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

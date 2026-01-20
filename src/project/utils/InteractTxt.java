@@ -329,7 +329,9 @@ public class InteractTxt {
                 String lecId = s1.nextLine();
                 s1.nextLine();
                 allClass.add(new Class(id, name, lecId));
-                InteractTxt.checkLecID(lecId).Lec_Classes.add(InteractTxt.checkClassID(id));
+                if(!lecId.equals("NA")){
+                    InteractTxt.checkLecID(lecId).Lec_Classes.add(InteractTxt.checkClassID(id));
+                }
             }
             Scanner s2 = new Scanner(new File("src/resources/intake_class.txt"));
             while(s2.hasNext()){

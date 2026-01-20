@@ -1,14 +1,25 @@
 package project.gui.admin;
 
-import project.utils.FrameFormat;
+import java.awt.*;
+import java.text.*;
+import java.time.*;
+import javax.swing.table.DefaultTableModel;
+import java.util.*;
+import javax.swing.*;
+import project.roles.*;
+import project.utils.*;
 
 public class ManageStudents extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ManageStudents
-     */
+    private DefaultTableModel model = new DefaultTableModel(
+        new String[]{"Student ID", "Name", "Email", "Intake", "DOB"}, 0
+    );
+    
     public ManageStudents() {
         initComponents();
+        for(Student x : InteractTxt.allStudent){
+            model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), x.getIntakeId(), x.getDob()});
+        }
     }
 
     /**
@@ -20,21 +31,244 @@ public class ManageStudents extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton2 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        StudentTable = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jButton2.setText("Back");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel1.setText("Students");
+
+        StudentTable.setModel(model);
+        StudentTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                StudentTableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(StudentTable);
+
+        jButton1.setText("Create");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(jButton2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(198, 198, 198)
+                        .addComponent(jLabel1)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 25, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(23, 23, 23))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addContainerGap(117, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        new Dashboard().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void StudentTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_StudentTableMouseClicked
+        int row = StudentTable.getSelectedRow();
+        Student Stu = InteractTxt.allStudent.get(row);
+
+        JTextField nameField = new JTextField(25);
+        nameField.setText(Stu.getName());
+        JTextField emailField = new JTextField(25);
+        emailField.setText(Stu.getEmail());
+        JComboBox<String> intakeList = new JComboBox<>();
+        for(Intake x : InteractTxt.allIntake){
+            intakeList.addItem(x.getIntakeId());
+        }
+        intakeList.setSelectedItem(Stu.getIntakeId());
+        if(!Stu.Stu_Classes.isEmpty()){
+            intakeList.setEnabled(false);
+        }
+        SpinnerDateModel dobModel = new SpinnerDateModel(new Date(), null, new Date(), Calendar.DAY_OF_MONTH);
+        JSpinner dobSpinner = new JSpinner(dobModel);
+        JSpinner.DateEditor editor = new JSpinner.DateEditor(dobSpinner, "yyyy-MM-dd");
+        dobSpinner.setEditor(editor);
+        editor.getTextField().setEditable(false);
+        dobSpinner.setValue(Date.from(LocalDate.parse(Stu.getDob()).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        panel.add(new JLabel("Name:"));
+        panel.add(nameField);
+        panel.add(new JLabel("Email:"));
+        panel.add(emailField);
+        panel.add(new JLabel("Intake:"));
+        panel.add(intakeList);
+        panel.add(new JLabel("Date Of Birth:"));
+        panel.add(dobSpinner);
+
+        while(true){
+            Object[] options = {"OK", "Delete", "Cancel"};
+            int result = JOptionPane.showOptionDialog(this,panel,Stu.getId(),JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[2]);
+            if (result != 0 && result != 1) break;
+
+            if (result == 0) {
+                String name = nameField.getText().trim();
+                String email = emailField.getText().trim();
+                String intakeId = (String) intakeList.getSelectedItem();
+                String dob = new SimpleDateFormat("yyyy-MM-dd").format((Date) dobSpinner.getValue());
+
+                if(ErrorChecking.checkInput(name).equals("null")){
+                    JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkInput(name).equals("number")){
+                    JOptionPane.showMessageDialog(this, "Name cannot in number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkEmail(email).equals("null")){
+                    JOptionPane.showMessageDialog(this, "Email is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkEmail(email).equals("not email")){
+                    JOptionPane.showMessageDialog(this, "Email must be in email format", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkEmail(email).equals("same") && !email.equals(Stu.getEmail())){
+                    JOptionPane.showMessageDialog(this, "Email must be Unique", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkInput(name).equals("String") && (ErrorChecking.checkEmail(email).equals("String") || email.equals(Stu.getEmail()))){
+                    Stu.setName(name);
+                    Stu.setEmail(email);
+                    Stu.setIntakeId(intakeId);
+                    Stu.setDob(dob);
+
+                    InteractTxt.writeUser();
+
+                    model.setValueAt(name, row, 1);
+                    model.setValueAt(email, row, 2);
+                    model.setValueAt(intakeId, row, 3);
+                    model.setValueAt(dob, row, 4);
+                    break;
+                }
+            }
+            
+            if (result == 1) {
+                int confirm = JOptionPane.showConfirmDialog(this, "Do you sure to delete the Student?", "Confirm", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.OK_OPTION) {
+                    InteractTxt.allStudent.remove(Stu);
+                    for (project.roles.Class x : Stu.Stu_Classes){
+                        x.Class_Students.remove(Stu);
+                    }
+
+                    Stu.Stu_Classes.clear();
+                    Stu.Stu_Scores.clear();
+                    Stu.GradesAndComments.clear();
+
+                    InteractTxt.saveDatabase();
+                    model.removeRow(row);
+                    break;
+                }
+            }
+        }
+
+    }//GEN-LAST:event_StudentTableMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        JTextField nameField = new JTextField(25);
+        JTextField emailField = new JTextField(25);
+        JComboBox<String> intakeList = new JComboBox<>();
+        for(Intake x : InteractTxt.allIntake){
+            intakeList.addItem(x.getIntakeId());
+        }
+        SpinnerDateModel dobModel = new SpinnerDateModel(new Date(), null, new Date(), Calendar.DAY_OF_MONTH);
+        JSpinner dobSpinner = new JSpinner(dobModel);
+        JSpinner.DateEditor editor = new JSpinner.DateEditor(dobSpinner, "yyyy-MM-dd");
+        dobSpinner.setEditor(editor);
+        editor.getTextField().setEditable(false);
+
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        panel.add(new JLabel("Name:"));
+        panel.add(nameField);
+        panel.add(new JLabel("Email:"));
+        panel.add(emailField);
+        panel.add(new JLabel("Intake:"));
+        panel.add(intakeList);
+        panel.add(new JLabel("Date Of Birth:"));
+        panel.add(dobSpinner);
+
+        while(true){
+            int result = JOptionPane.showConfirmDialog(this, panel, "New Student", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (result != JOptionPane.OK_OPTION) break;
+
+            if (result == JOptionPane.OK_OPTION) {
+                String name = nameField.getText().trim();
+                String email = emailField.getText().trim();
+                String intakeId = (String) intakeList.getSelectedItem();
+                String dob = new SimpleDateFormat("yyyy-MM-dd").format((Date) dobSpinner.getValue());
+
+                if(ErrorChecking.checkInput(name).equals("null")){
+                    JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkInput(name).equals("number")){
+                    JOptionPane.showMessageDialog(this, "Name cannot in number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkEmail(email).equals("null")){
+                    JOptionPane.showMessageDialog(this, "Email is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkEmail(email).equals("not email")){
+                    JOptionPane.showMessageDialog(this, "Email must be in email format", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkEmail(email).equals("same")){
+                    JOptionPane.showMessageDialog(this, "Email must be Unique", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkInput(name).equals("String") && ErrorChecking.checkEmail(email).equals("String")){
+                    int max = 0;
+                    for(Student x : InteractTxt.allStudent){
+                        String numPart = x.getId().substring(2);
+                        int num = Integer.parseInt(numPart);
+                        if (num > max) {
+                            max = num;
+                        }
+                    }
+                    String id = "tp" + (max + 1);
+
+                    String password = Tools.GeneratePW();
+
+                    String [] userdata = {id, name, email, password, "student"};
+                    InteractTxt.allStudent.add(new Student(userdata));
+                    
+                    Student New = InteractTxt.checkStuID(id);
+                    New.setIntakeId(intakeId);
+                    New.setDob(dob);
+
+                    InteractTxt.writeUser();
+                    
+                    model.addRow(new String[]{New.getId(), New.getName(), New.getEmail(), New.getIntakeId(), New.getDob()});
+                    break;
+                }
+            }
+        }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -72,5 +306,10 @@ public class ManageStudents extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable StudentTable;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

@@ -206,7 +206,7 @@ public class ManageGradingSystem extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        int result = JOptionPane.showConfirmDialog(this, "Do you want to save changes?", "Confirm", JOptionPane.YES_NO_CANCEL_OPTION);
+        int result = JOptionPane.showConfirmDialog(this, "Do you want to save changes?", "Confirm", JOptionPane.YES_NO_OPTION);
 
         if (result == JOptionPane.YES_OPTION) {
             InteractTxt.writeGrade();
@@ -215,7 +215,7 @@ public class ManageGradingSystem extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        int result = JOptionPane.showConfirmDialog(this, "Do you sure you want to exit?", "Confirm", JOptionPane.YES_NO_CANCEL_OPTION);
+        int result = JOptionPane.showConfirmDialog(this, "Do you sure you want to exit?", "Confirm", JOptionPane.YES_NO_OPTION);
 
         if (result == JOptionPane.YES_OPTION) {
             InteractTxt.allGrading.clear();

@@ -396,17 +396,17 @@ int selectedRow = jTable1.getSelectedRow();
     }
 
     // 3️⃣ Check existing comment
-    String existingComment = Tools.getSpecificComment(selectedClass, sessionStudent);
+//    String existingComment = Tools.getSpecificComment(selectedClass, sessionStudent);
 
-    if (!existingComment.equalsIgnoreCase("NA")) {
-        JOptionPane.showMessageDialog(
-                this,
-                "Comment already submitted.\nYou cannot edit it.",
-                "Not Allowed",
-                JOptionPane.INFORMATION_MESSAGE
-        );
-        return;
-    }
+//    if (!existingComment.equalsIgnoreCase("NA")) {
+//        JOptionPane.showMessageDialog(
+//                this,
+//                "Comment already submitted.\nYou cannot edit it.",
+//                "Not Allowed",
+//                JOptionPane.INFORMATION_MESSAGE
+//        );
+//        return;
+//    }
 
     // 4️⃣ Input dialog (multi-line)
     JTextArea textArea = new JTextArea(5, 30);
