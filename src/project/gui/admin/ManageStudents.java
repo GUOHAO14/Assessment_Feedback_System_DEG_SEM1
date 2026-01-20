@@ -177,14 +177,21 @@ public class ManageStudents extends javax.swing.JFrame {
             }
             
             if (result == 1) {
-                InteractTxt.allStudent.remove(Stu);
-                for (project.roles.Class x : Stu.Stu_Classes){
-                    x.Class_Students.remove(Stu);
+                int confirm = JOptionPane.showConfirmDialog(this, "Do you sure to delete the Student?", "Confirm", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.OK_OPTION) {
+                    InteractTxt.allStudent.remove(Stu);
+                    for (project.roles.Class x : Stu.Stu_Classes){
+                        x.Class_Students.remove(Stu);
+                    }
+
+                    Stu.Stu_Classes.clear();
+                    Stu.Stu_Scores.clear();
+                    Stu.GradesAndComments.clear();
+
+                    InteractTxt.saveDatabase();
+                    model.removeRow(row);
+                    break;
                 }
-                
-                InteractTxt.saveDatabase();
-                model.removeRow(row);
-                break;
             }
         }
 

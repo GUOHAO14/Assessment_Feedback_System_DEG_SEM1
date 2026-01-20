@@ -237,11 +237,24 @@ public class ManageLecturers extends javax.swing.JFrame {
             }
             
             if (result == 1) {
-//                InteractTxt.allLecturer.remove(Lec);
-//                
-//                InteractTxt.saveDatabase();
-//                model.removeRow(row);
-//                break;
+                int confirm = JOptionPane.showConfirmDialog(this, "Do you sure to delete the Lecturer?", "Confirm", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.OK_OPTION) {
+                    InteractTxt.allLecturer.remove(Lec);
+                    for (project.roles.Class x : Lec.Lec_Classes){
+                        x.setLecId("NA");
+                    }
+                    Lec.getLeader().leaderTeam.remove(Lec);
+                    for (project.roles.Module x : Lec.Lec_Modules){
+                        x.Mod_Lecturers.remove(Lec);
+                    }
+
+                    Lec.Lec_Modules.clear();
+                    Lec.Lec_Classes.clear();
+
+                    InteractTxt.saveDatabase();
+                    model.removeRow(row);
+                    break;
+                }
             }
         }
         

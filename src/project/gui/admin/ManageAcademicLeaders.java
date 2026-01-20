@@ -233,11 +233,32 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
             }
             
             if (result == 1) {
-//                InteractTxt.allLeader.remove(Lea);
-//                
-//                InteractTxt.saveDatabase();
-//                model.removeRow(row);
-//                break;
+//                int confirm = JOptionPane.showConfirmDialog(this, "Do you sure to delete the Leader?", "Confirm", JOptionPane.YES_NO_CANCEL_OPTION);
+//                if (confirm == JOptionPane.OK_OPTION) {
+//                    InteractTxt.allLeader.remove(Lea);
+//                    for (Lecturer x : Lea.leaderTeam){
+//                        x.setLeader(null);
+//                    }
+//
+//                    Lea.leaderTeam.clear();
+//
+//                    InteractTxt.saveDatabase();
+//                    model.removeRow(row);
+//                    break;
+//                }
+
+                if(Lea.leaderTeam.isEmpty()){
+                    int confirm = JOptionPane.showConfirmDialog(this, "Do you sure to delete the Leader?", "Confirm", JOptionPane.YES_NO_OPTION);
+                    if (confirm == JOptionPane.OK_OPTION) {
+                        InteractTxt.allLeader.remove(Lea);
+
+                        InteractTxt.saveDatabase();
+                        model.removeRow(row);
+                        break;
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(this, "Cannot Delete", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
         
