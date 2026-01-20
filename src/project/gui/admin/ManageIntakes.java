@@ -1,14 +1,30 @@
 package project.gui.admin;
 
-import project.utils.FrameFormat;
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import project.roles.*;
+import project.utils.*;
 
 public class ManageIntakes extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ManageIntakes
-     */
+    private DefaultTableModel model = new DefaultTableModel(
+        new String[]{"Intake ID", "Name", "Intake's Modules"}, 0
+    );
+
     public ManageIntakes() {
         initComponents();
+        for(Intake x : InteractTxt.allIntake){
+            String Modules = "";
+            for(int i=0; i < x.Int_Modules.size(); i++){
+                if(i == (x.Int_Modules.size()-1)){
+                    Modules += x.Int_Modules.get(i).getModuleId();
+                }else{
+                    Modules += x.Int_Modules.get(i).getModuleId() + ", ";
+                }
+            }
+            model.addRow(new String[]{x.getIntakeId(), x.getIntakeName(), Modules});
+        }
     }
 
     /**
@@ -22,6 +38,8 @@ public class ManageIntakes extends javax.swing.JFrame {
 
         jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        IntakeTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -35,6 +53,14 @@ public class ManageIntakes extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setText("Intakes");
 
+        IntakeTable.setModel(model);
+        IntakeTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                IntakeTableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(IntakeTable);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -42,21 +68,25 @@ public class ManageIntakes extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(210, 210, 210)
-                        .addComponent(jLabel1)))
-                .addContainerGap(215, Short.MAX_VALUE))
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton2))))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addContainerGap(368, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(145, Short.MAX_VALUE))
         );
 
         pack();
@@ -66,6 +96,58 @@ public class ManageIntakes extends javax.swing.JFrame {
         new Dashboard().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void IntakeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IntakeTableMouseClicked
+        int row = IntakeTable.getSelectedRow();
+        Intake Int = InteractTxt.allIntake.get(row);
+
+        JTextField nameField = new JTextField(25);
+        nameField.setText(Int.getIntakeName());
+
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        panel.add(new JLabel("Name:"));
+        panel.add(nameField);
+
+        while(true){
+            Object[] options = {"OK", "Delete", "Cancel"};
+            int result = JOptionPane.showOptionDialog(this,panel,Int.getIntakeId(),JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[2]);
+            if (result != 0 && result != 1) break;
+
+            if (result == 0) {
+                String name = nameField.getText().trim();
+
+                if(ErrorChecking.checkInput(name).equals("null")){
+                    JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkInput(name).equals("number")){
+                    JOptionPane.showMessageDialog(this, "Name cannot in number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkInput(name).equals("String")){
+                    Int.setIntakeName(name);
+
+                    InteractTxt.writeIntake();
+
+                    model.setValueAt(name, row, 1);
+                    break;
+                }
+            }
+
+            if (result == 1) {
+//                int confirm = JOptionPane.showConfirmDialog(this, "Do you sure to delete the Leader?", "Confirm", JOptionPane.YES_NO_OPTION);
+//                if (confirm == JOptionPane.OK_OPTION) {
+//                    InteractTxt.allIntake.remove(Int);
+//                    for (Lecturer x : Lea.leaderTeam){
+//                            x.setLeader(null);
+//                        }
+//
+//                    Lea.leaderTeam.clear();
+//
+//                    InteractTxt.saveDatabase();
+//                    model.removeRow(row);
+//                    break;
+//                }
+            }
+        }
+
+    }//GEN-LAST:event_IntakeTableMouseClicked
 
     /**
      * @param args the command line arguments
@@ -103,7 +185,9 @@ public class ManageIntakes extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable IntakeTable;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

@@ -10,7 +10,7 @@ import project.utils.*;
 public class ManageAcademicLeaders extends javax.swing.JFrame {
 
     private DefaultTableModel model = new DefaultTableModel(
-        new String[]{"Leader ID", "Name", "Email", "Lecturers Assigned"}, 0
+        new String[]{"Leader ID", "Name", "Email", "Lecturers Assigned", "Modules Assigned"}, 0
     );
     
     public ManageAcademicLeaders() {
@@ -24,7 +24,15 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
                     Lecturers += x.leaderTeam.get(i).getId() + ", ";
                 }
             }
-            model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), Lecturers});
+            String Modules = "";
+            for(int i=0; i < x.Lea_Modules.size(); i++){
+                if(i == (x.Lea_Modules.size()-1)){
+                    Modules += x.Lea_Modules.get(i).getModuleId();
+                }else{
+                    Modules += x.Lea_Modules.get(i).getModuleId() + ", ";
+                }
+            }
+            model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), Lecturers, Modules});
         }
         
         LeaderTable.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -32,7 +40,7 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
             public void mouseMoved(java.awt.event.MouseEvent e) {
                 int row = LeaderTable.rowAtPoint(e.getPoint());
                 int col = LeaderTable.columnAtPoint(e.getPoint());
-                if (row > -1 && col == 3) {
+                if (row > -1 && (col == 3 || col == 4)) {
                     Object value = LeaderTable.getValueAt(row, col);
                     LeaderTable.setToolTipText(value == null ? null : value.toString());
                 } else {
@@ -91,16 +99,15 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(151, 151, 151)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButton1)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jButton2)))))
-                .addGap(30, 30, 30))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(196, 196, 196)
+                        .addComponent(jLabel1)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,7 +116,7 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
                 .addComponent(jButton2)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(12, 12, 12)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
@@ -247,7 +254,7 @@ public class ManageAcademicLeaders extends javax.swing.JFrame {
 //                    break;
 //                }
 
-                if(Lea.leaderTeam.isEmpty()){
+                if(Lea.leaderTeam.isEmpty() && Lea.Lea_Modules.isEmpty()){
                     int confirm = JOptionPane.showConfirmDialog(this, "Do you sure to delete the Leader?", "Confirm", JOptionPane.YES_NO_OPTION);
                     if (confirm == JOptionPane.OK_OPTION) {
                         InteractTxt.allLeader.remove(Lea);
