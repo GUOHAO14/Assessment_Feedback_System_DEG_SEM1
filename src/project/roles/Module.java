@@ -3,12 +3,13 @@ package project.roles;
 import java.util.ArrayList;
 
 public class Module {
-    private String moduleId, moduleName;
+    private String moduleId, moduleName, leaderId;
     public ArrayList<Lecturer> Mod_Lecturers = new ArrayList<Lecturer>();
     
-    public Module(String moduleId, String moduleName) {
+    public Module(String moduleId, String moduleName, String leaderId) {
         this.moduleId = moduleId;
         this.moduleName = moduleName;
+        this.leaderId = leaderId;
     }
 
     public String getModuleId() {
@@ -25,6 +26,14 @@ public class Module {
 
     public void setModuleName(String moduleName) {
         this.moduleName = moduleName;
+    }
+    
+        public String getLeaderId() {
+        return leaderId;
+    }
+
+    public void setLeaderId(String leaderId) {
+        this.leaderId = leaderId;
     }
     
 }
