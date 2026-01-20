@@ -162,6 +162,7 @@ public class InteractTxt {
             for(Module x : allModule){
                 b.println(x.getModuleId());
                 b.println(x.getModuleName());
+                b.println(x.getLeaderId());
                 b.println();
             }
             b.close();
@@ -192,8 +193,9 @@ public class InteractTxt {
             while(s2.hasNext()){
                 String id = s2.nextLine();
                 String name = s2.nextLine();
+                String leaderId = s2.nextLine();  
                 s2.nextLine();
-                allModule.add(new Module(id, name));
+                allModule.add(new Module(id, name, leaderId));
             }
             Scanner s3 = new Scanner(new File("src/resources/intake_module.txt"));
             while(s3.hasNext()){
