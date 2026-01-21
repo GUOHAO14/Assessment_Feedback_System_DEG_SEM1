@@ -23,6 +23,7 @@ public class StudentClassRegistration extends FrameFormat {
      */
     public StudentClassRegistration(Student student) {        
         initComponents();
+        super.formatWindow("Register Class");
         
         this.sessionStudent = student;
         this.intakeId = student.getIntakeId();

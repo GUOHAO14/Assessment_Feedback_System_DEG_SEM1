@@ -26,249 +26,258 @@ import project.utils.Tools;
  * @author joshl
  */
 public class StudentResult extends FrameFormat {
+
     private Student sessionStudent;
     private String intakeId;
+
     /**
      * Creates new form StudentScore
      */
-public class MultiLineTableCellRenderer extends JTextArea
-        implements TableCellRenderer {
+    public class MultiLineTableCellRenderer extends JTextArea
+            implements TableCellRenderer {
 
-    public MultiLineTableCellRenderer() {
-        super();                // important
-        setLineWrap(true);      // ✅ valid
-        setWrapStyleWord(true); // ✅ valid
-        setOpaque(true);
-    }
-
-    @Override
-    public Component getTableCellRendererComponent(
-            JTable table, Object value,
-            boolean isSelected, boolean hasFocus,
-            int row, int column) {
-
-        setText(value == null ? "" : value.toString());
-
-        if (isSelected) {
-            setBackground(table.getSelectionBackground());
-            setForeground(table.getSelectionForeground());
-        } else {
-            setBackground(table.getBackground());
-            setForeground(table.getForeground());
+        public MultiLineTableCellRenderer() {
+            super();                // important
+            setLineWrap(true);      // ✅ valid
+            setWrapStyleWord(true); // ✅ valid
+            setOpaque(true);
         }
 
-        setSize(
-            table.getColumnModel().getColumn(column).getWidth(),
-            getPreferredSize().height
-        );
+        @Override
+        public Component getTableCellRendererComponent(
+                JTable table, Object value,
+                boolean isSelected, boolean hasFocus,
+                int row, int column) {
 
-        int rowHeight = getPreferredSize().height;
-        if (table.getRowHeight(row) != rowHeight) {
-            table.setRowHeight(row, rowHeight);
+            setText(value == null ? "" : value.toString());
+
+            if (isSelected) {
+                setBackground(table.getSelectionBackground());
+                setForeground(table.getSelectionForeground());
+            } else {
+                setBackground(table.getBackground());
+                setForeground(table.getForeground());
+            }
+
+            setSize(
+                    table.getColumnModel().getColumn(column).getWidth(),
+                    getPreferredSize().height
+            );
+
+            int rowHeight = getPreferredSize().height;
+            if (table.getRowHeight(row) != rowHeight) {
+                table.setRowHeight(row, rowHeight);
+            }
+
+            return this;
         }
-
-        return this;
     }
-}
+
     public StudentResult(Student student) {
         initComponents();
+        super.formatWindow("Student Registered Classes");
         this.sessionStudent = student;
         this.intakeId = student.getIntakeId();
         
+
         setupTables();
         loadRegisteredClasses();
-    }
-   private void setupTables() {
+        setupClassSelectionListener();
 
-    /* ===============================
+    }
+
+    private void setupTables() {
+
+        /* ===============================
        CLASS TABLE (jTable1)
        =============================== */
-    jTable1.setModel(new DefaultTableModel(
-    new Object[][]{},
-    new String[]{"Class", "Lecturer", "Grade", "Score"}
-) {
-    @Override
-    public boolean isCellEditable(int row, int column) {
-        return false;
-    }
-});
+        jTable1.setModel(new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Class", "Lecturer", "Grade", "Score"}
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        });
 
+        jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jTable1.getTableHeader().setReorderingAllowed(false);
 
-    jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-    jTable1.getTableHeader().setReorderingAllowed(false);
+        // Disable column resizing
+        for (int i = 0; i < jTable1.getColumnModel().getColumnCount(); i++) {
+            jTable1.getColumnModel().getColumn(i).setResizable(false);
+        }
 
-    // Disable column resizing
-    for (int i = 0; i < jTable1.getColumnModel().getColumnCount(); i++) {
-        jTable1.getColumnModel().getColumn(i).setResizable(false);
-    }
-
-    /* ===============================
+        /* ===============================
        ASSESSMENT TABLE (jTable2)
        =============================== */
-    jTable2.setModel(new DefaultTableModel(
-        new Object[][]{},
-        new String[]{"Assessment", "Marks", "Full Marks", "Feedback"}
-    ) {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
+        jTable2.setModel(new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Assessment", "Marks", "Feedback"}
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        });
+
+        jTable2.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jTable2.getTableHeader().setReorderingAllowed(false);
+
+        // Disable column resizing
+        for (int i = 0; i < jTable2.getColumnModel().getColumnCount(); i++) {
+            jTable2.getColumnModel().getColumn(i).setResizable(false);
         }
-    });
 
-    jTable2.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-    jTable2.getTableHeader().setReorderingAllowed(false);
-
-    // Disable column resizing
-    for (int i = 0; i < jTable2.getColumnModel().getColumnCount(); i++) {
-        jTable2.getColumnModel().getColumn(i).setResizable(false);
-    }
-
-    /* ===============================
+        /* ===============================
        MULTI-LINE RENDERER
        =============================== */
-    MultiLineTableCellRenderer renderer = new MultiLineTableCellRenderer();
+        MultiLineTableCellRenderer renderer = new MultiLineTableCellRenderer();
 
-    // jTable1 multiline columns
+        // jTable1 multiline columns
 //    jTable1.getColumnModel().getColumn(2).setCellRenderer(renderer); // Comment
-    jTable1.getColumnModel().getColumn(2).setCellRenderer(renderer); // Grade
-    jTable1.getColumnModel().getColumn(3).setCellRenderer(renderer); // Score
+        jTable1.getColumnModel().getColumn(2).setCellRenderer(renderer); // Grade
+        jTable1.getColumnModel().getColumn(3).setCellRenderer(renderer); // Score
 
-    // jTable2 multiline column
-    jTable2.getColumnModel().getColumn(3).setCellRenderer(renderer); // Feedback
-}
+        // jTable2 multiline column
+        jTable2.getColumnModel().getColumn(2).setCellRenderer(renderer); // Feedback
+    }
 
+    private void loadRegisteredClasses() {
 
-private void loadRegisteredClasses() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
 
-    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-    model.setRowCount(0);
+        for (project.roles.Class cls : sessionStudent.Stu_Classes) {
 
-    for (project.roles.Class cls : sessionStudent.Stu_Classes) {
+            Lecturer lec = InteractTxt.checkLecID(cls.getLecId());
 
-        Lecturer lec = InteractTxt.checkLecID(cls.getLecId());
+            String comment = Tools.getSpecificComment(cls, sessionStudent);
+            String grade = Tools.getSpecificGrade(cls, sessionStudent);
 
-        String comment = Tools.getSpecificComment(cls, sessionStudent);
-        String grade   = Tools.getSpecificGrade(cls, sessionStudent);
+            IntakeModule matchedIM = null;
+            for (IntakeModule im : InteractTxt.allIntakeModule) {
+                if (im.IM_Classes.contains(cls)) {
+                    matchedIM = im;
+                    break;
+                }
+            }
 
-        IntakeModule matchedIM = null;
-        for (IntakeModule im : InteractTxt.allIntakeModule) {
-            if (im.IM_Classes.contains(cls)) {
-                matchedIM = im;
+            String score = "NA";
+            if (matchedIM != null) {
+                score = Tools.calcStuScore(matchedIM, sessionStudent);
+            }
+
+            model.addRow(new Object[]{
+                cls.getClassName(),
+                lec != null ? lec.getName() : "N/A",
+                grade,
+                score
+            });
+        }
+    }
+
+    private void setupClassSelectionListener() {
+
+        jTable1.getSelectionModel().addListSelectionListener(e -> {
+
+            if (!e.getValueIsAdjusting()) {
+
+                int row = jTable1.getSelectedRow();
+                if (row == -1) {
+                    return;
+                }
+
+                String className
+                        = jTable1.getValueAt(row, 0).toString();
+
+                loadAssessmentsForClass(className);
+            }
+        });
+    }
+
+    private void loadAssessmentsForClass(String className) {
+        jTable2.setModel(new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Assessment", "Marks", "Feedback"}
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        });
+
+        MultiLineTableCellRenderer renderer = new MultiLineTableCellRenderer();
+        jTable2.getColumnModel().getColumn(2).setCellRenderer(renderer); // Feedback
+        DefaultTableModel model
+                = (DefaultTableModel) jTable2.getModel();
+
+        model.setRowCount(0);
+
+        project.roles.Class selectedClass = null;
+
+        for (project.roles.Class c : InteractTxt.allClass) {
+            if (c.getClassName().equals(className)) {
+                selectedClass = c;
                 break;
             }
         }
 
-        String score = "NA";
-        if (matchedIM != null) {
-            score = Tools.calcStuScore(matchedIM, sessionStudent);
+        if (selectedClass == null) {
+            return;
         }
 
-        model.addRow(new Object[]{
-    cls.getClassName(),
-    lec != null ? lec.getName() : "N/A",
-    grade,
-    score
-        });
-    }
-}
+        IntakeModule im = null;
 
-
-//private void setupClassSelectionListener() {
-//
-//    jTable1.getSelectionModel().addListSelectionListener(e -> {
-//
-//        if (!e.getValueIsAdjusting()) {
-//
-//            int row = jTable1.getSelectedRow();
-//            if (row == -1) return;
-//
-//            String className =
-//                    jTable1.getValueAt(row, 0).toString();
-//
-//            loadAssessmentsForClass(className);
-//        }
-//    });
-//}
-private void loadAssessmentsForClass(String className) {
-jTable2.setModel(new DefaultTableModel(
-    new Object[][]{},
-    new String[]{"Assessment", "Marks", "Full Marks", "Feedback"}
-) {
-    @Override
-    public boolean isCellEditable(int row, int column) {
-        return false;
-    }
-});
-
-MultiLineTableCellRenderer renderer = new MultiLineTableCellRenderer();
-jTable2.getColumnModel().getColumn(3).setCellRenderer(renderer);
-    DefaultTableModel model =
-            (DefaultTableModel) jTable2.getModel();
-
-    model.setRowCount(0);
-
-    project.roles.Class selectedClass = null;
-
-    for (project.roles.Class c : InteractTxt.allClass) {
-        if (c.getClassName().equals(className)) {
-            selectedClass = c;
-            break;
-        }
-    }
-
-    if (selectedClass == null) return;
-
-    IntakeModule im = null;
-
-    for (IntakeModule x : InteractTxt.allIntakeModule) {
-        if (x.IM_Classes.contains(selectedClass)) {
-            im = x;
-            break;
-        }
-    }
-
-    if (im == null) return;
-
-    for (Assessment ass : im.IM_Assessments) {
-
-        StudentScore ss = null;
-
-        for (StudentScore s : sessionStudent.Stu_Scores) {
-            if (s.getAssessment().equals(ass)) {
-                ss = s;
+        for (IntakeModule x : InteractTxt.allIntakeModule) {
+            if (x.IM_Classes.contains(selectedClass)) {
+                im = x;
                 break;
             }
         }
 
-        String marks = "-";
-        String fullMarks = "-";
-        String feedback = "-";
-
-        // Marks2 and FullMarks2 from Assessment
-        String marks2 = extractNumber(ass.getAssFullMarks());
-        String fullMarks2 = extractNumber(ass.getAssPercentage());
-
-        if (ss != null) {
-            marks = ss.getOrginalScore() + "/" + marks2;
-            fullMarks = ss.getOriginalFullMarks() + "/" + fullMarks2;
-            feedback = ss.getFeedback();
+        if (im == null) {
+            return;
         }
 
-        model.addRow(new Object[]{
-            ass.getAssName(),
-            marks,
-            fullMarks,
-            feedback
-        });
+        for (Assessment ass : im.IM_Assessments) {
+
+            StudentScore ss = null;
+
+            for (StudentScore s : sessionStudent.Stu_Scores) {
+                if (s.getAssessment().equals(ass)) {
+                    ss = s;
+                    break;
+                }
+            }
+
+            String marks = "-";
+            String feedback = "-";
+
+            // Marks2 and FullMarks2 from Assessment
+            String marks2 = extractNumber(ass.getAssFullMarks());
+
+            if (ss != null) {
+                marks = ss.getOrginalScore() + "/" + marks2;
+                feedback = ss.getFeedback();
+            }
+
+            model.addRow(new Object[]{
+                ass.getAssName(),
+                marks,
+                feedback
+
+            });
+        }
     }
-}
 
-private String extractNumber(String text) {
-    if (text == null) return "-";
-    return text.split(" ")[0]; // gets "60" from "60 (Marks 2)"
-}
-
-
+    private String extractNumber(String text) {
+        if (text == null) {
+            return "-";
+        }
+        return text.split(" ")[0]; // gets "60" from "60 (Marks 2)"
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -285,8 +294,6 @@ private String extractNumber(String text) {
         jTable2 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -330,20 +337,6 @@ private String extractNumber(String text) {
             }
         });
 
-        jButton3.setText("View Result");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        jButton4.setText("View Comment");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -358,13 +351,8 @@ private String extractNumber(String text) {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton4)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(jButton2))
+                        .addGap(0, 1037, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -377,10 +365,7 @@ private String extractNumber(String text) {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
+                .addComponent(jButton2)
                 .addContainerGap(43, Short.MAX_VALUE))
         );
 
@@ -388,193 +373,125 @@ private String extractNumber(String text) {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    new StudentHomepage(sessionStudent).setVisible(true);
+        new StudentHomepage(sessionStudent).setVisible(true);
 
-    // close current page
-    this.dispose();
+        // close current page
+        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-int selectedRow = jTable1.getSelectedRow();
+        int selectedRow = jTable1.getSelectedRow();
 
-    // 1️⃣ No class selected
-    if (selectedRow == -1) {
-        JOptionPane.showMessageDialog(
-                this,
-                "Please select a class first.",
-                "No Selection",
-                JOptionPane.WARNING_MESSAGE
-        );
-        return;
-    }
-
-    // 2️⃣ Get class name from table
-    String className = jTable1.getValueAt(selectedRow, 0).toString();
-
-    project.roles.Class selectedClass = null;
-    for (project.roles.Class c : InteractTxt.allClass) {
-        if (c.getClassName().equals(className)) {
-            selectedClass = c;
-            break;
+        // 1️⃣ No class selected
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please select a class first.",
+                    "No Selection",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
         }
-    }
 
-    if (selectedClass == null) {
-        JOptionPane.showMessageDialog(
-                this,
-                "Class not found.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE
-        );
-        return;
-    }
+        // 2️⃣ Get class
+        String className = jTable1.getValueAt(selectedRow, 0).toString();
+        project.roles.Class selectedClass = null;
 
-    // 3️⃣ Check existing comment
-//    String existingComment = Tools.getSpecificComment(selectedClass, sessionStudent);
-
-//    if (!existingComment.equalsIgnoreCase("NA")) {
-//        JOptionPane.showMessageDialog(
-//                this,
-//                "Comment already submitted.\nYou cannot edit it.",
-//                "Not Allowed",
-//                JOptionPane.INFORMATION_MESSAGE
-//        );
-//        return;
-//    }
-
-    // 4️⃣ Input dialog (multi-line)
-    JTextArea textArea = new JTextArea(5, 30);
-    textArea.setLineWrap(true);
-    textArea.setWrapStyleWord(true);
-
-    int input = JOptionPane.showConfirmDialog(
-            this,
-            new JScrollPane(textArea),
-            "Enter Comment",
-            JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.PLAIN_MESSAGE
-    );
-
-    if (input != JOptionPane.OK_OPTION) return;
-
-    String newComment = textArea.getText().trim();
-
-    if (newComment.isEmpty()) {
-        JOptionPane.showMessageDialog(
-                this,
-                "Comment cannot be empty.",
-                "Invalid Input",
-                JOptionPane.ERROR_MESSAGE
-        );
-        return;
-    }
-
-    // 5️⃣ Final confirmation
-    int confirm = JOptionPane.showConfirmDialog(
-            this,
-            "Are you sure you want to submit this comment?\n\nThis action cannot be undone.",
-            "Confirm Submission",
-            JOptionPane.YES_NO_OPTION
-    );
-
-    if (confirm != JOptionPane.YES_OPTION) return;
-
-    // 6️⃣ Update in-memory object ONLY
-    boolean updated = false;
-
-    for (StudentGradeAndComment gc : sessionStudent.GradesAndComments) {
-        if (gc.getStuClass().equals(selectedClass)) {
-            gc.setComment(newComment);
-            updated = true;
-            break;
+        for (project.roles.Class c : InteractTxt.allClass) {
+            if (c.getClassName().equals(className)) {
+                selectedClass = c;
+                break;
+            }
         }
-    }
 
-    if (!updated) {
+        if (selectedClass == null) {
+            JOptionPane.showMessageDialog(this, "Class not found.");
+            return;
+        }
+
+        // 3️⃣ Get existing comment (if any)
+        String existingComment = Tools.getSpecificComment(selectedClass, sessionStudent);
+        if (existingComment == null || existingComment.equalsIgnoreCase("NA")) {
+            existingComment = "";
+        }
+
+        // 4️⃣ Input dialog with PRE-FILLED comment
+        JTextArea textArea = new JTextArea(20, 50);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setText(existingComment);   // ⭐ KEY CHANGE
+
+        int input = JOptionPane.showConfirmDialog(
+                this,
+                new JScrollPane(textArea),
+                "Edit Comment",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+        );
+
+        if (input != JOptionPane.OK_OPTION) {
+            return;
+        }
+
+        String newComment = textArea.getText().trim();
+
+        if (newComment.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Comment cannot be empty.",
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+
+        // 5️⃣ Final confirmation
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Save this comment?\n\nThis will overwrite the previous comment.",
+                "Confirm",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        // 6️⃣ Update in-memory object
+        boolean updated = false;
+        for (StudentGradeAndComment gc : sessionStudent.GradesAndComments) {
+            if (gc.getStuClass().equals(selectedClass)) {
+                gc.setComment(newComment);
+                updated = true;
+                break;
+            }
+        }
+
+        if (!updated) {
+            JOptionPane.showMessageDialog(this, "Unable to save comment.");
+            return;
+        }
+
+        // 7️⃣ Persist data
+        InteractTxt.saveDatabase();
+
+        // 8️⃣ Refresh class table
+        loadRegisteredClasses();
+        jTable1.revalidate();
+        jTable1.repaint();
+
         JOptionPane.showMessageDialog(
                 this,
-                "Unable to save comment.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE
+                "Comment saved successfully.",
+                "Success",
+                JOptionPane.INFORMATION_MESSAGE
         );
-        return;
-    }
-
-    // 7️⃣ Save using EXISTING database system
-    InteractTxt.saveDatabase();
-
-    // 8️⃣ Refresh table
-    loadRegisteredClasses();
-    jTable1.revalidate();
-    jTable1.repaint();
-    JOptionPane.showMessageDialog(
-            this,
-            "Comment submitted successfully.",
-            "Success",
-            JOptionPane.INFORMATION_MESSAGE
-    );
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-
-    int row = jTable1.getSelectedRow();
-    if (row == -1) {
-        JOptionPane.showMessageDialog(this, "Please select a class first.");
-        return;
-    }
-
-    String className = jTable1.getValueAt(row, 0).toString();
-    loadAssessmentsForClass(className);
-
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-int row = jTable1.getSelectedRow();
-    if (row == -1) {
-        JOptionPane.showMessageDialog(this, "Please select a class first.");
-        return;
-    }
-
-    String className = jTable1.getValueAt(row, 0).toString();
-
-    project.roles.Class selectedClass = null;
-    for (project.roles.Class c : InteractTxt.allClass) {
-        if (c.getClassName().equals(className)) {
-            selectedClass = c;
-            break;
-        }
-    }
-
-    if (selectedClass == null) return;
-
-    // Reset table2 for comment view
-    DefaultTableModel model = new DefaultTableModel(
-        new Object[][]{},
-        new String[]{"Comment"}
-    ) {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-    };
-
-    jTable2.setModel(model);
-
-    // Multiline renderer
-    MultiLineTableCellRenderer renderer = new MultiLineTableCellRenderer();
-    jTable2.getColumnModel().getColumn(0).setCellRenderer(renderer);
-
-    String comment = Tools.getSpecificComment(selectedClass, sessionStudent);
-    model.addRow(new Object[]{comment});
-    }//GEN-LAST:event_jButton4ActionPerformed
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
