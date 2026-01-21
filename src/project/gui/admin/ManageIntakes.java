@@ -140,8 +140,13 @@ public class ManageIntakes extends javax.swing.JFrame {
                     }
                 }
                 
-                for(String x : selectedModules){
-                    System.out.println(x);
+                String Modules = "";
+                for(int i=0; i < selectedModules.size(); i++){
+                    if(i == (selectedModules.size()-1)){
+                        Modules += selectedModules;
+                    }else{
+                        Modules += selectedModules + ", ";
+                    }
                 }
 
                 if(ErrorChecking.checkInput(name).equals("null")){
@@ -149,11 +154,23 @@ public class ManageIntakes extends javax.swing.JFrame {
                 } else if (ErrorChecking.checkInput(name).equals("number")){
                     JOptionPane.showMessageDialog(this, "Name cannot in number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
                 } else if (ErrorChecking.checkInput(name).equals("String")){
+                    
+                    String IMID = s3.nextLine();
+                    String intakeId = s3.nextLine();
+                    String moduleId = s3.nextLine();
+                    s3.nextLine();
+                    allIntakeModule.add(new IntakeModule(IMID, intakeId, moduleId));
+                    
                     Int.setIntakeName(name);
+                    Int.Int_Modules.clear();
+                    for(String x : selectedModules){
+                        Int.Int_Modules.add(InteractTxt.checkModID(x));
+                    }
 
-                    InteractTxt.writeIntake();
+                    InteractTxt.saveDatabase();
 
                     model.setValueAt(name, row, 1);
+                    model.setValueAt(Modules, row, 2);
                     break;
                 }
             }

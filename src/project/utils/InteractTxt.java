@@ -247,6 +247,26 @@ public class InteractTxt {
         return null;
     }
     
+    public static ArrayList<Intake> checkMod_Intakes(String moduleId){
+        ArrayList<Intake> list = new ArrayList<>();
+        for(IntakeModule x : allIntakeModule){
+            if(x.getModuleId().equals(moduleId)){
+                list.add(checkIntID(x.getIntakeId()));
+            }
+        }
+        return list;
+    }
+    
+    public static ArrayList<project.roles.Module> checkInt_Modules(String intakeId){
+        ArrayList<project.roles.Module> list = new ArrayList<>();
+        for(IntakeModule x : allIntakeModule){
+            if(x.getIntakeId().equals(intakeId)){
+                list.add(checkModID(x.getModuleId()));
+            }
+        }
+        return list;
+    }
+    
     public static void writeModuleTaught(){
         try{
             PrintWriter a = new PrintWriter("src/resources/module_taught.txt");
