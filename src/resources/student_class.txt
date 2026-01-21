@@ -1,7 +1,7 @@
 tp076267
 Class1
 A
-mid
+bad
 
 tp076267
 Class3
