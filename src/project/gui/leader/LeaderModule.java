@@ -31,7 +31,7 @@ public class LeaderModule extends FrameFormat {
         this.sessionUser = sessionUser;
         model.setColumnIdentifiers(columnName);
         
-        sessionUser.printLeaderTeam();
+//        sessionUser.printLeaderTeam();
         
         createPopupMenu();
         
@@ -105,7 +105,7 @@ public class LeaderModule extends FrameFormat {
         for (Module module : InteractTxt.allModule) {
             if (module != null) {
                 // Show only modules created by this leader
-                if (!module.getLeaderId().equals(sessionUser.getId())) {
+                if (!module.getLeaderID().equals(sessionUser.getId())) {
                     continue;
                 }
 

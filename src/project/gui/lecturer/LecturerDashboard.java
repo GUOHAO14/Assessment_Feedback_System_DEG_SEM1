@@ -37,6 +37,7 @@ public class LecturerDashboard extends FrameFormat {
         jLabel2 = new javax.swing.JLabel();
         designAssessment1 = new javax.swing.JButton();
         logout = new javax.swing.JButton();
+        profileButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -57,6 +58,9 @@ public class LecturerDashboard extends FrameFormat {
         logout.setText("Logout");
         logout.addActionListener(this::logoutActionPerformed);
 
+        profileButton.setText("Profile");
+        profileButton.addActionListener(this::profileButtonActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -73,6 +77,8 @@ public class LecturerDashboard extends FrameFormat {
             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(profileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(logout)
                 .addContainerGap())
         );
@@ -80,7 +86,9 @@ public class LecturerDashboard extends FrameFormat {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(logout, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                    .addComponent(profileButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addGap(42, 42, 42)
@@ -111,6 +119,12 @@ public class LecturerDashboard extends FrameFormat {
         // TODO add your handling code here:
         Tools.logout(this, sessionUser);
     }//GEN-LAST:event_logoutActionPerformed
+
+    private void profileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_profileButtonActionPerformed
+        // TODO add your handling code here:
+        new project.main.UserProfile(sessionUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_profileButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -150,6 +164,7 @@ public class LecturerDashboard extends FrameFormat {
     private javax.swing.JButton designAssessment1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JButton logout;
+    private javax.swing.JButton profileButton;
     private javax.swing.JLabel welcomeText;
     // End of variables declaration//GEN-END:variables
 }

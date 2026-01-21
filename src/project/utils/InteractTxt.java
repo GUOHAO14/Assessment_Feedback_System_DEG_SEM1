@@ -145,7 +145,7 @@ public class InteractTxt {
     }
     
     public static ArrayList<Intake> allIntake = new ArrayList<Intake>();
-    public static ArrayList<Module> allModule = new ArrayList<>();
+    public static ArrayList<project.roles.Module> allModule = new ArrayList<>();
     public static ArrayList<IntakeModule> allIntakeModule = new ArrayList<IntakeModule>();
     
     public static void writeIntake(){
@@ -158,7 +158,7 @@ public class InteractTxt {
             }
             a.close();
             PrintWriter b = new PrintWriter("src/resources/module.txt");
-            for(Module x : allModule){
+            for(project.roles.Module x : allModule){
                 b.println(x.getModuleId());
                 b.println(x.getModuleName());
                 b.println(x.getLeader().getId());
@@ -194,7 +194,7 @@ public class InteractTxt {
                 String name = s2.nextLine();
                 String leader = s2.nextLine();
                 s2.nextLine();
-                allModule.add(new Module(id, name, InteractTxt.checkLeaID(leader)));
+                allModule.add(new project.roles.Module(id, name, InteractTxt.checkLeaID(leader)));
                 InteractTxt.checkLeaID(leader).Lea_Modules.add(checkModID(id));
             }
             Scanner s3 = new Scanner(new File("src/resources/intake_module.txt"));
@@ -221,8 +221,8 @@ public class InteractTxt {
         return null;
     }
     
-    public static Module checkModID(String id){
-        for(Module x : allModule){
+    public static project.roles.Module checkModID(String id){
+        for(project.roles.Module x : allModule){
             if(id.equals(x.getModuleId())){
                 return x;
             }
@@ -251,7 +251,7 @@ public class InteractTxt {
     public static void writeModuleTaught(){
         try{
             PrintWriter a = new PrintWriter("src/resources/module_taught.txt");
-            for(Module x : allModule){
+            for(project.roles.Module x : allModule){
                 for(Lecturer y : x.Mod_Lecturers){
                     a.println(x.getModuleId());
                     a.println(y.getId());
