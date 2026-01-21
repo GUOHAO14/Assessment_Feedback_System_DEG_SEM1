@@ -58,7 +58,7 @@ public class StudentClassRegistration extends FrameFormat {
     Intake intake = InteractTxt.checkIntID(intakeId);
     if (intake == null) return;
 
-    for (project.roles.Module m : intake.Int_Modules) {
+    for (project.roles.Module m : InteractTxt.checkInt_Modules(intake.getIntakeId())) {
 
         // 🔒 Skip modules already registered
         if (isModuleAlreadyRegistered(m.getModuleId())) {

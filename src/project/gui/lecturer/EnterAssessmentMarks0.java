@@ -381,7 +381,7 @@ public class EnterAssessmentMarks0 extends FrameFormat {
 
             System.out.println("Selected i: " + chosenIntake.getIntakeName());
             System.out.println("Selected id: " + chosenIntake.getIntakeId());
-            System.out.println("Modules: " + chosenIntake.Int_Modules);
+            System.out.println("Modules: " + InteractTxt.checkInt_Modules(chosenIntake.getIntakeId()));
 
             //find overlap of modules from chosen intake
             //and the lecturer's (sessionUser) own modules
@@ -389,7 +389,7 @@ public class EnterAssessmentMarks0 extends FrameFormat {
             moduleDropdown.addItem("None");
             moduleDropdown.setSelectedItem("None");
             
-            chosenIntake.Int_Modules.forEach(m -> {
+            InteractTxt.checkInt_Modules(chosenIntake.getIntakeId()).forEach(m -> {
                 String modId = m.getModuleId();
                 if (ownMods.contains(modId)) moduleDropdown.addItem(modId+" ("+m.getModuleName()+")");
             });
