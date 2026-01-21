@@ -310,18 +310,10 @@ public class InteractTxt {
                 a.println(x.getClassId());
                 a.println(x.getClassName());
                 a.println(x.getLecId());
+                a.println(x.getIMID());
                 a.println();
             }
             a.close();
-            PrintWriter b = new PrintWriter("src/resources/intake_class.txt");
-            for(IntakeModule x : allIntakeModule){
-                for(Class y : x.IM_Classes){
-                    b.println(x.getIMID());
-                    b.println(y.getClassId());
-                    b.println();
-                }   
-            }
-            b.close();
             PrintWriter c = new PrintWriter("src/resources/student_class.txt");
             for(Student x : allStudent){
                 for(Class y : x.Stu_Classes){
@@ -346,18 +338,13 @@ public class InteractTxt {
                 String id = s1.nextLine();
                 String name = s1.nextLine();
                 String lecId = s1.nextLine();
+                String IMID = s1.nextLine();
                 s1.nextLine();
-                allClass.add(new Class(id, name, lecId));
+                allClass.add(new Class(id, name, lecId, IMID));
                 if(!lecId.equals("NA")){
                     InteractTxt.checkLecID(lecId).Lec_Classes.add(InteractTxt.checkClassID(id));
                 }
-            }
-            Scanner s2 = new Scanner(new File("src/resources/intake_class.txt"));
-            while(s2.hasNext()){
-                String IMID = s2.nextLine();
-                String classId = s2.nextLine();
-                s2.nextLine();
-                InteractTxt.checkIMID(IMID).IM_Classes.add(InteractTxt.checkClassID(classId));
+                InteractTxt.checkIMID(IMID).IM_Classes.add(InteractTxt.checkClassID(id));
             }
             Scanner s3 = new Scanner(new File("src/resources/student_class.txt"));
             while(s3.hasNext()){

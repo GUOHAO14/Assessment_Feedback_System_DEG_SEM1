@@ -17,11 +17,11 @@ public class ManageIntakes extends javax.swing.JFrame {
         initComponents();
         for(Intake x : InteractTxt.allIntake){
             String Modules = "";
-            for(int i=0; i < x.Int_Modules.size(); i++){
-                if(i == (x.Int_Modules.size()-1)){
-                    Modules += x.Int_Modules.get(i).getModuleId();
+            for(int i=0; i < InteractTxt.checkInt_Modules(x.getIntakeId()).size(); i++){
+                if(i == (InteractTxt.checkInt_Modules(x.getIntakeId()).size()-1)){
+                    Modules += InteractTxt.checkInt_Modules(x.getIntakeId()).get(i).getModuleId();
                 }else{
-                    Modules += x.Int_Modules.get(i).getModuleId() + ", ";
+                    Modules += InteractTxt.checkInt_Modules(x.getIntakeId()).get(i).getModuleId() + ", ";
                 }
             }
             model.addRow(new String[]{x.getIntakeId(), x.getIntakeName(), Modules});
@@ -105,12 +105,17 @@ public class ManageIntakes extends javax.swing.JFrame {
         JTextField nameField = new JTextField(25);
         nameField.setText(Int.getIntakeName());
         
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        panel.add(new JLabel("Name:"));
+        panel.add(nameField);
+        panel.add(new JLabel("Modules:"));
+        
         JPanel modulesPanel = new JPanel();
         modulesPanel.setLayout(new BoxLayout(modulesPanel, BoxLayout.Y_AXIS));
         ArrayList<JCheckBox> moduleBoxes = new ArrayList<>();
         for (project.roles.Module x : InteractTxt.allModule) {
             JCheckBox cb = new JCheckBox(x.getModuleId());
-            for(project.roles.Module y : Int.Int_Modules){
+            for(project.roles.Module y : InteractTxt.checkInt_Modules(Int.getIntakeId())){
                 if (x.getModuleId().equals(y.getModuleId())) {
                     cb.setSelected(true);
                 }
@@ -119,12 +124,19 @@ public class ManageIntakes extends javax.swing.JFrame {
             modulesPanel.add(cb);
         }
         JScrollPane moduleScroll = new JScrollPane(modulesPanel);
-
-        JPanel panel = new JPanel(new GridLayout(0, 1));
-        panel.add(new JLabel("Name:"));
-        panel.add(nameField);
-        panel.add(new JLabel("Modules:"));
         panel.add(moduleScroll);
+        
+        boolean emptyStu = true;
+        for(Student x : InteractTxt.allStudent){
+            if(x.getIntakeId().equals(Int.getIntakeId())){
+                emptyStu = false;
+            }
+        }
+        if(!emptyStu){
+            for (JCheckBox cb : moduleBoxes) {
+                cb.setEnabled(false);
+            }
+        }
 
         while(true){
             Object[] options = {"OK", "Delete", "Cancel"};
@@ -139,15 +151,6 @@ public class ManageIntakes extends javax.swing.JFrame {
                         selectedModules.add(cb.getText());
                     }
                 }
-                
-                String Modules = "";
-                for(int i=0; i < selectedModules.size(); i++){
-                    if(i == (selectedModules.size()-1)){
-                        Modules += selectedModules;
-                    }else{
-                        Modules += selectedModules + ", ";
-                    }
-                }
 
                 if(ErrorChecking.checkInput(name).equals("null")){
                     JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
@@ -155,17 +158,37 @@ public class ManageIntakes extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Name cannot in number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
                 } else if (ErrorChecking.checkInput(name).equals("String")){
                     
-                    String IMID = s3.nextLine();
-                    String intakeId = s3.nextLine();
-                    String moduleId = s3.nextLine();
-                    s3.nextLine();
-                    allIntakeModule.add(new IntakeModule(IMID, intakeId, moduleId));
-                    
-                    Int.setIntakeName(name);
-                    Int.Int_Modules.clear();
-                    for(String x : selectedModules){
-                        Int.Int_Modules.add(InteractTxt.checkModID(x));
+                    for(project.roles.Module x : InteractTxt.checkInt_Modules(Int.getIntakeId())){
+                        boolean delete = true;
+                        if(selectedModules.contains(x.getModuleId())){
+                            delete = false;
+                        }
+                        if(true){
+                            delete
+                        }
                     }
+                    for(String y : selectedModules){
+                        boolean add = true;
+                        for(project.roles.Module x : InteractTxt.checkInt_Modules(Int.getIntakeId())){
+                            if(x.getModuleId().equals(y)){
+                                add = false;
+                            }
+                        }
+                        if(true){
+                            add
+                        }
+                    }
+                    
+                    String Modules = "";
+                    for(int i=0; i < selectedModules.size(); i++){
+                        if(i == (selectedModules.size()-1)){
+                            Modules += selectedModules.get(i);
+                        }else{
+                            Modules += selectedModules.get(i) + ", ";
+                            
+                        }
+                    }
+                    
 
                     InteractTxt.saveDatabase();
 

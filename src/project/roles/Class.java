@@ -3,13 +3,22 @@ package project.roles;
 import java.util.ArrayList;
 
 public class Class {
-    private String classId, className, lecId;
+    private String classId, className, lecId, IMID;
     public ArrayList<Student> Class_Students = new ArrayList<Student>();
     
-    public Class(String classId, String className, String lecId) {
+    public Class(String classId, String className, String lecId, String IMID) {
         this.classId = classId;
         this.className = className;
         this.lecId = lecId;
+        this.IMID = IMID;
+    }
+
+    public String getIMID() {
+        return IMID;
+    }
+
+    public void setIMID(String IMID) {
+        this.IMID = IMID;
     }
 
     public String getClassId() {
