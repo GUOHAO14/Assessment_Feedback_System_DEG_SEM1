@@ -1,15 +1,15 @@
 tp076267
-Class1
+C005
 A
 bad
 
 tp076267
-Class3
+C007
 NA
 heheehehehehehehehaiaioondcsdcs
 
 tp076266
-Class3
+C007
 C
 NA
 
@@ -19,7 +19,7 @@ NA
 NA
 
 tp076266
-Class4
+C008
 NA
 NA
 

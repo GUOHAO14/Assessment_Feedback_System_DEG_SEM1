@@ -163,7 +163,7 @@ public class ManageIntakes extends javax.swing.JFrame {
                         if(selectedModules.contains(x.getModuleId())){
                             delete = false;
                         }
-                        if(true){
+                        if(delete){
                             IntakeModule IMID = InteractTxt.checkIMID(Int.getIntakeId(), x.getModuleId());
                             InteractTxt.allIntakeModule.remove(IMID);
                             for(project.roles.Class a : IMID.IM_Classes){
@@ -184,7 +184,7 @@ public class ManageIntakes extends javax.swing.JFrame {
                                 add = false;
                             }
                         }
-                        if(true){
+                        if(add){
                             int max = 0;
                             for(IntakeModule x : InteractTxt.allIntakeModule){
                                 String numPart = x.getIMID().substring(4);
@@ -194,19 +194,31 @@ public class ManageIntakes extends javax.swing.JFrame {
                                 }
                             }
                             String IMID = "IMID" + (max + 1);
+                            InteractTxt.allIntakeModule.add(new IntakeModule(IMID, Int.getIntakeId(), y));
+                            
+                            int max2 = 0;
+                            for(project.roles.Class x : InteractTxt.allClass){
+                                String numPart = x.getClassId().substring(1);
+                                int num = Integer.parseInt(numPart);
+                                if (num > max2) {
+                                    max2 = num;
+                                }
+                            }
+                            String ClassId = "C" + (max + 1);
+                            InteractTxt.allClass.add(new project.roles.Class(ClassId, "Default Class", "NA", IMID));
+                            InteractTxt.checkIMID(IMID).IM_Classes.add(InteractTxt.checkClassID(ClassId));
                         }
                     }
                     
                     String Modules = "";
                     for(int i=0; i < InteractTxt.checkInt_Modules(Int.getIntakeId()).size(); i++){
                         if(i == (InteractTxt.checkInt_Modules(Int.getIntakeId()).size()-1)){
-                            Modules += InteractTxt.checkInt_Modules(Int.getIntakeId()).get(i);
+                            Modules += InteractTxt.checkInt_Modules(Int.getIntakeId()).get(i).getModuleId();
                         }else{
-                            Modules += InteractTxt.checkInt_Modules(Int.getIntakeId()).get(i) + ", ";
+                            Modules += InteractTxt.checkInt_Modules(Int.getIntakeId()).get(i).getModuleId() + ", ";
                             
                         }
                     }
-                    
 
                     InteractTxt.saveDatabase();
 
