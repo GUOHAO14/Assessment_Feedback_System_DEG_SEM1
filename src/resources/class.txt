@@ -12,11 +12,11 @@ lc076206
 
 Class4
 PythonB
-lc123
+NA
 
 Class5
 C++A
-lc123
+NA
 
 Class6
 C++B

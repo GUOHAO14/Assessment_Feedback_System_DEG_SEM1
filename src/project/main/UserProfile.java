@@ -11,6 +11,7 @@ import java.lang.Class;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import javax.swing.JFrame;
 
 /**
  *
@@ -21,36 +22,14 @@ public class UserProfile extends FrameFormat {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UserProfile.class.getName());
     private User sessionUser;
     private String dashboardClassName;
-//     * Creates new form UserProfile
-//     */
 
     public UserProfile(User sessionUser) {
         initComponents();
         this.sessionUser = sessionUser;
         super.formatWindow("User Profile");
         jLabel1.setText("User Profile");
-        // Determine dashboard class for back navigation
-        determineDashboardClass();
         displayStudentFields();
         loadUserData();
-    }
-
-    private void determineDashboardClass() {
-        String role = sessionUser.getRole();
-        switch (role) {
-            case "leader":
-                dashboardClassName = "project.gui.leader.LeaderDashboard";
-                break;
-            case "lecturer":
-                dashboardClassName = "project.gui.lecturer.LecturerDashboard";
-                break;
-            case "student":
-                dashboardClassName = "project.gui.student.StudentHomepage";
-                break;
-            case "admin":
-                dashboardClassName = "project.gui.admin.Dashboard";
-                break;
-        }
     }
 
     private void loadUserData() {
@@ -85,22 +64,6 @@ public class UserProfile extends FrameFormat {
         dobField.setVisible(isStudent);
         intakeLabel.setVisible(isStudent);
         intakeField.setVisible(isStudent);
-    }
-
-    private void navigateBackToDashboard() {
-        try {
-            // Use reflection to create the appropriate dashboard instance
-            Class<?> dashboardClass = Class.forName(dashboardClassName);
-            Object dashboard = dashboardClass.getConstructor(sessionUser.getClass()).newInstance(sessionUser);
-
-            // Make dashboard visible
-            ((javax.swing.JFrame) dashboard).setVisible(true);
-            this.dispose();
-
-        } catch (Exception e) {
-            logger.log(java.util.logging.Level.SEVERE, "Error navigating to dashboard", e);
-            JOptionPane.showMessageDialog(this, "Error returning to dashboard: " + e.getMessage(), "Navigation Error", JOptionPane.ERROR_MESSAGE);
-        }
     }
 
     private boolean isValidDOB(String dob) {
@@ -331,7 +294,7 @@ public class UserProfile extends FrameFormat {
             return;
         }
 
-        if (newPassword.isEmpty() || newPassword.length() < 7) {
+        if (newPassword.isEmpty() || newPassword.length() < 8) {
             JOptionPane.showMessageDialog(this, "Please enter a password with at least 8 characters.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -340,19 +303,42 @@ public class UserProfile extends FrameFormat {
         sessionUser.setEmail(newEmail);
         sessionUser.setPW(newPassword);
 
-        String dob = dobField.getText().trim();
+        if (sessionUser instanceof Student) {
+            String dob = dobField.getText().trim();
 
-        if (!isValidDOB(dob)) {
-            JOptionPane.showMessageDialog(this, "Invalid Date of Birth!\nFormat: YYYY-MM-DD\nExample: 2005-02-14", "Validation Error", JOptionPane.ERROR_MESSAGE);
-            return;
+            if (!isValidDOB(dob)) {
+                JOptionPane.showMessageDialog(this, "Invalid Date of Birth!\nFormat: YYYY-MM-DD\nExample: 2005-02-14", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
         }
-
-        JOptionPane.showMessageDialog(this, "Profile will be saved when you logged out.", "Success", JOptionPane.INFORMATION_MESSAGE);
+        InteractTxt.saveDatabase();
+        JOptionPane.showMessageDialog(this, "Profile is saved.", "Success", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        navigateBackToDashboard();
+        JFrame dashboard = null;
+
+        switch (sessionUser.getRole()) {
+            case "leader":
+                dashboard = new project.gui.leader.LeaderDashboard((Leader) sessionUser);
+                break;
+            case "lecturer":
+                dashboard = new project.gui.lecturer.LecturerDashboard((Lecturer) sessionUser);
+                break;
+            case "student":
+                dashboard = new project.gui.student.StudentHomepage((Student) sessionUser);
+                break;
+            case "admin":
+                dashboard = new project.gui.admin.Dashboard(); // admin dashboard takes no args
+                break;
+        }
+
+        if (dashboard != null) {
+            dashboard.setVisible(true); // show the dashboard
+            this.dispose();             // close current page
+        }
 
     }//GEN-LAST:event_jButton2ActionPerformed
 

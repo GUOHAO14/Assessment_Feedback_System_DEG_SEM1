@@ -2,7 +2,6 @@ package project.utils;
 
 import java.io.File;
 import project.roles.*;
-import project.roles.Module;
 import project.roles.Class;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -146,7 +145,7 @@ public class InteractTxt {
     }
     
     public static ArrayList<Intake> allIntake = new ArrayList<Intake>();
-    public static ArrayList<Module> allModule = new ArrayList<Module>();
+    public static ArrayList<Module> allModule = new ArrayList<>();
     public static ArrayList<IntakeModule> allIntakeModule = new ArrayList<IntakeModule>();
     
     public static void writeIntake(){

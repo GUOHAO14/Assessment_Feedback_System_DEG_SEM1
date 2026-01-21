@@ -3,102 +3,128 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package project.gui.leader;
+
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
 import project.utils.*;
 import project.roles.*;
 import project.roles.Module;
+
 /**
  *
  * @author US
  */
 public class LeaderModule extends FrameFormat {
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LeaderModule.class.getName());
     private Leader sessionUser;
-//    private IntakeModule intMod;
-//    private Module mod;
     private DefaultTableModel model = new DefaultTableModel();
-    private int row =-1;
-    private String[] columnName = {"IMID","Module ID", "Module Name","Intake ID","Intake Name"};
-    /**
-     * Creates new form LeaderModule
-     */
-//    public LeaderModule(Leader sessionUser, IntakeModule intMod, Module mod)
+    private int row = -1;
+    private String[] columnName = {"Module ID", "Module Name"};
+    private JPopupMenu popupMenu;
+
     public LeaderModule(Leader sessionUser) {
         initComponents();
         super.formatWindow("Leader Module");
         this.sessionUser = sessionUser;
-//        this.intMod = intMod;
-//        this.mod = mod;
-
         model.setColumnIdentifiers(columnName);
-       
+        
+        sessionUser.printLeaderTeam();
+        
+        createPopupMenu();
+        
         loadModuleData();
-  
     }
-        
-    public void loadModuleData() {
-    model.setRowCount(0);  // Clear existing rows
-    
-    for (IntakeModule im : InteractTxt.allIntakeModule) {
-        Module module = InteractTxt.checkModID(im.getModuleId());
-        Intake intake = InteractTxt.checkIntID(im.getIntakeId());
-        
-        if (module != null) {
-            String moduleName = module.getModuleName();
-            String intakeId = im.getIntakeId();
-            String intakeName = (intake != null) ? intake.getIntakeName() : "Unknown";
-            String lecturers = "";
-            for (Lecturer lec : module.Mod_Lecturers){
-                lecturers += lec.getName() + " ";
-            }
-            
-            // ✅ CORRECT ORDER - matches columnName array
-            Object[] row = {
-                im.getIMID(),            // [0] IMID
-                module.getModuleId(),    // [1] Module ID
-                moduleName,              // [2] Module Name
-                intakeId,                // [3] Intake ID
-                intakeName,              // [4] Intake Name
-                lecturers
-            };
-            model.addRow(row);
-            
-            // Debug output
-            System.out.println(
-                im.getIMID() + ", " +
-                module.getModuleId() + ", " +
-                moduleName + ", " +
-                intakeId + ", " +
-                intakeName+ ", " +
-                lecturers
-            );
-        }
-    }
-    
-    System.out.println("Total assignments loaded: " + model.getRowCount());
-}
 
-    
-    
-//    private void loadModules() {
-//        model.setRowCount(0); // Clear existing rows
-//        
-//        for (Module module : InteractTxt.allModule) {
-//            // Count lecturers assigned to this module
-//            int lecturerCount = module.Mod_Lecturers.size();
-//            
-//            Object[] row = {
-//                module.getModuleId(),
-//                module.getModuleName(),
-//                lecturerCount + " lecturer(s)"
-//            };
-//            System.out.println(row);
-//            model.addRow(row);
-//        }
-//        
-////        statusLabel.setText("Loaded " + InteractTxt.allModule.size() + " modules");
-//    }
+    /**
+     * Create the popup menu for table rows
+     */
+    private void createPopupMenu() {
+        popupMenu = new JPopupMenu();
+
+        JMenuItem editItem = new JMenuItem("Edit Module");
+        editItem.addActionListener(e -> {
+            if (row != -1) {
+                String moduleId = model.getValueAt(row, 0).toString();
+                String moduleName = model.getValueAt(row, 1).toString();
+
+                new LeaderEditModule(sessionUser, moduleId, moduleName).setVisible(true);
+                this.dispose();
+            }
+        });
+
+        JMenuItem deleteItem = new JMenuItem("Delete Module");
+        deleteItem.addActionListener(e -> {
+            if (row != -1) {
+                String moduleId = model.getValueAt(row, 0).toString();
+                String moduleName = model.getValueAt(row, 1).toString();
+
+                int confirm = JOptionPane.showConfirmDialog(
+                        this, "Are you sure you want to delete module: " + moduleName + "?", "Confirm Deletion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE
+                );
+
+                if (confirm == JOptionPane.YES_OPTION) {
+                    try {
+                        // Find and remove the module from allModule
+                        Module moduleToDelete = InteractTxt.checkModID(moduleId);
+                        if (moduleToDelete != null) {
+                            InteractTxt.allModule.remove(moduleToDelete);
+                        }
+
+                        // Save changes
+                        InteractTxt.saveDatabase();
+
+                        JOptionPane.showMessageDialog(
+                                this, "Module deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE
+                        );
+
+                        loadModuleData();
+
+                    } catch (Exception ex) {
+                        logger.log(java.util.logging.Level.SEVERE, "Error deleting module", ex);
+                        JOptionPane.showMessageDialog(
+                                this, "Error deleting module: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE
+                        );
+                    }
+                }
+            }
+        });
+
+        popupMenu.add(editItem);
+        popupMenu.add(deleteItem);
+    }
+
+    public void loadModuleData() {
+        model.setRowCount(0);
+
+        // Use a Set to track already added modules (to avoid duplicates)
+        java.util.Set<String> addedModules = new java.util.HashSet<>();
+
+        for (Module module : InteractTxt.allModule) {
+            if (module != null) {
+                // Show only modules created by this leader
+                if (!module.getLeaderId().equals(sessionUser.getId())) {
+                    continue;
+                }
+
+                // Skip if already added (avoid duplicates)
+                if (addedModules.contains(module.getModuleId())) {
+                    continue;
+                }
+
+                Object[] rowData = {
+                    module.getModuleId(),
+                    module.getModuleName()
+                };
+                model.addRow(rowData);
+                addedModules.add(module.getModuleId());
+            }
+        }
+
+        System.out.println("Total modules loaded: " + model.getRowCount());
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -112,8 +138,8 @@ public class LeaderModule extends FrameFormat {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -127,42 +153,43 @@ public class LeaderModule extends FrameFormat {
             }
         });
 
-        jButton2.setText("Edit Module");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButton4.setText("Back");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButton4ActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Delete Module");
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setText("Manage Module");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton4)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(41, Short.MAX_VALUE))
+                        .addGap(473, 473, 473)
+                        .addComponent(jButton1))
+                    .addComponent(jLabel1))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
-                .addGap(21, 21, 21))
+                .addGap(15, 15, 15)
+                .addComponent(jButton4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17)
+                .addComponent(jButton1)
+                .addContainerGap())
         );
 
         pack();
@@ -170,17 +197,15 @@ public class LeaderModule extends FrameFormat {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        System.out.println("BUTTON CLICKED!"); 
         new LeaderAddModule(sessionUser).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        System.out.println("BUTTON CLICKED!"); 
-        new LeaderEditModule(sessionUser).setVisible(true);
+        new LeaderDashboard(sessionUser).setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -219,8 +244,8 @@ public class LeaderModule extends FrameFormat {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
