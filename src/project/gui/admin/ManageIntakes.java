@@ -41,6 +41,7 @@ public class ManageIntakes extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         IntakeTable = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,6 +63,13 @@ public class ManageIntakes extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(IntakeTable);
 
+        jButton1.setText("Create");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -73,9 +81,11 @@ public class ManageIntakes extends javax.swing.JFrame {
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton1)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton2)))))
                 .addContainerGap(30, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -87,7 +97,9 @@ public class ManageIntakes extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(145, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addContainerGap(110, Short.MAX_VALUE))
         );
 
         pack();
@@ -168,7 +180,9 @@ public class ManageIntakes extends javax.swing.JFrame {
                             InteractTxt.allIntakeModule.remove(IMID);
                             for(project.roles.Class a : IMID.IM_Classes){
                                 InteractTxt.allClass.remove(a);
-                                InteractTxt.checkLecID(a.getLecId()).Lec_Classes.remove(a);
+                                if(!a.getLecId().equals("NA")){
+                                    InteractTxt.checkLecID(a.getLecId()).Lec_Classes.remove(a);
+                                }                                
                             }
                             for(Assessment b : IMID.IM_Assessments){
                                 InteractTxt.allAssessment.remove(b);
@@ -204,7 +218,7 @@ public class ManageIntakes extends javax.swing.JFrame {
                                     max2 = num;
                                 }
                             }
-                            String ClassId = "C" + (max + 1);
+                            String ClassId = "C" + (max2 + 1);
                             InteractTxt.allClass.add(new project.roles.Class(ClassId, "Default Class", "NA", IMID));
                             InteractTxt.checkIMID(IMID).IM_Classes.add(InteractTxt.checkClassID(ClassId));
                         }
@@ -229,23 +243,127 @@ public class ManageIntakes extends javax.swing.JFrame {
             }
 
             if (result == 1) {
-//                int confirm = JOptionPane.showConfirmDialog(this, "Do you sure to delete the Leader?", "Confirm", JOptionPane.YES_NO_OPTION);
-//                if (confirm == JOptionPane.OK_OPTION) {
-//                    InteractTxt.allIntake.remove(Int);
-//                    for (Lecturer x : Lea.leaderTeam){
-//                            x.setLeader(null);
-//                        }
-//
-//                    Lea.leaderTeam.clear();
-//
-//                    InteractTxt.saveDatabase();
-//                    model.removeRow(row);
-//                    break;
-//                }
+                if(emptyStu){
+                    int confirm = JOptionPane.showConfirmDialog(this, "Do you sure to delete the Intake?", "Confirm", JOptionPane.YES_NO_OPTION);
+                    if (confirm == JOptionPane.OK_OPTION) {
+                        InteractTxt.allIntake.remove(Int);
+                        for(project.roles.Module x : InteractTxt.checkInt_Modules(Int.getIntakeId())){
+                            IntakeModule IMID = InteractTxt.checkIMID(Int.getIntakeId(), x.getModuleId());
+                            InteractTxt.allIntakeModule.remove(IMID);
+                            for(project.roles.Class a : IMID.IM_Classes){
+                                InteractTxt.allClass.remove(a);
+                                if(!a.getLecId().equals("NA")){
+                                    InteractTxt.checkLecID(a.getLecId()).Lec_Classes.remove(a);
+                                }                                
+                            }
+                            for(Assessment b : IMID.IM_Assessments){
+                                InteractTxt.allAssessment.remove(b);
+                            }
+                            IMID.IM_Classes.clear();
+                            IMID.IM_Assessments.clear();
+                        }
+                        
+                        InteractTxt.saveDatabase();
+                        model.removeRow(row);
+                        break;
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(this, "Cannot Delete", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
 
     }//GEN-LAST:event_IntakeTableMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        JTextField idField = new JTextField(25);
+        JTextField nameField = new JTextField(25);
+        
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        panel.add(new JLabel("Intake ID:"));
+        panel.add(idField);
+        panel.add(new JLabel("Name:"));
+        panel.add(nameField);
+        panel.add(new JLabel("Modules:"));
+        
+        JPanel modulesPanel = new JPanel();
+        modulesPanel.setLayout(new BoxLayout(modulesPanel, BoxLayout.Y_AXIS));
+        ArrayList<JCheckBox> moduleBoxes = new ArrayList<>();
+        for (project.roles.Module x : InteractTxt.allModule) {
+            JCheckBox cb = new JCheckBox(x.getModuleId());
+            moduleBoxes.add(cb);
+            modulesPanel.add(cb);
+        }
+        JScrollPane moduleScroll = new JScrollPane(modulesPanel);
+        panel.add(moduleScroll);
+        
+        moduleScroll.setPreferredSize(new Dimension(260,100));
+
+
+        while(true){
+            int result = JOptionPane.showConfirmDialog(this, panel, "New Intake", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (result != JOptionPane.OK_OPTION) break;
+
+            if (result == JOptionPane.OK_OPTION) {
+                String id = idField.getText().trim();
+                String name = nameField.getText().trim();
+                ArrayList<String> selectedModules = new ArrayList<>();
+                for (JCheckBox cb : moduleBoxes) {
+                    if (cb.isSelected()) {
+                        selectedModules.add(cb.getText());
+                    }
+                }
+                
+                if(ErrorChecking.checkInput(name).equals("null")){
+                    JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkInput(name).equals("number")){
+                    JOptionPane.showMessageDialog(this, "Name cannot in number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                }  else if (ErrorChecking.checkInput(name).equals("String")){
+                    InteractTxt.allIntake.add(new Intake(id, name));
+                    Intake New = InteractTxt.checkIntID(id);
+                    
+                    for(String y : selectedModules){
+                        int max = 0;
+                        for(IntakeModule x : InteractTxt.allIntakeModule){
+                            String numPart = x.getIMID().substring(4);
+                            int num = Integer.parseInt(numPart);
+                            if (num > max) {
+                                max = num;
+                            }
+                        }
+                        String IMID = "IMID" + (max + 1);
+                        InteractTxt.allIntakeModule.add(new IntakeModule(IMID, New.getIntakeId(), y));
+
+                        int max2 = 0;
+                        for(project.roles.Class x : InteractTxt.allClass){
+                            String numPart = x.getClassId().substring(1);
+                            int num = Integer.parseInt(numPart);
+                            if (num > max2) {
+                                max2 = num;
+                            }
+                        }
+                        String ClassId = "C" + (max2 + 1);
+                        InteractTxt.allClass.add(new project.roles.Class(ClassId, "Default Class", "NA", IMID));
+                        InteractTxt.checkIMID(IMID).IM_Classes.add(InteractTxt.checkClassID(ClassId));
+                    }
+                    
+                    InteractTxt.saveDatabase();
+                    
+                    String Modules = "";
+                    for(int i=0; i < InteractTxt.checkInt_Modules(New.getIntakeId()).size(); i++){
+                        if(i == (InteractTxt.checkInt_Modules(New.getIntakeId()).size()-1)){
+                            Modules += InteractTxt.checkInt_Modules(New.getIntakeId()).get(i).getModuleId();
+                        }else{
+                            Modules += InteractTxt.checkInt_Modules(New.getIntakeId()).get(i).getModuleId() + ", ";
+                            
+                        }
+                    }
+                    model.addRow(new String[]{New.getIntakeId(), New.getIntakeName(), Modules});
+                    break;
+                }
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -284,6 +402,7 @@ public class ManageIntakes extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable IntakeTable;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
