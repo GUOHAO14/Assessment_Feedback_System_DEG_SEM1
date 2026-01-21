@@ -77,7 +77,6 @@ public class MultiLineTableCellRenderer extends JTextArea
         
         setupTables();
         loadRegisteredClasses();
-        setupClassSelectionListener();
     }
    private void setupTables() {
 
@@ -85,14 +84,15 @@ public class MultiLineTableCellRenderer extends JTextArea
        CLASS TABLE (jTable1)
        =============================== */
     jTable1.setModel(new DefaultTableModel(
-        new Object[][]{},
-        new String[]{"Class", "Lecturer", "Comment", "Grade", "Score"}
-    ) {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-    });
+    new Object[][]{},
+    new String[]{"Class", "Lecturer", "Grade", "Score"}
+) {
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return false;
+    }
+});
+
 
     jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
     jTable1.getTableHeader().setReorderingAllowed(false);
@@ -129,9 +129,9 @@ public class MultiLineTableCellRenderer extends JTextArea
     MultiLineTableCellRenderer renderer = new MultiLineTableCellRenderer();
 
     // jTable1 multiline columns
-    jTable1.getColumnModel().getColumn(2).setCellRenderer(renderer); // Comment
-    jTable1.getColumnModel().getColumn(3).setCellRenderer(renderer); // Grade
-    jTable1.getColumnModel().getColumn(4).setCellRenderer(renderer); // Score
+//    jTable1.getColumnModel().getColumn(2).setCellRenderer(renderer); // Comment
+    jTable1.getColumnModel().getColumn(2).setCellRenderer(renderer); // Grade
+    jTable1.getColumnModel().getColumn(3).setCellRenderer(renderer); // Score
 
     // jTable2 multiline column
     jTable2.getColumnModel().getColumn(3).setCellRenderer(renderer); // Feedback
@@ -164,34 +164,44 @@ private void loadRegisteredClasses() {
         }
 
         model.addRow(new Object[]{
-            cls.getClassName(),
-            lec != null ? lec.getName() : "N/A",
-            comment,
-            grade,
-            score
+    cls.getClassName(),
+    lec != null ? lec.getName() : "N/A",
+    grade,
+    score
         });
     }
 }
 
 
-private void setupClassSelectionListener() {
-
-    jTable1.getSelectionModel().addListSelectionListener(e -> {
-
-        if (!e.getValueIsAdjusting()) {
-
-            int row = jTable1.getSelectedRow();
-            if (row == -1) return;
-
-            String className =
-                    jTable1.getValueAt(row, 0).toString();
-
-            loadAssessmentsForClass(className);
-        }
-    });
-}
+//private void setupClassSelectionListener() {
+//
+//    jTable1.getSelectionModel().addListSelectionListener(e -> {
+//
+//        if (!e.getValueIsAdjusting()) {
+//
+//            int row = jTable1.getSelectedRow();
+//            if (row == -1) return;
+//
+//            String className =
+//                    jTable1.getValueAt(row, 0).toString();
+//
+//            loadAssessmentsForClass(className);
+//        }
+//    });
+//}
 private void loadAssessmentsForClass(String className) {
+jTable2.setModel(new DefaultTableModel(
+    new Object[][]{},
+    new String[]{"Assessment", "Marks", "Full Marks", "Feedback"}
+) {
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return false;
+    }
+});
 
+MultiLineTableCellRenderer renderer = new MultiLineTableCellRenderer();
+jTable2.getColumnModel().getColumn(3).setCellRenderer(renderer);
     DefaultTableModel model =
             (DefaultTableModel) jTable2.getModel();
 
@@ -275,6 +285,8 @@ private String extractNumber(String text) {
         jTable2 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -318,6 +330,20 @@ private String extractNumber(String text) {
             }
         });
 
+        jButton3.setText("View Result");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("View Comment");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -332,7 +358,12 @@ private String extractNumber(String text) {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton1)
-                            .addComponent(jButton2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton4)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -346,7 +377,10 @@ private String extractNumber(String text) {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3)
+                    .addComponent(jButton4))
                 .addContainerGap(43, Short.MAX_VALUE))
         );
 
@@ -473,7 +507,6 @@ int selectedRow = jTable1.getSelectedRow();
     loadRegisteredClasses();
     jTable1.revalidate();
     jTable1.repaint();
-
     JOptionPane.showMessageDialog(
             this,
             "Comment submitted successfully.",
@@ -482,11 +515,66 @@ int selectedRow = jTable1.getSelectedRow();
     );
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+
+    int row = jTable1.getSelectedRow();
+    if (row == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a class first.");
+        return;
+    }
+
+    String className = jTable1.getValueAt(row, 0).toString();
+    loadAssessmentsForClass(className);
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+int row = jTable1.getSelectedRow();
+    if (row == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a class first.");
+        return;
+    }
+
+    String className = jTable1.getValueAt(row, 0).toString();
+
+    project.roles.Class selectedClass = null;
+    for (project.roles.Class c : InteractTxt.allClass) {
+        if (c.getClassName().equals(className)) {
+            selectedClass = c;
+            break;
+        }
+    }
+
+    if (selectedClass == null) return;
+
+    // Reset table2 for comment view
+    DefaultTableModel model = new DefaultTableModel(
+        new Object[][]{},
+        new String[]{"Comment"}
+    ) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+
+    jTable2.setModel(model);
+
+    // Multiline renderer
+    MultiLineTableCellRenderer renderer = new MultiLineTableCellRenderer();
+    jTable2.getColumnModel().getColumn(0).setCellRenderer(renderer);
+
+    String comment = Tools.getSpecificComment(selectedClass, sessionStudent);
+    model.addRow(new Object[]{comment});
+    }//GEN-LAST:event_jButton4ActionPerformed
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
