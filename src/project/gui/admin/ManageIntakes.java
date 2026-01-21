@@ -164,7 +164,17 @@ public class ManageIntakes extends javax.swing.JFrame {
                             delete = false;
                         }
                         if(true){
-                            delete
+                            IntakeModule IMID = InteractTxt.checkIMID(Int.getIntakeId(), x.getModuleId());
+                            InteractTxt.allIntakeModule.remove(IMID);
+                            for(project.roles.Class a : IMID.IM_Classes){
+                                InteractTxt.allClass.remove(a);
+                                InteractTxt.checkLecID(a.getLecId()).Lec_Classes.remove(a);
+                            }
+                            for(Assessment b : IMID.IM_Assessments){
+                                InteractTxt.allAssessment.remove(b);
+                            }
+                            IMID.IM_Classes.clear();
+                            IMID.IM_Assessments.clear();
                         }
                     }
                     for(String y : selectedModules){
@@ -175,16 +185,24 @@ public class ManageIntakes extends javax.swing.JFrame {
                             }
                         }
                         if(true){
-                            add
+                            int max = 0;
+                            for(IntakeModule x : InteractTxt.allIntakeModule){
+                                String numPart = x.getIMID().substring(4);
+                                int num = Integer.parseInt(numPart);
+                                if (num > max) {
+                                    max = num;
+                                }
+                            }
+                            String IMID = "IMID" + (max + 1);
                         }
                     }
                     
                     String Modules = "";
-                    for(int i=0; i < selectedModules.size(); i++){
-                        if(i == (selectedModules.size()-1)){
-                            Modules += selectedModules.get(i);
+                    for(int i=0; i < InteractTxt.checkInt_Modules(Int.getIntakeId()).size(); i++){
+                        if(i == (InteractTxt.checkInt_Modules(Int.getIntakeId()).size()-1)){
+                            Modules += InteractTxt.checkInt_Modules(Int.getIntakeId()).get(i);
                         }else{
-                            Modules += selectedModules.get(i) + ", ";
+                            Modules += InteractTxt.checkInt_Modules(Int.getIntakeId()).get(i) + ", ";
                             
                         }
                     }

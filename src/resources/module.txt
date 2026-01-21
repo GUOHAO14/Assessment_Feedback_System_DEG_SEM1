@@ -14,11 +14,11 @@ Mod4
 Intro to Cyber
 lc456
 
-M001
+Mod5
 Object Oriented Programming
 lc76364
 
-M002
+Mod6
 Data Structures
 lc76364
 
