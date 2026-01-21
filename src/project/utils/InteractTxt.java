@@ -204,7 +204,6 @@ public class InteractTxt {
                 String moduleId = s3.nextLine();
                 s3.nextLine();
                 allIntakeModule.add(new IntakeModule(IMID, intakeId, moduleId));
-                InteractTxt.checkIntID(intakeId).Int_Modules.add(InteractTxt.checkModID(moduleId));
             }
         }catch(Exception e){
             System.out.println("Error in read ..........");
