@@ -104,42 +104,27 @@ public class ManageIntakes extends javax.swing.JFrame {
 
         JTextField nameField = new JTextField(25);
         nameField.setText(Int.getIntakeName());
-
-        DefaultListModel<String> List = new DefaultListModel<>();
-        for (project.roles.Module x : InteractTxt.allModule) {
-            List.addElement(x.getModuleId());
-        }
-        JList<String> ModuleList = new JList<>(List);
-        ModuleList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        ModuleList.setVisibleRowCount(5);
-        JScrollPane moduleField = new JScrollPane(ModuleList);
         
         JPanel modulesPanel = new JPanel();
-modulesPanel.setLayout(new BoxLayout(modulesPanel, BoxLayout.Y_AXIS));
-
-ArrayList<JCheckBox> moduleBoxes = new ArrayList<>();
-
-for (project.roles.Module x : InteractTxt.allModule) {
-    JCheckBox cb = new JCheckBox(x.getModuleId());
-    moduleBoxes.add(cb);
-    modulesPanel.add(cb);
-}
-
-JScrollPane moduleScroll = new JScrollPane(modulesPanel);
+        modulesPanel.setLayout(new BoxLayout(modulesPanel, BoxLayout.Y_AXIS));
+        ArrayList<JCheckBox> moduleBoxes = new ArrayList<>();
+        for (project.roles.Module x : InteractTxt.allModule) {
+            JCheckBox cb = new JCheckBox(x.getModuleId());
+            for(project.roles.Module y : Int.Int_Modules){
+                if (x.getModuleId().equals(y.getModuleId())) {
+                    cb.setSelected(true);
+                }
+            }
+            moduleBoxes.add(cb);
+            modulesPanel.add(cb);
+        }
+        JScrollPane moduleScroll = new JScrollPane(modulesPanel);
 
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.add(new JLabel("Name:"));
         panel.add(nameField);
         panel.add(new JLabel("Modules:"));
         panel.add(moduleScroll);
-        
-        ArrayList<String> selectedModules = new ArrayList<>();
-
-for (JCheckBox cb : moduleBoxes) {
-    if (cb.isSelected()) {
-        selectedModules.add(cb.getText());
-    }
-}
 
         while(true){
             Object[] options = {"OK", "Delete", "Cancel"};
@@ -148,7 +133,12 @@ for (JCheckBox cb : moduleBoxes) {
 
             if (result == 0) {
                 String name = nameField.getText().trim();
-                ArrayList<String> selectedModules = new ArrayList<>(ModuleList.getSelectedValuesList());
+                ArrayList<String> selectedModules = new ArrayList<>();
+                for (JCheckBox cb : moduleBoxes) {
+                    if (cb.isSelected()) {
+                        selectedModules.add(cb.getText());
+                    }
+                }
                 
                 for(String x : selectedModules){
                     System.out.println(x);
