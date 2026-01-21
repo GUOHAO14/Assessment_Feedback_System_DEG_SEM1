@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class Intake {
     private String intakeId, intakeName;
-    public ArrayList<Module> Int_Modules = new ArrayList<Module>();
     
     public Intake(String intakeId, String intakeName) {
         this.intakeId = intakeId;
