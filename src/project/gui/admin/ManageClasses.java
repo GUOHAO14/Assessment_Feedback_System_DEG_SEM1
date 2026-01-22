@@ -162,28 +162,26 @@ public class ManageClasses extends javax.swing.JFrame {
             if (result == 1) {
                 //detect must at least one class
                 boolean delete = true;
+                outer:
                 for(Student y : Cla.Class_Students){
-                    for(Assessment x : InteractTxt.checkIMID(Cla.getIMID()).IM_Assessments){
-                        for(StudentScore z : y.Stu_Scores){
-                            if(x == z.getAssessment()){
-                                delete = false;
-                            }
+                    for(StudentScore z : y.Stu_Scores){
+                        if(InteractTxt.checkIMID(Cla.getIMID()).IM_Assessments.contains(z.getAssessment())){
+                            delete = false;
+                            break outer;
                         }
                     }
-                }
-                
-                
-                for(Student x : Cla.Class_Students){
-                    
-                    if ((x.Stu_Scores == null || x.Stu_Scores.isEmpty()) && (x.GradesAndComments == null || x.GradesAndComments.isEmpty())) {
-                        delete
+                    for(StudentGradeAndComment z : y.GradesAndComments){
+                        if(Cla == z.getStuClass()){
+                            delete = false;
+                            break outer;
+                        }
                     }
-                    
                 }
                 
                 if(delete){
                     int confirm = JOptionPane.showConfirmDialog(this, "Do you sure to delete the Intake?", "Confirm", JOptionPane.YES_NO_OPTION);
                     if (confirm == JOptionPane.OK_OPTION) {
+                        //DELETE DELETE (No Stu_Scores and No GradeAndComments)
                         InteractTxt.allIntake.remove(Int);
                         for(project.roles.Module x : InteractTxt.checkInt_Modules(Int.getIntakeId())){
                             IntakeModule IMID = InteractTxt.checkIMID(Int.getIntakeId(), x.getModuleId());
