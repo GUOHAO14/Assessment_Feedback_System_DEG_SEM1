@@ -153,8 +153,8 @@ public class StudentResult extends FrameFormat {
 
             Lecturer lec = InteractTxt.checkLecID(cls.getLecId());
 
-            String comment = Tools.getSpecificComment(cls, sessionStudent);
-            String grade = Tools.getSpecificGrade(cls, sessionStudent);
+            String comment = sessionStudent.getSpecificComment(cls);
+            String grade = sessionStudent.getSpecificGrade(cls);
 
             IntakeModule matchedIM = null;
             for (IntakeModule im : InteractTxt.allIntakeModule) {
@@ -166,7 +166,7 @@ public class StudentResult extends FrameFormat {
 
             String score = "NA";
             if (matchedIM != null) {
-                score = Tools.calcStuScore(matchedIM, sessionStudent);
+                score = sessionStudent.calcStuScore(matchedIM);
             }
 
             model.addRow(new Object[]{
@@ -410,7 +410,7 @@ public class StudentResult extends FrameFormat {
         }
 
         // 3️⃣ Get existing comment (if any)
-        String existingComment = Tools.getSpecificComment(selectedClass, sessionStudent);
+        String existingComment = sessionStudent.getSpecificComment(selectedClass);
         if (existingComment == null || existingComment.equalsIgnoreCase("NA")) {
             existingComment = "";
         }

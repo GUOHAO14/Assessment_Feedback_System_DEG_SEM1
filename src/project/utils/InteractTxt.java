@@ -319,8 +319,8 @@ public class InteractTxt {
                 for(Class y : x.Stu_Classes){
                     c.println(x.getId());
                     c.println(y.getClassId());
-                    c.println(Tools.getSpecificGrade(y, x));
-                    c.println(Tools.getSpecificComment(y, x));
+                    c.println(x.getSpecificGrade(y));
+                    c.println(x.getSpecificComment(y));
                     c.println();
                 }   
             }

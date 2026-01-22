@@ -117,7 +117,7 @@ public class LecturerDashboard extends FrameFormat {
 
     private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
         // TODO add your handling code here:
-        Tools.logout(this, sessionUser);
+        sessionUser.logout(this);
     }//GEN-LAST:event_logoutActionPerformed
 
     private void profileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_profileButtonActionPerformed
