@@ -145,10 +145,6 @@ public class DesignAssessment1 extends FrameFormat {
                                 a.setAssPercentage(percent);
                             }
 
-                            System.out.println("Type: " + type);
-                            System.out.println("Name: " + name);
-                            System.out.println("Percent: " + percent);
-
                             generateAssessmentList();
 
                             loop = false;

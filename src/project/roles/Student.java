@@ -1,6 +1,9 @@
 package project.roles;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import project.utils.InteractTxt;
+import project.utils.exceptions.IntegerRangeException;
 
 public class Student extends User {
     private String intakeId, dob;
@@ -58,5 +61,86 @@ public class Student extends User {
         
         this.intakeId = studentData[1];
         this.dob = studentData[2];
+    }
+    
+    public String calcStuScore(IntakeModule im) {
+        ArrayList<String> assIds = new ArrayList<>();
+        int score = 0;
+        int count = 0;
+        
+        im.IM_Assessments.forEach(i -> {
+           assIds.add(i.getAssId());
+        });
+        
+        for (StudentScore ss : this.Stu_Scores) {
+            String assId = ss.getAssessment().getAssId();
+           
+            if (assIds.contains(assId)) {
+                score += Float.parseFloat(ss.getFinalScore());
+                count++;
+            }
+        }
+        
+        System.out.println(count);
+        System.out.println(assIds.size());
+        
+        if (assIds.isEmpty()) return "NA";
+        if (count != assIds.size()) return "Incomp.";
+        else return String.valueOf(score);
+    }
+    
+    public String calcStuGrade(String input) {
+        String grade = null;
+        try {
+            if (input.equals("NA") || input.equals("NA")) return input;
+            
+            float num = Float.parseFloat(input);
+            
+            if (num < 0 || num > 100) {
+                throw new IntegerRangeException("Score input", 1, 100);
+            } else {
+                
+                System.out.println(num);
+                for (Grading g : InteractTxt.allGrading) {
+                    System.out.println(g.getMarksFrom()+"-"+g.getMarksTo());
+                    if (num >= Float.parseFloat(g.getMarksFrom()) && num <= Float.parseFloat(g.getMarksTo())) {
+                        System.out.println("hit");
+                        grade = g.getGrade();
+                    }
+                }
+            }
+        } catch (NumberFormatException e) {
+            grade = "NA";
+            System.out.println("calcStuGPA: "+grade);
+        } catch (IntegerRangeException e) {
+            grade = "NA";
+            System.out.println("calcStuGPA: "+grade);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "GPA calculation failed.\nReport this error.", "Error - Unknown Error", 0);
+            grade = "NA";
+        }
+        return grade;
+    }
+    
+    
+    
+    public String getSpecificGrade(project.roles.Class c) {
+        String grade = "NA";
+        for (StudentGradeAndComment gc : this.GradesAndComments) {
+            if (c.getClassId().equals(gc.getStuClass().getClassId())) {
+                grade = gc.getGrade();
+            }
+        }
+        return grade;
+    }
+    
+    public String getSpecificComment(project.roles.Class c) {
+        String grade = "NA";
+        for (StudentGradeAndComment gc : this.GradesAndComments) {
+            if (c.getClassId().equals(gc.getStuClass().getClassId())) {
+                grade = gc.getComment();
+            }
+        }
+        return grade;
     }
 }

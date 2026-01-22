@@ -134,7 +134,7 @@ public class LeaderDashboard extends FrameFormat {
 
     private void logOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutActionPerformed
         // TODO add your handling code here:
-        Tools.logout(this, sessionUser);
+        sessionUser.logout(this);
     }//GEN-LAST:event_logOutActionPerformed
 
     /**
