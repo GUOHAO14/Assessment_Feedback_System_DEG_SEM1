@@ -13,11 +13,6 @@ PythonA
 lc076206
 IMID2
 
-C008
-PythonB
-NA
-IMID3
-
 C009
 C++A
 NA
@@ -59,7 +54,7 @@ lc789
 IMID8
 
 C13
-Default Class
+Default
 NA
 IMID9
 
@@ -69,7 +64,7 @@ NA
 IMID10
 
 C15
-NEW CLASS CLASS
+HAHAHA
 NA
-IMID1
+IMID3
 

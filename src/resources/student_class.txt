@@ -19,11 +19,6 @@ NA
 NA
 
 tp076266
-C008
-NA
-NA
-
-tp076266
 C001
 null
 null
