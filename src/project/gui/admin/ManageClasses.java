@@ -160,33 +160,54 @@ public class ManageClasses extends javax.swing.JFrame {
             }
 
             if (result == 1) {
-//                if(emptyStu){
-//                    int confirm = JOptionPane.showConfirmDialog(this, "Do you sure to delete the Intake?", "Confirm", JOptionPane.YES_NO_OPTION);
-//                    if (confirm == JOptionPane.OK_OPTION) {
-//                        InteractTxt.allIntake.remove(Int);
-//                        for(project.roles.Module x : InteractTxt.checkInt_Modules(Int.getIntakeId())){
-//                            IntakeModule IMID = InteractTxt.checkIMID(Int.getIntakeId(), x.getModuleId());
-//                            InteractTxt.allIntakeModule.remove(IMID);
-//                            for(project.roles.Class a : IMID.IM_Classes){
-//                                InteractTxt.allClass.remove(a);
-//                                if(!a.getLecId().equals("NA")){
-//                                    InteractTxt.checkLecID(a.getLecId()).Lec_Classes.remove(a);
-//                                }
-//                            }
-//                            for(Assessment b : IMID.IM_Assessments){
-//                                InteractTxt.allAssessment.remove(b);
-//                            }
-//                            IMID.IM_Classes.clear();
-//                            IMID.IM_Assessments.clear();
-//                        }
-//
-//                        InteractTxt.saveDatabase();
-//                        model.removeRow(row);
-//                        break;
-//                    }
-//                }else{
-//                    JOptionPane.showMessageDialog(this, "Cannot Delete", "Error", JOptionPane.ERROR_MESSAGE);
-//                }
+                //detect must at least one class
+                boolean delete = true;
+                for(Student y : Cla.Class_Students){
+                    for(Assessment x : InteractTxt.checkIMID(Cla.getIMID()).IM_Assessments){
+                        for(StudentScore z : y.Stu_Scores){
+                            if(x == z.getAssessment()){
+                                delete = false;
+                            }
+                        }
+                    }
+                }
+                
+                
+                for(Student x : Cla.Class_Students){
+                    
+                    if ((x.Stu_Scores == null || x.Stu_Scores.isEmpty()) && (x.GradesAndComments == null || x.GradesAndComments.isEmpty())) {
+                        delete
+                    }
+                    
+                }
+                
+                if(delete){
+                    int confirm = JOptionPane.showConfirmDialog(this, "Do you sure to delete the Intake?", "Confirm", JOptionPane.YES_NO_OPTION);
+                    if (confirm == JOptionPane.OK_OPTION) {
+                        InteractTxt.allIntake.remove(Int);
+                        for(project.roles.Module x : InteractTxt.checkInt_Modules(Int.getIntakeId())){
+                            IntakeModule IMID = InteractTxt.checkIMID(Int.getIntakeId(), x.getModuleId());
+                            InteractTxt.allIntakeModule.remove(IMID);
+                            for(project.roles.Class a : IMID.IM_Classes){
+                                InteractTxt.allClass.remove(a);
+                                if(!a.getLecId().equals("NA")){
+                                    InteractTxt.checkLecID(a.getLecId()).Lec_Classes.remove(a);
+                                }
+                            }
+                            for(Assessment b : IMID.IM_Assessments){
+                                InteractTxt.allAssessment.remove(b);
+                            }
+                            IMID.IM_Classes.clear();
+                            IMID.IM_Assessments.clear();
+                        }
+
+                        InteractTxt.saveDatabase();
+                        model.removeRow(row);
+                        break;
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(this, "Cannot Delete", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }//GEN-LAST:event_ClassTableMouseClicked
@@ -197,20 +218,13 @@ public class ManageClasses extends javax.swing.JFrame {
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.add(new JLabel("Name:"));
         panel.add(nameField);
-        panel.add(new JLabel("Modules:"));
-
-        JPanel modulesPanel = new JPanel();
-        modulesPanel.setLayout(new BoxLayout(modulesPanel, BoxLayout.Y_AXIS));
-        ArrayList<JCheckBox> moduleBoxes = new ArrayList<>();
-        for (project.roles.Module x : InteractTxt.allModule) {
-            JCheckBox cb = new JCheckBox(x.getModuleId());
-            moduleBoxes.add(cb);
-            modulesPanel.add(cb);
+        panel.add(new JLabel("Intake Module:"));
+        
+        JComboBox<String> IMIDList = new JComboBox<>();
+        for(IntakeModule x : InteractTxt.allIntakeModule){
+            IMIDList.addItem(x.getIMID());
         }
-        JScrollPane moduleScroll = new JScrollPane(modulesPanel);
-        panel.add(moduleScroll);
-
-        moduleScroll.setPreferredSize(new Dimension(260,100));
+        panel.add(IMIDList);
 
         while(true){
             int result = JOptionPane.showConfirmDialog(this, panel, "New Intake", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -218,62 +232,38 @@ public class ManageClasses extends javax.swing.JFrame {
 
             if (result == JOptionPane.OK_OPTION) {
                 String name = nameField.getText().trim();
-                ArrayList<String> selectedModules = new ArrayList<>();
-                for (JCheckBox cb : moduleBoxes) {
-                    if (cb.isSelected()) {
-                        selectedModules.add(cb.getText());
-                    }
-                }
+                String IMID = (String) IMIDList.getSelectedItem();
 
-                if (ErrorChecking.checkID(id).equals("null")){
-                    JOptionPane.showMessageDialog(this, "ID is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkID(id).equals("same")){
-                    JOptionPane.showMessageDialog(this, "Intake ID must be unique", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkInput(name).equals("null")){
+                if (ErrorChecking.checkInput(name).equals("null")){
                     JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
                 } else if (ErrorChecking.checkInput(name).equals("number")){
                     JOptionPane.showMessageDialog(this, "Name cannot in number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkInput(name).equals("String") && ErrorChecking.checkID(id).equals("String")){
-                    InteractTxt.allIntake.add(new Intake(id, name));
-                    Intake New = InteractTxt.checkIntID(id);
-
-                    for(String y : selectedModules){
-                        int max = 0;
-                        for(IntakeModule x : InteractTxt.allIntakeModule){
-                            String numPart = x.getIMID().substring(4);
-                            int num = Integer.parseInt(numPart);
-                            if (num > max) {
-                                max = num;
-                            }
+                } else if (ErrorChecking.checkInput(name).equals("String")){
+                    int max = 0;
+                    for(project.roles.Class x : InteractTxt.allClass){
+                        String numPart = x.getClassId().substring(1);
+                        int num = Integer.parseInt(numPart);
+                        if (num > max) {
+                            max = num;
                         }
-                        String IMID = "IMID" + (max + 1);
-                        InteractTxt.allIntakeModule.add(new IntakeModule(IMID, New.getIntakeId(), y));
-
-                        int max2 = 0;
-                        for(project.roles.Class x : InteractTxt.allClass){
-                            String numPart = x.getClassId().substring(1);
-                            int num = Integer.parseInt(numPart);
-                            if (num > max2) {
-                                max2 = num;
-                            }
-                        }
-                        String ClassId = "C" + (max2 + 1);
-                        InteractTxt.allClass.add(new project.roles.Class(ClassId, "Default Class", "NA", IMID));
-                        InteractTxt.checkIMID(IMID).IM_Classes.add(InteractTxt.checkClassID(ClassId));
                     }
+                    String ClassId = "C" + (max + 1);
+                    InteractTxt.allClass.add(new project.roles.Class(ClassId, name, "NA", IMID));
+                    InteractTxt.checkIMID(IMID).IM_Classes.add(InteractTxt.checkClassID(ClassId));
+                    project.roles.Class New = InteractTxt.checkClassID(ClassId);
 
                     InteractTxt.saveDatabase();
-
-                    String Modules = "";
-                    for(int i=0; i < InteractTxt.checkInt_Modules(New.getIntakeId()).size(); i++){
-                        if(i == (InteractTxt.checkInt_Modules(New.getIntakeId()).size()-1)){
-                            Modules += InteractTxt.checkInt_Modules(New.getIntakeId()).get(i).getModuleId();
+                    
+                    String Students = "";
+                    for(int i=0; i < New.Class_Students.size(); i++){
+                        if(i == (New.Class_Students.size()-1)){
+                            Students += New.Class_Students.get(i).getId();
                         }else{
-                            Modules += InteractTxt.checkInt_Modules(New.getIntakeId()).get(i).getModuleId() + ", ";
-
+                            Students += New.Class_Students.get(i).getId() + ", ";
                         }
                     }
-                    model.addRow(new String[]{New.getIntakeId(), New.getIntakeName(), Modules});
+
+                    model.addRow(new String[]{New.getClassId(), New.getClassName(), New.getLecId(), New.getIMID(), Students});
                     break;
                 }
             }
