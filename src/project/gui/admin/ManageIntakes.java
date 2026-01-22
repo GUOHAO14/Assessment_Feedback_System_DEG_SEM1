@@ -26,6 +26,20 @@ public class ManageIntakes extends javax.swing.JFrame {
             }
             model.addRow(new String[]{x.getIntakeId(), x.getIntakeName(), Modules});
         }
+        
+        IntakeTable.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(java.awt.event.MouseEvent e) {
+                int row = IntakeTable.rowAtPoint(e.getPoint());
+                int col = IntakeTable.columnAtPoint(e.getPoint());
+                if (row > -1 && (col == 2)) {
+                    Object value = IntakeTable.getValueAt(row, col);
+                    IntakeTable.setToolTipText(value == null ? null : value.toString());
+                } else {
+                    IntakeTable.setToolTipText(null);
+                }
+            }
+        });
     }
 
     /**
@@ -233,6 +247,7 @@ public class ManageIntakes extends javax.swing.JFrame {
                             
                         }
                     }
+                    Int.setIntakeName(name);
 
                     InteractTxt.saveDatabase();
 
