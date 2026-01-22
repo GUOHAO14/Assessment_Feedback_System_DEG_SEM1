@@ -314,11 +314,15 @@ public class ManageIntakes extends javax.swing.JFrame {
                     }
                 }
                 
-                if(ErrorChecking.checkInput(name).equals("null")){
+                if (ErrorChecking.checkID(id).equals("null")){
+                    JOptionPane.showMessageDialog(this, "ID is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkID(id).equals("same")){
+                    JOptionPane.showMessageDialog(this, "Intake ID must be unique", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                } else if (ErrorChecking.checkInput(name).equals("null")){
                     JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
                 } else if (ErrorChecking.checkInput(name).equals("number")){
                     JOptionPane.showMessageDialog(this, "Name cannot in number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                }  else if (ErrorChecking.checkInput(name).equals("String")){
+                } else if (ErrorChecking.checkInput(name).equals("String") && ErrorChecking.checkID(id).equals("String")){
                     InteractTxt.allIntake.add(new Intake(id, name));
                     Intake New = InteractTxt.checkIntID(id);
                     

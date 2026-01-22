@@ -76,4 +76,18 @@ public class ErrorChecking {
         
         return "String";
     }
+    
+    public static String checkID(String input) {
+        if (input.isEmpty()) {
+            return "null";
+        }
+        
+        for (Intake x : InteractTxt.allIntake){
+            if(input.equals(x.getIntakeId())){
+                return "same";
+            }
+        }
+        
+        return "String";
+    }
 }
