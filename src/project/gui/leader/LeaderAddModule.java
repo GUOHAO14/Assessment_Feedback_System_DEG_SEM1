@@ -128,7 +128,7 @@ public class LeaderAddModule extends FrameFormat {
 
         for (Module module : InteractTxt.allModule) {
             String moduleId = module.getModuleId();
-            if (moduleId.startsWith("MOD")) {
+            if (moduleId.startsWith("Mod")) {
                 try {
                     int num = Integer.parseInt(moduleId.substring(3));
                     if (num > maxId) {
@@ -140,7 +140,7 @@ public class LeaderAddModule extends FrameFormat {
             }
         }
 
-        return String.format("MOD%03d", maxId + 1);
+        return "Mod" + (maxId + 1);
     }
 
     private void clearForm() {
