@@ -160,44 +160,35 @@ public class ManageClasses extends javax.swing.JFrame {
             }
 
             if (result == 1) {
-                //detect must at least one class
                 boolean delete = true;
-                outer:
-                for(Student y : Cla.Class_Students){
-                    for(StudentScore z : y.Stu_Scores){
-                        if(InteractTxt.checkIMID(Cla.getIMID()).IM_Assessments.contains(z.getAssessment())){
-                            delete = false;
-                            break outer;
-                        }
-                    }
-                    for(StudentGradeAndComment z : y.GradesAndComments){
-                        if(Cla == z.getStuClass()){
-                            delete = false;
-                            break outer;
+                if (InteractTxt.checkIMID(Cla.getIMID()).IM_Classes.size() <= 1) {
+                    delete = false;
+                } else {
+                    outer:
+                    for(Student y : Cla.Class_Students){
+                        for(StudentScore z : y.Stu_Scores){
+                            if(InteractTxt.checkIMID(Cla.getIMID()).IM_Assessments.contains(z.getAssessment())){
+                                delete = false;
+                                break outer;
+                            }
                         }
                     }
                 }
                 
                 if(delete){
-                    int confirm = JOptionPane.showConfirmDialog(this, "Do you sure to delete the Intake?", "Confirm", JOptionPane.YES_NO_OPTION);
+                    int confirm = JOptionPane.showConfirmDialog(this, "Do you sure to delete the Class?", "Confirm", JOptionPane.YES_NO_OPTION);
                     if (confirm == JOptionPane.OK_OPTION) {
-                        //DELETE DELETE (No Stu_Scores and No GradeAndComments)
-                        InteractTxt.allIntake.remove(Int);
-                        for(project.roles.Module x : InteractTxt.checkInt_Modules(Int.getIntakeId())){
-                            IntakeModule IMID = InteractTxt.checkIMID(Int.getIntakeId(), x.getModuleId());
-                            InteractTxt.allIntakeModule.remove(IMID);
-                            for(project.roles.Class a : IMID.IM_Classes){
-                                InteractTxt.allClass.remove(a);
-                                if(!a.getLecId().equals("NA")){
-                                    InteractTxt.checkLecID(a.getLecId()).Lec_Classes.remove(a);
-                                }
-                            }
-                            for(Assessment b : IMID.IM_Assessments){
-                                InteractTxt.allAssessment.remove(b);
-                            }
-                            IMID.IM_Classes.clear();
-                            IMID.IM_Assessments.clear();
+                        InteractTxt.allClass.remove(Cla);
+                        if(!Cla.getLecId().equals("NA")){
+                            InteractTxt.checkLecID(Cla.getLecId()).Lec_Classes.remove(Cla);
                         }
+                        InteractTxt.checkIMID(Cla.getIMID()).IM_Classes.remove(Cla);
+                        for(Student x : Cla.Class_Students){
+                            x.Stu_Classes.remove(Cla);
+                            x.GradesAndComments.removeIf(gc -> gc.getStuClass() == Cla);
+                            
+                        }
+                        Cla.Class_Students.clear();
 
                         InteractTxt.saveDatabase();
                         model.removeRow(row);
