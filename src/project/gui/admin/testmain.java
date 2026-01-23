@@ -4,6 +4,7 @@
  */
 package project.gui.admin;
 
+import project.roles.*;
 import project.utils.*;
 
 /**
@@ -13,6 +14,6 @@ import project.utils.*;
 public class testmain {
     public static void main(String[]args) {
         InteractTxt.initDatabase();
-        new Dashboard().setVisible(true);
+        new Dashboard(InteractTxt.allAdmin.get(0)).setVisible(true);
     }
 }
