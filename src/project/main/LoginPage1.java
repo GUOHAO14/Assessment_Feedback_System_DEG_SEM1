@@ -227,8 +227,8 @@ public class LoginPage1 extends FrameFormat {
 
             } else if (sessionUser instanceof Admin) {
                 Admin admin = (Admin) sessionUser;
-//                new project.gui.admin.AdminDashboard(admin).setVisible(true);
-//                this.dispose();
+                new project.gui.admin.Dashboard(admin).setVisible(true);
+                this.dispose();
 
             } else {
                 // Handle an unknown subclass of User if necessary

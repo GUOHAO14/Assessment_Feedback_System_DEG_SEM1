@@ -1,11 +1,11 @@
 package project.main;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import project.utils.InteractTxt;
 
 
 public class MainProgram {
     public static void main(String[]args) {
-//        new LoginPage0().setVisible(true);
+        new LoginPage0().setVisible(true);
+        InteractTxt.initDatabase();
     }
 }

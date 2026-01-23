@@ -1,11 +1,14 @@
 package project.gui.admin;
 
+import project.roles.Admin;
 import project.utils.FrameFormat;
 
-public class Dashboard extends javax.swing.JFrame {
-
+public class Dashboard extends FrameFormat {
+    
+    private Admin sessionUser;
     public Dashboard() {
         initComponents();
+        this.sessionUser = sessionUser;
     }
 
     /**
@@ -136,12 +139,12 @@ public class Dashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        new ManageStudents().setVisible(true);
+        new ManageStudents(sessionUser).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new ManageLecturers().setVisible(true);
+        new ManageLecturers(sessionUser).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -150,22 +153,22 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        new ManageAcademicLeaders().setVisible(true);
+        new ManageAcademicLeaders(sessionUser).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        new ManageIntakes().setVisible(true);
+        new ManageIntakes(sessionUser).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        new ManageGradingSystem().setVisible(true);
+        new ManageGradingSystem(sessionUser).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        new ManageClasses().setVisible(true);
+        new ManageClasses(sessionUser).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
 
