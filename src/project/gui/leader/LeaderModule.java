@@ -204,7 +204,7 @@ public class LeaderModule extends FrameFormat {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        jLabel2.setText("Click A Row to Edit Or Delete Module");
+        jLabel2.setText("Click A Row to Edit or Delete Module");
 
         jButton1.setText("Add Module");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
