@@ -36,7 +36,7 @@ public class LeaderEditModule extends FrameFormat {
         moduleIdField.setEditable(false);
         moduleNameField.setText(moduleName);
 
-        // Load lecturers and preselect assigned ones
+      
         loadLecturerList();
         preselectAssignedLecturers(moduleId);
 
@@ -135,7 +135,7 @@ public class LeaderEditModule extends FrameFormat {
     }
 
     private void updateLecturerAssignments(Module module) {
-        // Get selected lecturers
+   
         List<String> selectedLecturers = jList1.getSelectedValuesList();
 
         // Clear existing assignments
