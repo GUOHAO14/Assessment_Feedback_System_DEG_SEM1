@@ -27,7 +27,6 @@ public class LeaderAddModule extends FrameFormat {
         super.formatWindow("Leader Add Module");
         this.sessionUser = sessionUser;
 
-        // Initialize lecturer list model
         lecturerListModel = new DefaultListModel<>();
         jList1.setModel(lecturerListModel);
 
@@ -35,9 +34,6 @@ public class LeaderAddModule extends FrameFormat {
         loadLecturerList();
     }
 
-    /**
-     * Load lecturers into JList for multiple selection
-     */
     private void loadLecturerList() {
         lecturerListModel.clear();
 
@@ -55,25 +51,18 @@ public class LeaderAddModule extends FrameFormat {
         String moduleName = modField.getText().trim();
 
         if (moduleName.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Please fill in module name!",
-                    "Validation Error",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please fill in module name!", "Validation Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         // Check for existing module with same name
         for (Module existingModule : InteractTxt.allModule) {
             if (existingModule.getModuleName().equalsIgnoreCase(moduleName)) {
-                JOptionPane.showMessageDialog(this,
-                        "A module with this name already exists: " + existingModule.getModuleId(),
-                        "Module Exists",
-                        JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this,"A module with this name already exists: " + existingModule.getModuleId(), "Module Exists",JOptionPane.WARNING_MESSAGE);
                 return;
             }
         }
 
-        // Generate Module ID
         String moduleId = generateModuleId();
 
         // Create new module with Leader object
@@ -114,11 +103,7 @@ public class LeaderAddModule extends FrameFormat {
             lecturerInfo = "\nLecturers assigned: " + assignedCount;
         }
 
-        JOptionPane.showMessageDialog(this,
-                "Module added successfully!\nID: " + moduleId
-                + "\nName: " + moduleName + lecturerInfo,
-                "Success",
-                JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Module added successfully!\nID: " + moduleId + "\nName: " + moduleName + lecturerInfo, "Success", JOptionPane.INFORMATION_MESSAGE);
 
         clearForm();
     }
