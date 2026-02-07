@@ -31,63 +31,62 @@ public class ErrorChecking {
         
     }
     
-    public static String checkInput(String input) {
-        if (input.isEmpty()) {
-            return "null";
+    public static ValidationResult checkInput(String input) {
+        if (input == null || input.isEmpty()) {
+            return ValidationResult.EMPTY;
         }
-        
+
         try {
             Integer.parseInt(input);
-            return "number";
-        } catch (Exception e) {
-            return "String";
+            return ValidationResult.NUMBER;
+        } catch (NumberFormatException e) {
+            return ValidationResult.OK;
         }
     }
     
-    public static String checkEmail(String input) {
-        if (input.isEmpty()) {
-            return "null";
+    public static ValidationResult checkEmail(String email) {
+        if (email == null || email.isEmpty()) {
+            return ValidationResult.EMPTY;
         }
-        
-        if (!input.contains("@")){
-            return "not email";
+
+        if (!email.contains("@")) {
+            return ValidationResult.INVALID;
         }
-        
-        for (Student x : InteractTxt.allStudent){
-            if(input.equals(x.getEmail())){
-                return "same";
-            }
+
+        if (emailExists(email)) {
+            return ValidationResult.EXISTS;
         }
-        for (Lecturer x : InteractTxt.allLecturer){
-            if(input.equals(x.getEmail())){
-                return "same";
-            }
-        }
-        for (Leader x : InteractTxt.allLeader){
-            if(input.equals(x.getEmail())){
-                return "same";
-            }
-        }
-        for (Admin x : InteractTxt.allAdmin){
-            if(input.equals(x.getEmail())){
-                return "same";
-            }
-        }
-        
-        return "String";
+
+        return ValidationResult.OK;
+    }
+
+    private static boolean emailExists(String email) {
+        for (Student x : InteractTxt.allStudent)
+            if (email.equals(x.getEmail())) return true;
+
+        for (Lecturer x : InteractTxt.allLecturer)
+            if (email.equals(x.getEmail())) return true;
+
+        for (Leader x : InteractTxt.allLeader)
+            if (email.equals(x.getEmail())) return true;
+
+        for (Admin x : InteractTxt.allAdmin)
+            if (email.equals(x.getEmail())) return true;
+
+        return false;
     }
     
-    public static String checkID(String input) {
-        if (input.isEmpty()) {
-            return "null";
+    public static ValidationResult checkID(String input) {
+        if (input == null || input.isEmpty()) {
+            return ValidationResult.EMPTY;
         }
         
         for (Intake x : InteractTxt.allIntake){
             if(input.equals(x.getIntakeId())){
-                return "same";
+                return ValidationResult.EXISTS;
             }
         }
         
-        return "String";
+        return ValidationResult.OK;
     }
 }

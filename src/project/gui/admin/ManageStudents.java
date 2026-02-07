@@ -150,18 +150,15 @@ public class ManageStudents extends FrameFormat {
                 String email = emailField.getText().trim();
                 String intakeId = (String) intakeList.getSelectedItem();
                 String dob = new SimpleDateFormat("yyyy-MM-dd").format((Date) dobSpinner.getValue());
-
-                if(ErrorChecking.checkInput(name).equals("null")){
-                    JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkInput(name).equals("number")){
-                    JOptionPane.showMessageDialog(this, "Name cannot in number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkEmail(email).equals("null")){
-                    JOptionPane.showMessageDialog(this, "Email is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkEmail(email).equals("not email")){
-                    JOptionPane.showMessageDialog(this, "Email must be in email format", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkEmail(email).equals("same") && !email.equals(Stu.getEmail())){
-                    JOptionPane.showMessageDialog(this, "Email must be Unique", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkInput(name).equals("String") && (ErrorChecking.checkEmail(email).equals("String") || email.equals(Stu.getEmail()))){
+                
+                ValidationResult nameResult = ErrorChecking.checkInput(name);
+                ValidationResult emailResult = ErrorChecking.checkEmail(email);
+                
+                if (nameResult != ValidationResult.OK) {
+                    showNameError(nameResult);
+                }else if (emailResult != ValidationResult.OK && !email.equals(Stu.getEmail())) {
+                    showEmailError(emailResult);
+                }else{
                     Stu.setName(name);
                     Stu.setEmail(email);
                     Stu.setIntakeId(intakeId);
@@ -231,17 +228,14 @@ public class ManageStudents extends FrameFormat {
                 String intakeId = (String) intakeList.getSelectedItem();
                 String dob = new SimpleDateFormat("yyyy-MM-dd").format((Date) dobSpinner.getValue());
 
-                if(ErrorChecking.checkInput(name).equals("null")){
-                    JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkInput(name).equals("number")){
-                    JOptionPane.showMessageDialog(this, "Name cannot in number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkEmail(email).equals("null")){
-                    JOptionPane.showMessageDialog(this, "Email is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkEmail(email).equals("not email")){
-                    JOptionPane.showMessageDialog(this, "Email must be in email format", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkEmail(email).equals("same")){
-                    JOptionPane.showMessageDialog(this, "Email must be Unique", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkInput(name).equals("String") && ErrorChecking.checkEmail(email).equals("String")){
+                ValidationResult nameResult = ErrorChecking.checkInput(name);
+                ValidationResult emailResult = ErrorChecking.checkEmail(email);
+                
+                if (nameResult != ValidationResult.OK) {
+                    showNameError(nameResult);
+                }else if (emailResult != ValidationResult.OK) {
+                    showEmailError(emailResult);
+                }else{
                     int max = 0;
                     for(Student x : InteractTxt.allStudent){
                         String numPart = x.getId().substring(2);

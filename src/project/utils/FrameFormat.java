@@ -97,4 +97,34 @@ abstract public class FrameFormat extends JFrame {
         this.dispose();
     }
     
+    public void showNameError(ValidationResult result) {
+        switch (result) {
+            case EMPTY ->
+                JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            case NUMBER ->
+                JOptionPane.showMessageDialog(this, "Name cannot be a number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public void showEmailError(ValidationResult result) {
+        switch (result) {
+            case EMPTY ->
+                JOptionPane.showMessageDialog(this, "Email is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            case INVALID ->
+                JOptionPane.showMessageDialog(this, "Email must be in valid format", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            case EXISTS ->
+                JOptionPane.showMessageDialog(this, "Email must be unique", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public void showIDError(ValidationResult result) {
+        switch (result) {
+            case EMPTY ->
+                JOptionPane.showMessageDialog(this, "Intake ID is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            case EXISTS ->
+                JOptionPane.showMessageDialog(this, "Intake ID must be unique", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    
 }

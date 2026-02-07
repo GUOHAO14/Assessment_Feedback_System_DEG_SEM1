@@ -158,13 +158,12 @@ public class ManageIntakes extends FrameFormat {
                         selectedModules.add(cb.getText());
                     }
                 }
-
-                if(ErrorChecking.checkInput(name).equals("null")){
-                    JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkInput(name).equals("number")){
-                    JOptionPane.showMessageDialog(this, "Name cannot in number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkInput(name).equals("String")){
-                    
+                
+                ValidationResult nameResult = ErrorChecking.checkInput(name);
+                
+                if (nameResult != ValidationResult.OK) {
+                    showNameError(nameResult);
+                }else{
                     for(project.roles.Module x : InteractTxt.checkInt_Modules(Int.getIntakeId())){
                         boolean delete = true;
                         if(selectedModules.contains(x.getModuleId())){
@@ -310,15 +309,14 @@ public class ManageIntakes extends FrameFormat {
                     }
                 }
                 
-                if (ErrorChecking.checkID(id).equals("null")){
-                    JOptionPane.showMessageDialog(this, "ID is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkID(id).equals("same")){
-                    JOptionPane.showMessageDialog(this, "Intake ID must be unique", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkInput(name).equals("null")){
-                    JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkInput(name).equals("number")){
-                    JOptionPane.showMessageDialog(this, "Name cannot in number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkInput(name).equals("String") && ErrorChecking.checkID(id).equals("String")){
+                ValidationResult nameResult = ErrorChecking.checkInput(name);
+                ValidationResult idResult = ErrorChecking.checkID(id);
+                
+                if (nameResult != ValidationResult.OK) {
+                    showNameError(nameResult);
+                }else if (idResult != ValidationResult.OK) {
+                    showIDError(idResult);
+                }else{
                     InteractTxt.allIntake.add(new Intake(id, name));
                     Intake New = InteractTxt.checkIntID(id);
                     

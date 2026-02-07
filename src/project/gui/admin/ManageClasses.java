@@ -124,13 +124,12 @@ public class ManageClasses extends FrameFormat {
 
             if (result == 0) {
                 String name = nameField.getText().trim();
+                
+                ValidationResult nameResult = ErrorChecking.checkInput(name);
 
-                if(ErrorChecking.checkInput(name).equals("null")){
-                    JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkInput(name).equals("number")){
-                    JOptionPane.showMessageDialog(this, "Name cannot in number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkInput(name).equals("String")){
-
+                if (nameResult != ValidationResult.OK) {
+                    showNameError(nameResult);
+                }else{
                     Cla.setClassName(name);
 
                     InteractTxt.saveDatabase();
@@ -203,12 +202,12 @@ public class ManageClasses extends FrameFormat {
             if (result == JOptionPane.OK_OPTION) {
                 String name = nameField.getText().trim();
                 String IMID = (String) IMIDList.getSelectedItem();
-
-                if (ErrorChecking.checkInput(name).equals("null")){
-                    JOptionPane.showMessageDialog(this, "Name is required", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkInput(name).equals("number")){
-                    JOptionPane.showMessageDialog(this, "Name cannot in number", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                } else if (ErrorChecking.checkInput(name).equals("String")){
+                
+                ValidationResult nameResult = ErrorChecking.checkInput(name);
+                
+                if (nameResult != ValidationResult.OK) {
+                    showNameError(nameResult);
+                }else{
                     int max = 0;
                     for(project.roles.Class x : InteractTxt.allClass){
                         String numPart = x.getClassId().substring(1);
