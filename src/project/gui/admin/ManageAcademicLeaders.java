@@ -18,38 +18,10 @@ public class ManageAcademicLeaders extends FrameFormat {
         initComponents();
         this.sessionUser = sessionUser;
         for(Leader x : InteractTxt.allLeader){
-            String Lecturers = "";
-            for(int i=0; i < x.leaderTeam.size(); i++){
-                if(i == (x.leaderTeam.size()-1)){
-                    Lecturers += x.leaderTeam.get(i).getId();
-                }else{
-                    Lecturers += x.leaderTeam.get(i).getId() + ", ";
-                }
-            }
-            String Modules = "";
-            for(int i=0; i < x.Lea_Modules.size(); i++){
-                if(i == (x.Lea_Modules.size()-1)){
-                    Modules += x.Lea_Modules.get(i).getModuleId();
-                }else{
-                    Modules += x.Lea_Modules.get(i).getModuleId() + ", ";
-                }
-            }
-            model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), Lecturers, Modules});
+            model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), x.getLecturersAsString(), x.getModulesAsString()});
         }
         
-        LeaderTable.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            @Override
-            public void mouseMoved(java.awt.event.MouseEvent e) {
-                int row = LeaderTable.rowAtPoint(e.getPoint());
-                int col = LeaderTable.columnAtPoint(e.getPoint());
-                if (row > -1 && (col == 3 || col == 4)) {
-                    Object value = LeaderTable.getValueAt(row, col);
-                    LeaderTable.setToolTipText(value == null ? null : value.toString());
-                } else {
-                    LeaderTable.setToolTipText(null);
-                }
-            }
-        });
+        Tools.enableTooltip(LeaderTable, Set.of(2, 3, 4));
     }
 
     /**
