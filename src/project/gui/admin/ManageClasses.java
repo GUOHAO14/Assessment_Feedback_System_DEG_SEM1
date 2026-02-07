@@ -18,30 +18,10 @@ public class ManageClasses extends FrameFormat {
         initComponents();
         this.sessionUser = sessionUser;
         for(project.roles.Class x : InteractTxt.allClass){
-            String Students = "";
-            for(int i=0; i < x.Class_Students.size(); i++){
-                if(i == (x.Class_Students.size()-1)){
-                    Students += x.Class_Students.get(i).getId();
-                }else{
-                    Students += x.Class_Students.get(i).getId() + ", ";
-                }
-            }
-            model.addRow(new String[]{x.getClassId(), x.getClassName(), x.getLecId(), x.getIMID(), Students});
+            model.addRow(new String[]{x.getClassId(), x.getClassName(), x.getLecId(), x.getIMID(), x.getStudentsAsString()});
         }
         
-        ClassTable.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            @Override
-            public void mouseMoved(java.awt.event.MouseEvent e) {
-                int row = ClassTable.rowAtPoint(e.getPoint());
-                int col = ClassTable.columnAtPoint(e.getPoint());
-                if (row > -1 && (col == 4)) {
-                    Object value = ClassTable.getValueAt(row, col);
-                    ClassTable.setToolTipText(value == null ? null : value.toString());
-                } else {
-                    ClassTable.setToolTipText(null);
-                }
-            }
-        });
+        Tools.enableTooltip(ClassTable, Set.of(4));
     }
 
     /**
@@ -123,8 +103,7 @@ public class ManageClasses extends FrameFormat {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new Dashboard(sessionUser).setVisible(true);
-        this.dispose();
+        openPage(new Dashboard(sessionUser));
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void ClassTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ClassTableMouseClicked

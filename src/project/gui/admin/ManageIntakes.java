@@ -18,30 +18,10 @@ public class ManageIntakes extends FrameFormat {
         initComponents();
         this.sessionUser = sessionUser;
         for(Intake x : InteractTxt.allIntake){
-            String Modules = "";
-            for(int i=0; i < InteractTxt.checkInt_Modules(x.getIntakeId()).size(); i++){
-                if(i == (InteractTxt.checkInt_Modules(x.getIntakeId()).size()-1)){
-                    Modules += InteractTxt.checkInt_Modules(x.getIntakeId()).get(i).getModuleId();
-                }else{
-                    Modules += InteractTxt.checkInt_Modules(x.getIntakeId()).get(i).getModuleId() + ", ";
-                }
-            }
-            model.addRow(new String[]{x.getIntakeId(), x.getIntakeName(), Modules});
+            model.addRow(new String[]{x.getIntakeId(), x.getIntakeName(), x.getModulesAsString()});
         }
         
-        IntakeTable.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            @Override
-            public void mouseMoved(java.awt.event.MouseEvent e) {
-                int row = IntakeTable.rowAtPoint(e.getPoint());
-                int col = IntakeTable.columnAtPoint(e.getPoint());
-                if (row > -1 && (col == 2)) {
-                    Object value = IntakeTable.getValueAt(row, col);
-                    IntakeTable.setToolTipText(value == null ? null : value.toString());
-                } else {
-                    IntakeTable.setToolTipText(null);
-                }
-            }
-        });
+        Tools.enableTooltip(IntakeTable, Set.of(2));
     }
 
     /**
@@ -122,8 +102,7 @@ public class ManageIntakes extends FrameFormat {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new Dashboard(sessionUser).setVisible(true);
-        this.dispose();
+        openPage(new Dashboard(sessionUser));
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void IntakeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IntakeTableMouseClicked

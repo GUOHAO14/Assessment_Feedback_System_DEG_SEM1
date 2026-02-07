@@ -22,6 +22,10 @@ public class Leader extends User {
     }
     
     public String getLecturersAsString() {
+        if (leaderTeam == null || leaderTeam.isEmpty()) {
+            return "";
+        }
+        
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < leaderTeam.size(); i++) {
@@ -35,7 +39,11 @@ public class Leader extends User {
     }
     
     public String getModulesAsString() {
-    StringBuilder sb = new StringBuilder();
+        if (Lea_Modules == null || Lea_Modules.isEmpty()) {
+            return "";
+        }
+        
+        StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < Lea_Modules.size(); i++) {
             sb.append(Lea_Modules.get(i).getModuleId());

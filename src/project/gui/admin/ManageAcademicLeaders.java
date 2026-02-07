@@ -21,7 +21,7 @@ public class ManageAcademicLeaders extends FrameFormat {
             model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), x.getLecturersAsString(), x.getModulesAsString()});
         }
         
-        Tools.enableTooltip(LeaderTable, Set.of(4));
+        Tools.enableTooltip(LeaderTable, Set.of(2, 3, 4));
     }
 
     /**
@@ -101,8 +101,7 @@ public class ManageAcademicLeaders extends FrameFormat {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new Dashboard(sessionUser).setVisible(true);
-        this.dispose();
+        openPage(new Dashboard(sessionUser));
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

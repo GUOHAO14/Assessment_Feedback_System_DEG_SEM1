@@ -44,4 +44,21 @@ public class Class {
     public void setLecId(String lecId) {
         this.lecId = lecId;
     }
+    
+    public String getStudentsAsString() {
+        if (Class_Students == null || Class_Students.isEmpty()) {
+            return "";
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < Class_Students.size(); i++) {
+            sb.append(Class_Students.get(i).getId());
+
+            if (i < Class_Students.size() - 1) {
+                sb.append(", ");
+            }
+        }
+        return sb.toString();
+    }
 }
