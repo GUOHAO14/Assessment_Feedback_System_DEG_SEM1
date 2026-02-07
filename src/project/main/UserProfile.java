@@ -330,9 +330,9 @@ public class UserProfile extends FrameFormat {
             case "student":
                 dashboard = new project.gui.student.StudentHomepage((Student) sessionUser);
                 break;
-            case "admin":
-                dashboard = new project.gui.admin.Dashboard(); // admin dashboard takes no args
-                break;
+//            case "admin":
+//                dashboard = new project.gui.admin.Dashboard(); // admin dashboard takes no args
+//                break;
         }
 
         if (dashboard != null) {
