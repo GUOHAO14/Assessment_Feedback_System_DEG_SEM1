@@ -139,13 +139,11 @@ public class Dashboard extends FrameFormat {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        new ManageStudents(sessionUser).setVisible(true);
-        this.dispose();
+        openPage(new ManageStudents(sessionUser));
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new ManageLecturers(sessionUser).setVisible(true);
-        this.dispose();
+        openPage(new ManageLecturers(sessionUser));
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -153,23 +151,19 @@ public class Dashboard extends FrameFormat {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        new ManageAcademicLeaders(sessionUser).setVisible(true);
-        this.dispose();
+        openPage(new ManageAcademicLeaders(sessionUser));
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        new ManageIntakes(sessionUser).setVisible(true);
-        this.dispose();
+        openPage(new ManageIntakes(sessionUser));
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        new ManageGradingSystem(sessionUser).setVisible(true);
-        this.dispose();
+        openPage(new ManageGradingSystem(sessionUser));
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        new ManageClasses(sessionUser).setVisible(true);
-        this.dispose();
+        openPage(new ManageClasses(sessionUser));
     }//GEN-LAST:event_jButton7ActionPerformed
 
     /**

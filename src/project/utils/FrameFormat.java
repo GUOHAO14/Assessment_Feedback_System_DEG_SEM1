@@ -92,5 +92,9 @@ abstract public class FrameFormat extends JFrame {
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); 
     }
     
+    public void openPage (FrameFormat nextFrame) {
+        nextFrame.setVisible(true);
+        this.dispose();
+    }
     
 }
