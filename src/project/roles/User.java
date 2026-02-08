@@ -2,6 +2,8 @@ package project.roles;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.security.SecureRandom;
+import java.util.*;
 import javax.swing.JOptionPane;
 import project.utils.ErrorChecking;
 import project.utils.FrameFormat;
@@ -120,5 +122,61 @@ public abstract class User {
                 JOptionPane.showMessageDialog(yourPage, "Cannot log out from program. There is an error in IntakeModule Assessments", "Logout Program Failure", JOptionPane.WARNING_MESSAGE);
             }
         } else System.out.println("Continue to use the program");
+    }
+    
+    public static String getNewLcID() {
+        int max = 0;
+        for(Lecturer x : InteractTxt.allLecturer){
+            String numPart = x.getId().substring(2);
+            int num = Integer.parseInt(numPart);
+            if (num > max) {
+                max = num;
+            }
+        }
+        for(Leader x : InteractTxt.allLeader){
+            String numPart = x.getId().substring(2);
+            int num = Integer.parseInt(numPart);
+            if (num > max) {
+                max = num;
+            }
+        }
+        String id = "lc" + (max + 1);
+        return id;
+    }
+    
+    public static String getNewStuID() {
+        int max = 0;
+        for(Student x : InteractTxt.allStudent){
+            String numPart = x.getId().substring(2);
+            int num = Integer.parseInt(numPart);
+            if (num > max) {
+                max = num;
+            }
+        }
+        String id = "tp" + (max + 1);
+        return id;
+    }
+    
+    public static String GeneratePW(){
+        String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lower = "abcdefghijklmnopqrstuvwxyz";
+        String number = "0123456789";
+        String symbol = "!@#$%^&*()-_=+[]{};:,.<>?/";
+        SecureRandom random = new SecureRandom();
+        ArrayList<Character> pw = new ArrayList<>();
+        pw.add(upper.charAt(random.nextInt(upper.length())));
+        pw.add(lower.charAt(random.nextInt(lower.length())));
+        pw.add(number.charAt(random.nextInt(number.length())));
+        pw.add(symbol.charAt(random.nextInt(symbol.length())));
+        String all = upper + lower + number + symbol;
+        for (int i = 4; i < 12; i++) {
+            pw.add(all.charAt(random.nextInt(all.length())));
+        }
+        StringBuilder builder = new StringBuilder();
+        for (char c : pw) {
+            builder.append(c);
+        }
+        String password = builder.toString();
+        return password;
     }
 }

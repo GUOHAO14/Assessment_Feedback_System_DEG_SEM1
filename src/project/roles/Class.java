@@ -1,6 +1,7 @@
 package project.roles;
 
-import java.util.ArrayList;
+import java.util.*;
+import project.utils.*;
 
 public class Class {
     private String classId, className, lecId, IMID;
@@ -60,5 +61,36 @@ public class Class {
             }
         }
         return sb.toString();
+    }
+    
+    public static String getNewClaID() {
+        int max = 0;
+        for(project.roles.Class x : InteractTxt.allClass){
+            String numPart = x.getClassId().substring(1);
+            int num = Integer.parseInt(numPart);
+            if (num > max) {
+                max = num;
+            }
+        }
+        String ClassId = "C" + (max + 1);
+        return ClassId;
+    }
+    
+    public boolean checkDelete() {
+        boolean delete = true;
+        if (InteractTxt.checkIMID(this.getIMID()).IM_Classes.size() <= 1) {
+            delete = false;
+        } else {
+            outer:
+            for(Student y : this.Class_Students){
+                for(StudentScore z : y.Stu_Scores){
+                    if(InteractTxt.checkIMID(this.getIMID()).IM_Assessments.contains(z.getAssessment())){
+                        delete = false;
+                        break outer;
+                    }
+                }
+            }
+        }
+        return delete;
     }
 }

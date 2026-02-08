@@ -140,20 +140,7 @@ public class ManageClasses extends FrameFormat {
             }
 
             if (result == 1) {
-                boolean delete = true;
-                if (InteractTxt.checkIMID(Cla.getIMID()).IM_Classes.size() <= 1) {
-                    delete = false;
-                } else {
-                    outer:
-                    for(Student y : Cla.Class_Students){
-                        for(StudentScore z : y.Stu_Scores){
-                            if(InteractTxt.checkIMID(Cla.getIMID()).IM_Assessments.contains(z.getAssessment())){
-                                delete = false;
-                                break outer;
-                            }
-                        }
-                    }
-                }
+                boolean delete = Cla.checkDelete();
                 
                 if(delete){
                     int confirm = JOptionPane.showConfirmDialog(this, "Do you sure to delete the Class?", "Confirm", JOptionPane.YES_NO_OPTION);
@@ -196,7 +183,7 @@ public class ManageClasses extends FrameFormat {
         panel.add(IMIDList);
 
         while(true){
-            int result = JOptionPane.showConfirmDialog(this, panel, "New Intake", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            int result = JOptionPane.showConfirmDialog(this, panel, "New Class", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result != JOptionPane.OK_OPTION) break;
 
             if (result == JOptionPane.OK_OPTION) {
@@ -208,31 +195,14 @@ public class ManageClasses extends FrameFormat {
                 if (nameResult != ValidationResult.OK) {
                     showNameError(nameResult);
                 }else{
-                    int max = 0;
-                    for(project.roles.Class x : InteractTxt.allClass){
-                        String numPart = x.getClassId().substring(1);
-                        int num = Integer.parseInt(numPart);
-                        if (num > max) {
-                            max = num;
-                        }
-                    }
-                    String ClassId = "C" + (max + 1);
+                    String ClassId = project.roles.Class.getNewClaID();
                     InteractTxt.allClass.add(new project.roles.Class(ClassId, name, "NA", IMID));
                     InteractTxt.checkIMID(IMID).IM_Classes.add(InteractTxt.checkClassID(ClassId));
                     project.roles.Class New = InteractTxt.checkClassID(ClassId);
 
                     InteractTxt.saveDatabase();
-                    
-                    String Students = "";
-                    for(int i=0; i < New.Class_Students.size(); i++){
-                        if(i == (New.Class_Students.size()-1)){
-                            Students += New.Class_Students.get(i).getId();
-                        }else{
-                            Students += New.Class_Students.get(i).getId() + ", ";
-                        }
-                    }
 
-                    model.addRow(new String[]{New.getClassId(), New.getClassName(), New.getLecId(), New.getIMID(), Students});
+                    model.addRow(new String[]{New.getClassId(), New.getClassName(), New.getLecId(), New.getIMID(), ""});
                     break;
                 }
             }

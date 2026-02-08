@@ -140,24 +140,9 @@ public class ManageLecturers extends FrameFormat {
                 }else if (emailResult != ValidationResult.OK) {
                     showEmailError(emailResult);
                 }else{
-                    int max = 0;
-                    for(Lecturer x : InteractTxt.allLecturer){
-                        String numPart = x.getId().substring(2);
-                        int num = Integer.parseInt(numPart);
-                        if (num > max) {
-                            max = num;
-                        }
-                    }
-                    for(Leader x : InteractTxt.allLeader){
-                        String numPart = x.getId().substring(2);
-                        int num = Integer.parseInt(numPart);
-                        if (num > max) {
-                            max = num;
-                        }
-                    }
-                    String id = "lc" + (max + 1);
+                    String id = User.getNewLcID();
 
-                    String password = Tools.GeneratePW();
+                    String password = User.GeneratePW();
 
                     String [] userdata = {id, name, email, password, "lecturer"};
                     InteractTxt.allLecturer.add(new Lecturer(userdata));

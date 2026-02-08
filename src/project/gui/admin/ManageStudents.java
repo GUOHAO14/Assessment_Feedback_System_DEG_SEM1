@@ -236,17 +236,9 @@ public class ManageStudents extends FrameFormat {
                 }else if (emailResult != ValidationResult.OK) {
                     showEmailError(emailResult);
                 }else{
-                    int max = 0;
-                    for(Student x : InteractTxt.allStudent){
-                        String numPart = x.getId().substring(2);
-                        int num = Integer.parseInt(numPart);
-                        if (num > max) {
-                            max = num;
-                        }
-                    }
-                    String id = "tp" + (max + 1);
+                    String id = User.getNewStuID();
 
-                    String password = Tools.GeneratePW();
+                    String password = User.GeneratePW();
 
                     String [] userdata = {id, name, email, password, "student"};
                     InteractTxt.allStudent.add(new Student(userdata));
