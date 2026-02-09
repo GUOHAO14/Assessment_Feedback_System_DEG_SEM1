@@ -62,18 +62,21 @@ public class EnterAssessmentMarks0 extends FrameFormat {
     //utility methods
     private void disableModuleDropdown() {
         moduleDropdown.setEnabled(false);
+        moduleDropdown.setEditable(true);
         AutoCompleteDecorator.decorate(moduleDropdown);
         chosenIM = null;
     }
     
     private void disableClassDropdown() {
         classDropdown.setEnabled(false);
+        classDropdown.setEditable(true);
         AutoCompleteDecorator.decorate(classDropdown);
         chosenClass = null;
     }
     
     private void disableStudentDropdown() {
         studentDropdown.setEnabled(false);
+        studentDropdown.setEditable(true);
         AutoCompleteDecorator.decorate(studentDropdown);
         chosenStudent = null;
     }
@@ -387,7 +390,7 @@ public class EnterAssessmentMarks0 extends FrameFormat {
         String choice = intakeDropdown.getSelectedItem().toString();
         System.out.println(choice);
 
-        if (choice == null || choice.isEmpty() || choice.equals("None")) chosenIntake = null;
+        if (!InteractTxt.allIntake.contains(InteractTxt.checkIntID(choice.split(" ")[0])) || choice == null || choice.isEmpty() || choice.equals("None")) chosenIntake = null;
         else {
             // valid choice
             System.out.println("------");
@@ -431,7 +434,7 @@ public class EnterAssessmentMarks0 extends FrameFormat {
             System.out.println("hello: "+choice);
             System.out.println(choice);
 
-            if (choice == null || choice.isEmpty() || choice.equals("None")) chosenIM = null;
+            if (!InteractTxt.allModule.contains(InteractTxt.checkModID(choice.split(" ")[0])) || choice == null || choice.isEmpty() || choice.equals("None")) chosenIM = null;
             else {
                 // valid choice
                 System.out.println("------");
@@ -508,7 +511,7 @@ public class EnterAssessmentMarks0 extends FrameFormat {
             String choice = classDropdown.getSelectedItem().toString();
             System.out.println(choice);
 
-            if (choice == null || choice.isEmpty() || choice.equals("None")) chosenClass = null;
+            if (!InteractTxt.allClass.contains(InteractTxt.checkClassID(choice.split(" ")[0])) || choice == null || choice.isEmpty() || choice.equals("None")) chosenClass = null;
             else {
                 // valid choice
                 System.out.println("------");
@@ -549,7 +552,7 @@ public class EnterAssessmentMarks0 extends FrameFormat {
             String choice = studentDropdown.getSelectedItem().toString();
             System.out.println(choice);
 
-            if (choice == null || choice.isEmpty() || choice.equals("None")) chosenStudent = null;
+            if (!InteractTxt.allStudent.contains(InteractTxt.checkStuID(choice.split(" ")[0])) || choice == null || choice.isEmpty() || choice.equals("None")) chosenStudent = null;
             else {
                 // valid choice
                 System.out.println("------");

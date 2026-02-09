@@ -4,13 +4,21 @@
  */
 package project.gui.lecturer;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import project.roles.Intake;
@@ -60,14 +68,12 @@ public class ViewStudentComments extends FrameFormat {
             ownClasses.add(c.getClassId());
         });
         
-        intakeDropdown.setEditable(true);
-        
         InteractTxt.allIntake.forEach(i -> {
             String item = i.getIntakeId() + " (" + i.getIntakeName() + ")";
             intakeDropdown.addItem(item);
         });
         
-        
+        intakeDropdown.setEditable(true);
         intakeDropdown.addItem("None");
         intakeDropdown.setSelectedItem("None");
         AutoCompleteDecorator.decorate(intakeDropdown);
@@ -109,18 +115,21 @@ public class ViewStudentComments extends FrameFormat {
     
     private void disableModuleDropdown() {
         moduleDropdown.setEnabled(false);
+        moduleDropdown.setEditable(true);
         AutoCompleteDecorator.decorate(moduleDropdown);
         chosenIM = null;
     }
     
     private void disableClassDropdown() {
         classDropdown.setEnabled(false);
+        classDropdown.setEditable(true);
         AutoCompleteDecorator.decorate(classDropdown);
         chosenClass = null;
     }
     
     private void disableStudentDropdown() {
         studentDropdown.setEnabled(false);
+        studentDropdown.setEditable(true);
         AutoCompleteDecorator.decorate(studentDropdown);
         chosenStudent = null;
     }
@@ -346,7 +355,7 @@ public class ViewStudentComments extends FrameFormat {
             String choice = classDropdown.getSelectedItem().toString();
             System.out.println(choice);
 
-            if (choice == null || choice.isEmpty() || choice.equals("None")) chosenClass = null;
+            if (!InteractTxt.allClass.contains(InteractTxt.checkClassID(choice.split(" ")[0])) ||choice == null || choice.isEmpty() || choice.equals("None")) chosenClass = null;
             else {
                 // valid choice
                 System.out.println("------");
@@ -393,7 +402,7 @@ public class ViewStudentComments extends FrameFormat {
             String choice = studentDropdown.getSelectedItem().toString();
             System.out.println(choice);
 
-            if (choice == null || choice.isEmpty() || choice.equals("None")) chosenStudent = null;
+            if (!InteractTxt.allStudent.contains(InteractTxt.checkStuID(choice.split(" ")[0])) || choice == null || choice.isEmpty() || choice.equals("None")) chosenStudent = null;
             else {
                 // valid choice
                 System.out.println("------");
@@ -424,7 +433,7 @@ public class ViewStudentComments extends FrameFormat {
         String choice = intakeDropdown.getSelectedItem().toString();
         System.out.println(choice);
 
-        if (choice == null || choice.isEmpty() || choice.equals("None")) chosenIntake = null;
+        if (!InteractTxt.allIntake.contains(InteractTxt.checkIntID(choice.split(" ")[0])) || choice == null || choice.isEmpty() || choice.equals("None")) chosenIntake = null;
         else {
             // valid choice
             System.out.println("------");
@@ -461,35 +470,102 @@ public class ViewStudentComments extends FrameFormat {
 
     private void mainTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mainTableMouseReleased
         // TODO add your handling code here:
-        row = mainTable.getSelectedRow();
+        int row = mainTable.getSelectedRow();
         String stuId = String.valueOf(model.getValueAt(row, 0));
         String stuName = String.valueOf(model.getValueAt(row, 1));
         String classId = String.valueOf(model.getValueAt(row, 2));
         String comment = String.valueOf(model.getValueAt(row, 3));
-        
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(6, 8, 6, 8);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        gbc.gridx = 0;
-        gbc.weightx = 0.0;
-        panel.add(new JLabel("Assessment Type"), gbc);
-
-        gbc.gridx = 1;
-        gbc.weightx = 0.0;
-        panel.add(new JLabel("Score"), gbc);
-
-        gbc.gridx = 2;
-        gbc.weightx = 0.0;
-        panel.add(new JLabel("Full Score"), gbc);
-
-        gbc.gridx = 3;
-        gbc.weightx = 1.0;
-        panel.add(new JLabel("Feedback"), gbc);
         
-        JOptionPane.showMessageDialog(this, "Assessment format unset for this module and class.\nGo to Design Assessment page.", "Error - Void Action", 0);
+        Font labelFont = new Font("Segoe UI", Font.BOLD, 12);
+        Color labelColor = new Color(70, 70, 70);
+
+        // label settings
+        gbc.gridx = 0;
+        gbc.weightx = 0;
+        gbc.anchor = GridBagConstraints.EAST;
+
+        // value settings
+        GridBagConstraints valueGbc = new GridBagConstraints();
+        valueGbc.gridx = 1;
+        valueGbc.weightx = 1.0;
+        valueGbc.fill = GridBagConstraints.HORIZONTAL;
+        valueGbc.insets = new Insets(6, 8, 6, 8);
+        valueGbc.anchor = GridBagConstraints.WEST;
+
+        // stuId
+        gbc.gridy = 0;
+        JLabel label1 = new JLabel("Student ID:");
+        label1.setFont(labelFont);
+        label1.setForeground(labelColor);
+        panel.add(label1, gbc);
+
+        valueGbc.gridy = 0;
+        panel.add(new JLabel(stuId), valueGbc);
+
+        // stuName
+        gbc.gridy = 1;
+        JLabel label2 = new JLabel("Student Name:");
+        label2.setFont(labelFont);
+        label2.setForeground(labelColor);
+        panel.add(label2, gbc);
+
+        valueGbc.gridy = 1;
+        panel.add(new JLabel(stuName), valueGbc);
+
+        // classId
+        gbc.gridy = 2;
+        JLabel label3 = new JLabel("Class:");
+        label3.setFont(labelFont);
+        label3.setForeground(labelColor);
+        panel.add(label3, gbc);
+
+        valueGbc.gridy = 2;
+        panel.add(
+            new JLabel(classId + " (" + InteractTxt.checkClassID(classId).getClassName() + ")"),
+            valueGbc
+        );
+
+        // comment
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.NORTHEAST;
+        JLabel label4 = new JLabel("Comment:");
+        label4.setFont(labelFont);
+        label4.setForeground(labelColor);
+        panel.add(label4, gbc);
+
+        JTextArea commentField = new JTextArea(8, 30);
+        commentField.setLineWrap(true);
+        commentField.setWrapStyleWord(true);
+        commentField.setText(comment);
+
+        JScrollPane commentScroll = new JScrollPane(
+                commentField,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+        );
+
+        valueGbc.gridy = 3;
+        valueGbc.weighty = 1.0;
+        valueGbc.fill = GridBagConstraints.BOTH;
+        panel.add(commentScroll, valueGbc);
+
+        // wrap panel to prevent huge dialog
+        JScrollPane container = new JScrollPane(panel);
+        container.setPreferredSize(new Dimension(520, 320));
+
+        int userInput = JOptionPane.showConfirmDialog(
+                this,
+                container,
+                "Student Comment",
+                JOptionPane.OK_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+        );
     }//GEN-LAST:event_mainTableMouseReleased
 
     private void mainTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_mainTableKeyReleased
@@ -505,7 +581,7 @@ public class ViewStudentComments extends FrameFormat {
             System.out.println("hello: "+choice);
             System.out.println(choice);
 
-            if (choice == null || choice.isEmpty() || choice.equals("None")) chosenIM = null;
+            if (!InteractTxt.allModule.contains(InteractTxt.checkModID(choice.split(" ")[0])) || choice == null || choice.isEmpty() || choice.equals("None")) chosenIM = null;
             else {
                 // valid choice
                 System.out.println("------");
@@ -562,8 +638,23 @@ public class ViewStudentComments extends FrameFormat {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        try {
+            /* Create and display the form */
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
+        for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+            System.out.println(info.getName() + " -> " + info.getClassName());
+        }
 
-        /* Create and display the form */
+        } catch (ClassNotFoundException ex) {
+            System.getLogger(ViewStudentComments.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        } catch (InstantiationException ex) {
+            System.getLogger(ViewStudentComments.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        } catch (IllegalAccessException ex) {
+            System.getLogger(ViewStudentComments.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            System.getLogger(ViewStudentComments.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+
         InteractTxt.initDatabase();
         String x = "lc076206";
         InteractTxt.allLecturer.forEach(l -> {

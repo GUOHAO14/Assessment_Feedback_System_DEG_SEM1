@@ -13,7 +13,6 @@ public class LoginPage1 extends FrameFormat {
     private ArrayList<? extends User> allUserCreds = new ArrayList<>();
     private String userType;
     
-    
     public LoginPage1(ArrayList<? extends User> allUserCreds, String userType) {
         initComponents();
         super.formatWindow(userType + " Login Page");
