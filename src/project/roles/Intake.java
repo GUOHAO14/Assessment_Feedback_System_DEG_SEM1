@@ -92,4 +92,9 @@ public class Intake {
         IMID.IM_Assessments.clear();
     }
     
+    @Override
+    public String toString() {
+        return getIntakeId() + " (" + getIntakeName() + ")";
+    }
+    
 }

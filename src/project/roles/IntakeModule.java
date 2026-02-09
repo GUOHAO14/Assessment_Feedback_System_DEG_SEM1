@@ -1,6 +1,7 @@
 package project.roles;
 
 import java.util.ArrayList;
+import project.utils.*;
 
 public class IntakeModule {
     private String IMID, intakeId, moduleId;
@@ -39,5 +40,10 @@ public class IntakeModule {
     
     public void getAllIMDetails() {
         System.out.println(getIMID() + ", " + getIntakeId() + ", " + getModuleId());
+    }
+    
+    @Override
+    public String toString() {
+        return getIMID() + " (" + InteractTxt.checkIntID(getIntakeId()).getIntakeName() + " | " + InteractTxt.checkModID(getModuleId()).getModuleName() + ")";
     }
 }

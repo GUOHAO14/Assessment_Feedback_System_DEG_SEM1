@@ -176,9 +176,9 @@ public class ManageClasses extends FrameFormat {
         panel.add(nameField);
         panel.add(new JLabel("Intake Module:"));
         
-        JComboBox<String> IMIDList = new JComboBox<>();
+        JComboBox<IntakeModule> IMIDList = new JComboBox<>();
         for(IntakeModule x : InteractTxt.allIntakeModule){
-            IMIDList.addItem(x.getIMID());
+            IMIDList.addItem(x);
         }
         panel.add(IMIDList);
 
@@ -188,7 +188,8 @@ public class ManageClasses extends FrameFormat {
 
             if (result == JOptionPane.OK_OPTION) {
                 String name = nameField.getText().trim();
-                String IMID = (String) IMIDList.getSelectedItem();
+                IntakeModule IM = (IntakeModule) IMIDList.getSelectedItem();
+                String IMID = IM.getIMID();
                 
                 ValidationResult nameResult = ErrorChecking.checkInput(name);
                 
@@ -197,7 +198,7 @@ public class ManageClasses extends FrameFormat {
                 }else{
                     String ClassId = project.roles.Class.getNewClaID();
                     InteractTxt.allClass.add(new project.roles.Class(ClassId, name, "NA", IMID));
-                    InteractTxt.checkIMID(IMID).IM_Classes.add(InteractTxt.checkClassID(ClassId));
+                    IM.IM_Classes.add(InteractTxt.checkClassID(ClassId));
                     project.roles.Class New = InteractTxt.checkClassID(ClassId);
 
                     InteractTxt.saveDatabase();

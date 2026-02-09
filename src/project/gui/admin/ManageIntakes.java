@@ -121,7 +121,9 @@ public class ManageIntakes extends FrameFormat {
         modulesPanel.setLayout(new BoxLayout(modulesPanel, BoxLayout.Y_AXIS));
         ArrayList<JCheckBox> moduleBoxes = new ArrayList<>();
         for (project.roles.Module x : InteractTxt.allModule) {
-            JCheckBox cb = new JCheckBox(x.getModuleId());
+            JCheckBox cb = new JCheckBox(x.toString());
+            cb.putClientProperty("module", x);
+
             for(project.roles.Module y : InteractTxt.checkInt_Modules(Int.getIntakeId())){
                 if (x.getModuleId().equals(y.getModuleId())) {
                     cb.setSelected(true);
@@ -147,10 +149,10 @@ public class ManageIntakes extends FrameFormat {
 
             if (result == 0) {
                 String name = nameField.getText().trim();
-                ArrayList<String> selectedModules = new ArrayList<>();
+                ArrayList<project.roles.Module> selectedModules = new ArrayList<>();
                 for (JCheckBox cb : moduleBoxes) {
                     if (cb.isSelected()) {
-                        selectedModules.add(cb.getText());
+                        selectedModules.add((project.roles.Module) cb.getClientProperty("module"));
                     }
                 }
                 
@@ -161,22 +163,22 @@ public class ManageIntakes extends FrameFormat {
                 }else{
                     for(project.roles.Module x : InteractTxt.checkInt_Modules(Int.getIntakeId())){
                         boolean delete = true;
-                        if(selectedModules.contains(x.getModuleId())){
+                        if(selectedModules.contains(x)){
                             delete = false;
                         }
                         if(delete){
                             Int.deleteIntakeModule(x);
                         }
                     }
-                    for(String y : selectedModules){
+                    for(project.roles.Module y : selectedModules){
                         boolean add = true;
                         for(project.roles.Module x : InteractTxt.checkInt_Modules(Int.getIntakeId())){
-                            if(x.getModuleId().equals(y)){
+                            if(x == y){
                                 add = false;
                             }
                         }
                         if(add){
-                            Int.createIntakeModule(y);
+                            Int.createIntakeModule(y.getModuleId());
                         }
                     }
                     Int.setIntakeName(name);
@@ -225,7 +227,8 @@ public class ManageIntakes extends FrameFormat {
         modulesPanel.setLayout(new BoxLayout(modulesPanel, BoxLayout.Y_AXIS));
         ArrayList<JCheckBox> moduleBoxes = new ArrayList<>();
         for (project.roles.Module x : InteractTxt.allModule) {
-            JCheckBox cb = new JCheckBox(x.getModuleId());
+            JCheckBox cb = new JCheckBox(x.toString());
+            cb.putClientProperty("module", x);
             moduleBoxes.add(cb);
             modulesPanel.add(cb);
         }
@@ -242,10 +245,10 @@ public class ManageIntakes extends FrameFormat {
             if (result == JOptionPane.OK_OPTION) {
                 String id = idField.getText().trim();
                 String name = nameField.getText().trim();
-                ArrayList<String> selectedModules = new ArrayList<>();
+                ArrayList<project.roles.Module> selectedModules = new ArrayList<>();
                 for (JCheckBox cb : moduleBoxes) {
                     if (cb.isSelected()) {
-                        selectedModules.add(cb.getText());
+                        selectedModules.add((project.roles.Module) cb.getClientProperty("module"));
                     }
                 }
                 
@@ -260,8 +263,8 @@ public class ManageIntakes extends FrameFormat {
                     InteractTxt.allIntake.add(new Intake(id, name));
                     Intake New = InteractTxt.checkIntID(id);
                     
-                    for(String y : selectedModules){
-                        New.createIntakeModule(y);
+                    for(project.roles.Module y : selectedModules){
+                        New.createIntakeModule(y.getModuleId());
                     }
                     
                     InteractTxt.saveDatabase();
