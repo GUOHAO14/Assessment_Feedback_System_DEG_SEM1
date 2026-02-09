@@ -405,7 +405,7 @@ public class InteractTxt {
                 }
             }
             b.close();
-        }catch(Exception e){
+        } catch(Exception e){
             System.out.println("Error in write ..........");
             e.printStackTrace();
         }

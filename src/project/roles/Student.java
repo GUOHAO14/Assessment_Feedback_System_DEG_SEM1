@@ -123,7 +123,6 @@ public class Student extends User {
     }
     
     
-    
     public String getSpecificGrade(project.roles.Class c) {
         String grade = "NA";
         for (StudentGradeAndComment gc : this.GradesAndComments) {
@@ -132,6 +131,14 @@ public class Student extends User {
             }
         }
         return grade;
+    }
+    
+    public void setSpecificGrade(project.roles.Class c, String grade) {
+        for (StudentGradeAndComment gc : this.GradesAndComments) {
+            if (c.getClassId().equals(gc.getStuClass().getClassId())) {
+                gc.setGrade(grade);
+            }
+        }
     }
     
     public String getSpecificComment(project.roles.Class c) {

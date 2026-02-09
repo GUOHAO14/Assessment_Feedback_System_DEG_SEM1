@@ -19,6 +19,20 @@ Class Test
 30
 IMID1
 
+Ass6
+Group Assignment
+Assignment
+100
+50
+IMID3
+
+Ass7
+Test
+Class Test
+30
+50
+IMID3
+
 Ass4
 Group Assignment
 Assignment
@@ -27,9 +41,9 @@ Assignment
 IMID2
 
 Ass5
-Final Exam
+Final Exam hehe
 Examination
-100
+80
 40
 IMID2
 

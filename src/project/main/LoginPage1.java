@@ -2,12 +2,7 @@ package project.main;
 
 import project.roles.*;
 import project.utils.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 /**
  *

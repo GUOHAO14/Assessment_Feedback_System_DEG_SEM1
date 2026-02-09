@@ -5,7 +5,6 @@
 package project.gui.student;
 
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import project.roles.*;
 import project.utils.*;
@@ -260,6 +259,7 @@ if (sessionStudent.Stu_Classes.contains(selectedClass)) {
 
 // 6️⃣ Add class to student
 sessionStudent.Stu_Classes.add(selectedClass);
+sessionStudent.GradesAndComments.add(new StudentGradeAndComment(selectedClass, "NA", "NA"));
 
 // 7️⃣ Save database (THIS DOES EVERYTHING)
 InteractTxt.saveDatabase();

@@ -60,4 +60,32 @@ public class Tools {
             }
         });
     }
+    
+    public static void setAllAssStuGrades(IntakeModule im, String grade) {
+        for (project.roles.Class c : im.IM_Classes) {
+            Iterator<Student> stuIterator = c.Class_Students.iterator();
+
+            while (stuIterator.hasNext()) {
+                Student student = stuIterator.next();
+                student.setSpecificGrade(c, grade);
+            }
+        }
+    }
+    
+    public static void deleteAllAssStuScores(Assessment a) {
+        IntakeModule im = a.getAssIM();
+        
+        for (project.roles.Class c : im.IM_Classes) {
+            for (Student s : c.Class_Students) {
+                Iterator<StudentScore> ssIterator = s.Stu_Scores.iterator();
+
+                while (ssIterator.hasNext()) {
+                    StudentScore score = ssIterator.next();
+                    if (score.getAssessment().getAssId().equals(a.getAssId())) {
+                        ssIterator.remove(); 
+                    }
+                }
+            }
+        }
+    }
 }

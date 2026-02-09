@@ -12,6 +12,15 @@ public class Assessment {
         this.assFullMarks = assFullMarks;
         this.assIM = assIM;
     }
+    
+    public Assessment(Assessment ass) {
+        this.assId = ass.getAssId();
+        this.assName = ass.getAssName();
+        this.assType = ass.getAssType();
+        this.assPercentage = ass.getAssPercentage();
+        this.assFullMarks = ass.getAssFullMarks();
+        this.assIM = ass.getAssIM();
+    }
 
     public String getAssId() {
         return assId;
@@ -62,6 +71,6 @@ public class Assessment {
     }
     
     public void getAllAssDetails() {
-        System.out.println(getAssName() + ", " + getAssId() + ", " + getAssType() + ", " + getAssPercentage() + ", " + getAssIM().getIMID());
+        System.out.println(getAssName() + ", " + getAssId() + ", " + getAssType() + ", " + getAssPercentage() + ", " + getAssFullMarks() + ", " + getAssIM().getIMID());
     }
 }
