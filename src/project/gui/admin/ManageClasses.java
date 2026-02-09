@@ -21,6 +21,8 @@ public class ManageClasses extends FrameFormat {
             model.addRow(new String[]{x.getClassId(), x.getClassName(), x.getLecId(), x.getIMID(), x.getStudentsAsString()});
         }
         
+        Tools.showLecName(ClassTable, Set.of(2));
+        Tools.showIMName(ClassTable, Set.of(3));
         Tools.enableTooltip(ClassTable, Set.of(4));
     }
 

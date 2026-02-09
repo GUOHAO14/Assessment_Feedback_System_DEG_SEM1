@@ -42,8 +42,13 @@ public class IntakeModule {
         System.out.println(getIMID() + ", " + getIntakeId() + ", " + getModuleId());
     }
     
+    public String getIMName() {
+        String name = InteractTxt.checkIntID(getIntakeId()).getIntakeName() + " | " + InteractTxt.checkModID(getModuleId()).getModuleName();
+        return name;
+    }
+    
     @Override
     public String toString() {
-        return getIMID() + " (" + InteractTxt.checkIntID(getIntakeId()).getIntakeName() + " | " + InteractTxt.checkModID(getModuleId()).getModuleName() + ")";
+        return getIMID() + " (" + getIMName() + ")";
     }
 }

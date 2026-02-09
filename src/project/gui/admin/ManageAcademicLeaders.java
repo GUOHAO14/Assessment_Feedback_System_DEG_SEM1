@@ -21,7 +21,7 @@ public class ManageAcademicLeaders extends FrameFormat {
             model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), x.getLecturersAsString(), x.getModulesAsString()});
         }
         
-        Tools.enableTooltip(LeaderTable, Set.of(2, 3, 4));
+        Tools.enableTooltip(LeaderTable, Set.of(3, 4));
     }
 
     /**
