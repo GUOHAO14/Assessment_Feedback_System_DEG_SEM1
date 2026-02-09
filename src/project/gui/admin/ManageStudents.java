@@ -22,6 +22,8 @@ public class ManageStudents extends FrameFormat {
         for(Student x : InteractTxt.allStudent){
             model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), x.getIntakeId(), x.getDob()});
         }
+        
+        Tools.showIntakeName(StudentTable, Set.of(3));
     }
 
     /**

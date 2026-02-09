@@ -37,47 +37,6 @@ public class Tools {
         });
     }
     
-    public static void showLecName(JTable table, Set<Integer> columns) {
-        table.addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                int row = table.rowAtPoint(e.getPoint());
-                int col = table.columnAtPoint(e.getPoint());
-
-                if (row > -1 && columns.contains(col)) {
-                    String LecId = (table.getValueAt(row, col)).toString();
-                    String value;
-                    if(LecId.equals("NA")){
-                        value = "NA";
-                    }else{
-                        value = InteractTxt.checkLecID(LecId).getName();
-                    }
-                    table.setToolTipText(value == null ? null : value);
-                } else {
-                    table.setToolTipText(null);
-                }
-            }
-        });
-    }
-    
-    public static void showIMName(JTable table, Set<Integer> columns) {
-        table.addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                int row = table.rowAtPoint(e.getPoint());
-                int col = table.columnAtPoint(e.getPoint());
-
-                if (row > -1 && columns.contains(col)) {
-                    String IMID = (table.getValueAt(row, col)).toString();
-                    String value = InteractTxt.checkIMID(IMID).getIMName();
-                    table.setToolTipText(value == null ? null : value);
-                } else {
-                    table.setToolTipText(null);
-                }
-            }
-        });
-    }
-    
     public static void enableAdvancedTooltip(JTable table) {
         table.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
@@ -118,6 +77,42 @@ public class Tools {
                 }
 
                 table.setToolTipText(tooltip);
+            }
+        });
+    }
+    
+    public static void showLeaName(JTable table, Set<Integer> columns) {
+        table.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                int row = table.rowAtPoint(e.getPoint());
+                int col = table.columnAtPoint(e.getPoint());
+
+                if (row > -1 && columns.contains(col)) {
+                    String LeaId = (table.getValueAt(row, col)).toString();
+                    String value = InteractTxt.checkLeaID(LeaId).getName();
+                    table.setToolTipText(value == null ? null : value);
+                } else {
+                    table.setToolTipText(null);
+                }
+            }
+        });
+    }
+    
+    public static void showIntakeName(JTable table, Set<Integer> columns) {
+        table.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                int row = table.rowAtPoint(e.getPoint());
+                int col = table.columnAtPoint(e.getPoint());
+
+                if (row > -1 && columns.contains(col)) {
+                    String IntakeId = (table.getValueAt(row, col)).toString();
+                    String value = InteractTxt.checkIntID(IntakeId).getIntakeName();
+                    table.setToolTipText(value == null ? null : value);
+                } else {
+                    table.setToolTipText(null);
+                }
             }
         });
     }
