@@ -15,6 +15,13 @@ public class ManageGradingSystem extends FrameFormat {
     private boolean ProgramUpdate = false;
     private boolean Loop = true;
     
+    private void rejectEdit(int row, int col, String oldValue, String message) {
+        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+        ProgramUpdate = true;
+        model.setValueAt(oldValue, row, col);
+        ProgramUpdate = false;
+    }
+    
     public ManageGradingSystem(Admin sessionUser) {
         initComponents();
         this.sessionUser = sessionUser;
@@ -31,20 +38,15 @@ public class ManageGradingSystem extends FrameFormat {
                 int row = e.getFirstRow();
                 int col = e.getColumn();
                 Object NewV = model.getValueAt(row, col);
+                Grading OldV = InteractTxt.allGrading.get(row);
                 System.out.println("Changed at row " + row + ", col " + col + ": " + NewV);
                 
                 if(col == 0){
-                    JOptionPane.showMessageDialog(this, "Cannot edit", "Error", JOptionPane.ERROR_MESSAGE);
-                    ProgramUpdate = true;
-                    model.setValueAt(InteractTxt.allGrading.get(row).getGrade(), row, col);
-                    ProgramUpdate = false;
+                    rejectEdit(row, col, OldV.getGrade(), "Cannot edit");
                     return;
                 } else if (col == 1){
                     if (row == (InteractTxt.allGrading.size()-1)) {
-                        JOptionPane.showMessageDialog(this, "Cannot edit", "Error", JOptionPane.ERROR_MESSAGE);
-                        ProgramUpdate = true;
-                        model.setValueAt(InteractTxt.allGrading.get(row).getMarksFrom(), row, col);
-                        ProgramUpdate = false;
+                        rejectEdit(row, col, OldV.getMarksFrom(), "Cannot edit");
                         return;
                     }
                     
@@ -52,44 +54,32 @@ public class ManageGradingSystem extends FrameFormat {
                         int NewValue = Integer.parseInt(String.valueOf(NewV));
                         
                         if(NewValue < 0+((InteractTxt.allGrading.size()-1)-row)*2){
-                            JOptionPane.showMessageDialog(this, "Too Small", "Error", JOptionPane.ERROR_MESSAGE);
-                            ProgramUpdate = true;
-                            model.setValueAt(InteractTxt.allGrading.get(row).getMarksFrom(), row, col);
-                            ProgramUpdate = false;
+                            rejectEdit(row, col, OldV.getMarksFrom(), "Too Small");
                             return;
                         } else if (NewValue > 100-((row*2)+1)){
-                            JOptionPane.showMessageDialog(this, "Too Big", "Error", JOptionPane.ERROR_MESSAGE);
-                            ProgramUpdate = true;
-                            model.setValueAt(InteractTxt.allGrading.get(row).getMarksFrom(), row, col);
-                            ProgramUpdate = false;
+                            rejectEdit(row, col, OldV.getMarksFrom(), "Too Big");
                             return;
                         }
                         
                         if(Loop){
-                            InteractTxt.allGrading.get(row).setMarksFrom(String.valueOf(NewValue));
+                            OldV.setMarksFrom(String.valueOf(NewValue));
                             InteractTxt.allGrading.get(row+1).setMarksTo(String.valueOf(NewValue - 1));
                             Loop = false;
                             model.setValueAt(InteractTxt.allGrading.get(row+1).getMarksTo(), (row+1), 2);
                         }
                         Loop = true;
                         
-                        if (NewValue >= Integer.parseInt(InteractTxt.allGrading.get(row).getMarksTo())){
-                            InteractTxt.allGrading.get(row).setMarksTo(String.valueOf(NewValue + 1));
-                            model.setValueAt(InteractTxt.allGrading.get(row).getMarksTo(), row, 2);
+                        if (NewValue >= Integer.parseInt(OldV.getMarksTo())){
+                            OldV.setMarksTo(String.valueOf(NewValue + 1));
+                            model.setValueAt(OldV.getMarksTo(), row, 2);
                         }
                     } catch (Exception f) {
-                        JOptionPane.showMessageDialog(this, "Must be Number", "Error", JOptionPane.ERROR_MESSAGE);
-                        ProgramUpdate = true;
-                        model.setValueAt(InteractTxt.allGrading.get(row).getMarksFrom(), row, col);
-                        ProgramUpdate = false;
+                        rejectEdit(row, col, OldV.getMarksFrom(), "Must be Number");
                     }
                     
                 } else if (col == 2){
                     if (row == 0) {
-                        JOptionPane.showMessageDialog(this, "Cannot edit", "Error", JOptionPane.ERROR_MESSAGE);
-                        ProgramUpdate = true;
-                        model.setValueAt(InteractTxt.allGrading.get(row).getMarksTo(), row, col);
-                        ProgramUpdate = false;
+                        rejectEdit(row, col, OldV.getMarksTo(), "Cannot edit");
                         return;
                     }
                     
@@ -97,36 +87,27 @@ public class ManageGradingSystem extends FrameFormat {
                         int NewValue = Integer.parseInt(String.valueOf(NewV));
                         
                         if(NewValue < 0+(((InteractTxt.allGrading.size()-1)-row)*2)+1){
-                            JOptionPane.showMessageDialog(this, "Too Small", "Error", JOptionPane.ERROR_MESSAGE);
-                            ProgramUpdate = true;
-                            model.setValueAt(InteractTxt.allGrading.get(row).getMarksTo(), row, col);
-                            ProgramUpdate = false;
+                            rejectEdit(row, col, OldV.getMarksTo(), "Too Small");
                             return;
                         } else if (NewValue > 100-(row*2)){
-                            JOptionPane.showMessageDialog(this, "Too Big", "Error", JOptionPane.ERROR_MESSAGE);
-                            ProgramUpdate = true;
-                            model.setValueAt(InteractTxt.allGrading.get(row).getMarksTo(), row, col);
-                            ProgramUpdate = false;
+                            rejectEdit(row, col, OldV.getMarksTo(), "Too Big");
                             return;
                         }
                         
                         if(Loop){
-                            InteractTxt.allGrading.get(row).setMarksTo(String.valueOf(NewValue));
+                            OldV.setMarksTo(String.valueOf(NewValue));
                             InteractTxt.allGrading.get(row-1).setMarksFrom(String.valueOf(NewValue + 1));
                             Loop = false;
                             model.setValueAt(InteractTxt.allGrading.get(row-1).getMarksFrom(), (row-1), 1);
                         }
                         Loop = true;
                         
-                        if (NewValue <= Integer.parseInt(InteractTxt.allGrading.get(row).getMarksFrom())){
-                            InteractTxt.allGrading.get(row).setMarksFrom(String.valueOf(NewValue - 1));
-                            model.setValueAt(InteractTxt.allGrading.get(row).getMarksFrom(), row, 1);
+                        if (NewValue <= Integer.parseInt(OldV.getMarksFrom())){
+                            OldV.setMarksFrom(String.valueOf(NewValue - 1));
+                            model.setValueAt(OldV.getMarksFrom(), row, 1);
                         }
                     } catch (Exception f) {
-                        JOptionPane.showMessageDialog(this, "Must be Number", "Error", JOptionPane.ERROR_MESSAGE);
-                        ProgramUpdate = true;
-                        model.setValueAt(InteractTxt.allGrading.get(row).getMarksTo(), row, col);
-                        ProgramUpdate = false;
+                        rejectEdit(row, col, OldV.getMarksTo(), "Must be Number");
                     }
                 }
             }

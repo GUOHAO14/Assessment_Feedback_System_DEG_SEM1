@@ -54,5 +54,10 @@ public class Leader extends User {
         }
         return sb.toString();
     }
+    
+    @Override
+    public String toString() {
+        return getId() + " (" + getName() + ")";
+    }
 
 }

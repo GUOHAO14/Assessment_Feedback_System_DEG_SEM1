@@ -20,6 +20,8 @@ public class ManageLecturers extends FrameFormat {
         for(Lecturer x : InteractTxt.allLecturer){
             model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), x.getLeader().getId()});
         }
+        
+        Tools.showLeaName(LecturerTable, Set.of(3));
     }
 
     /**
@@ -110,9 +112,9 @@ public class ManageLecturers extends FrameFormat {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         JTextField nameField = new JTextField(25);
         JTextField emailField = new JTextField(25);
-        JComboBox<String> leaderList = new JComboBox<>();
+        JComboBox<Leader> leaderList = new JComboBox<>();
         for(Leader x : InteractTxt.allLeader){
-            leaderList.addItem(x.getId());
+            leaderList.addItem(x);
         }
 
         JPanel panel = new JPanel(new GridLayout(0, 1));
@@ -130,7 +132,7 @@ public class ManageLecturers extends FrameFormat {
             if (result == JOptionPane.OK_OPTION) {
                 String name = nameField.getText().trim();
                 String email = emailField.getText().trim();
-                String leaderId = (String) leaderList.getSelectedItem();
+                Leader leader = (Leader) leaderList.getSelectedItem();
                 
                 ValidationResult nameResult = ErrorChecking.checkInput(name);
                 ValidationResult emailResult = ErrorChecking.checkEmail(email);
@@ -140,30 +142,15 @@ public class ManageLecturers extends FrameFormat {
                 }else if (emailResult != ValidationResult.OK) {
                     showEmailError(emailResult);
                 }else{
-                    int max = 0;
-                    for(Lecturer x : InteractTxt.allLecturer){
-                        String numPart = x.getId().substring(2);
-                        int num = Integer.parseInt(numPart);
-                        if (num > max) {
-                            max = num;
-                        }
-                    }
-                    for(Leader x : InteractTxt.allLeader){
-                        String numPart = x.getId().substring(2);
-                        int num = Integer.parseInt(numPart);
-                        if (num > max) {
-                            max = num;
-                        }
-                    }
-                    String id = "lc" + (max + 1);
+                    String id = User.getNewLcID();
 
-                    String password = Tools.GeneratePW();
+                    String password = User.GeneratePW();
 
                     String [] userdata = {id, name, email, password, "lecturer"};
                     InteractTxt.allLecturer.add(new Lecturer(userdata));
 
-                    InteractTxt.checkLecID(id).setLeader(InteractTxt.checkLeaID(leaderId));
-                    InteractTxt.checkLeaID(leaderId).leaderTeam.add(InteractTxt.checkLecID(id));
+                    InteractTxt.checkLecID(id).setLeader(leader);
+                    leader.leaderTeam.add(InteractTxt.checkLecID(id));
 
                     InteractTxt.writeUser();
                     Lecturer New = InteractTxt.checkLecID(id);
@@ -184,11 +171,11 @@ public class ManageLecturers extends FrameFormat {
         nameField.setText(Lec.getName());
         JTextField emailField = new JTextField(25);
         emailField.setText(Lec.getEmail());
-        JComboBox<String> leaderList = new JComboBox<>();
+        JComboBox<Leader> leaderList = new JComboBox<>();
         for(Leader x : InteractTxt.allLeader){
-            leaderList.addItem(x.getId());
+            leaderList.addItem(x);
         }
-        leaderList.setSelectedItem(Lec.getLeader().getId());
+        leaderList.setSelectedItem(Lec.getLeader());
 
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.add(new JLabel("Name:"));
@@ -206,7 +193,8 @@ public class ManageLecturers extends FrameFormat {
             if (result == 0) {
                 String name = nameField.getText().trim();
                 String email = emailField.getText().trim();
-                String leaderId = (String) leaderList.getSelectedItem();
+                Leader leader = (Leader) leaderList.getSelectedItem();
+                String leaderId = leader.getId();
                 
                 ValidationResult nameResult = ErrorChecking.checkInput(name);
                 ValidationResult emailResult = ErrorChecking.checkEmail(email);
@@ -219,7 +207,7 @@ public class ManageLecturers extends FrameFormat {
                     Lec.setName(name);
                     Lec.setEmail(email);
                     Lec.getLeader().leaderTeam.remove(Lec);
-                    Lec.setLeader(InteractTxt.checkLeaID(leaderId));
+                    Lec.setLeader(leader);
                     Lec.getLeader().leaderTeam.add(Lec);
 
                     InteractTxt.writeUser();

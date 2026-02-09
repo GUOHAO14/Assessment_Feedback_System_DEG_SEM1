@@ -121,7 +121,9 @@ public class ManageIntakes extends FrameFormat {
         modulesPanel.setLayout(new BoxLayout(modulesPanel, BoxLayout.Y_AXIS));
         ArrayList<JCheckBox> moduleBoxes = new ArrayList<>();
         for (project.roles.Module x : InteractTxt.allModule) {
-            JCheckBox cb = new JCheckBox(x.getModuleId());
+            JCheckBox cb = new JCheckBox(x.toString());
+            cb.putClientProperty("module", x);
+
             for(project.roles.Module y : InteractTxt.checkInt_Modules(Int.getIntakeId())){
                 if (x.getModuleId().equals(y.getModuleId())) {
                     cb.setSelected(true);
@@ -133,12 +135,7 @@ public class ManageIntakes extends FrameFormat {
         JScrollPane moduleScroll = new JScrollPane(modulesPanel);
         panel.add(moduleScroll);
         
-        boolean emptyStu = true;
-        for(Student x : InteractTxt.allStudent){
-            if(x.getIntakeId().equals(Int.getIntakeId())){
-                emptyStu = false;
-            }
-        }
+        boolean emptyStu = Int.checkEmptyStu();
         if(!emptyStu){
             for (JCheckBox cb : moduleBoxes) {
                 cb.setEnabled(false);
@@ -152,10 +149,10 @@ public class ManageIntakes extends FrameFormat {
 
             if (result == 0) {
                 String name = nameField.getText().trim();
-                ArrayList<String> selectedModules = new ArrayList<>();
+                ArrayList<project.roles.Module> selectedModules = new ArrayList<>();
                 for (JCheckBox cb : moduleBoxes) {
                     if (cb.isSelected()) {
-                        selectedModules.add(cb.getText());
+                        selectedModules.add((project.roles.Module) cb.getClientProperty("module"));
                     }
                 }
                 
@@ -166,65 +163,22 @@ public class ManageIntakes extends FrameFormat {
                 }else{
                     for(project.roles.Module x : InteractTxt.checkInt_Modules(Int.getIntakeId())){
                         boolean delete = true;
-                        if(selectedModules.contains(x.getModuleId())){
+                        if(selectedModules.contains(x)){
                             delete = false;
                         }
                         if(delete){
-                            IntakeModule IMID = InteractTxt.checkIMID(Int.getIntakeId(), x.getModuleId());
-                            InteractTxt.allIntakeModule.remove(IMID);
-                            for(project.roles.Class a : IMID.IM_Classes){
-                                InteractTxt.allClass.remove(a);
-                                if(!a.getLecId().equals("NA")){
-                                    InteractTxt.checkLecID(a.getLecId()).Lec_Classes.remove(a);
-                                }                                
-                            }
-                            for(Assessment b : IMID.IM_Assessments){
-                                InteractTxt.allAssessment.remove(b);
-                            }
-                            IMID.IM_Classes.clear();
-                            IMID.IM_Assessments.clear();
+                            Int.deleteIntakeModule(x);
                         }
                     }
-                    for(String y : selectedModules){
+                    for(project.roles.Module y : selectedModules){
                         boolean add = true;
                         for(project.roles.Module x : InteractTxt.checkInt_Modules(Int.getIntakeId())){
-                            if(x.getModuleId().equals(y)){
+                            if(x == y){
                                 add = false;
                             }
                         }
                         if(add){
-                            int max = 0;
-                            for(IntakeModule x : InteractTxt.allIntakeModule){
-                                String numPart = x.getIMID().substring(4);
-                                int num = Integer.parseInt(numPart);
-                                if (num > max) {
-                                    max = num;
-                                }
-                            }
-                            String IMID = "IMID" + (max + 1);
-                            InteractTxt.allIntakeModule.add(new IntakeModule(IMID, Int.getIntakeId(), y));
-                            
-                            int max2 = 0;
-                            for(project.roles.Class x : InteractTxt.allClass){
-                                String numPart = x.getClassId().substring(1);
-                                int num = Integer.parseInt(numPart);
-                                if (num > max2) {
-                                    max2 = num;
-                                }
-                            }
-                            String ClassId = "C" + (max2 + 1);
-                            InteractTxt.allClass.add(new project.roles.Class(ClassId, "Default Class", "NA", IMID));
-                            InteractTxt.checkIMID(IMID).IM_Classes.add(InteractTxt.checkClassID(ClassId));
-                        }
-                    }
-                    
-                    String Modules = "";
-                    for(int i=0; i < InteractTxt.checkInt_Modules(Int.getIntakeId()).size(); i++){
-                        if(i == (InteractTxt.checkInt_Modules(Int.getIntakeId()).size()-1)){
-                            Modules += InteractTxt.checkInt_Modules(Int.getIntakeId()).get(i).getModuleId();
-                        }else{
-                            Modules += InteractTxt.checkInt_Modules(Int.getIntakeId()).get(i).getModuleId() + ", ";
-                            
+                            Int.createIntakeModule(y.getModuleId());
                         }
                     }
                     Int.setIntakeName(name);
@@ -232,7 +186,7 @@ public class ManageIntakes extends FrameFormat {
                     InteractTxt.saveDatabase();
 
                     model.setValueAt(name, row, 1);
-                    model.setValueAt(Modules, row, 2);
+                    model.setValueAt(Int.getModulesAsString(), row, 2);
                     break;
                 }
             }
@@ -243,19 +197,7 @@ public class ManageIntakes extends FrameFormat {
                     if (confirm == JOptionPane.OK_OPTION) {
                         InteractTxt.allIntake.remove(Int);
                         for(project.roles.Module x : InteractTxt.checkInt_Modules(Int.getIntakeId())){
-                            IntakeModule IMID = InteractTxt.checkIMID(Int.getIntakeId(), x.getModuleId());
-                            InteractTxt.allIntakeModule.remove(IMID);
-                            for(project.roles.Class a : IMID.IM_Classes){
-                                InteractTxt.allClass.remove(a);
-                                if(!a.getLecId().equals("NA")){
-                                    InteractTxt.checkLecID(a.getLecId()).Lec_Classes.remove(a);
-                                }                                
-                            }
-                            for(Assessment b : IMID.IM_Assessments){
-                                InteractTxt.allAssessment.remove(b);
-                            }
-                            IMID.IM_Classes.clear();
-                            IMID.IM_Assessments.clear();
+                            Int.deleteIntakeModule(x);
                         }
                         
                         InteractTxt.saveDatabase();
@@ -285,7 +227,8 @@ public class ManageIntakes extends FrameFormat {
         modulesPanel.setLayout(new BoxLayout(modulesPanel, BoxLayout.Y_AXIS));
         ArrayList<JCheckBox> moduleBoxes = new ArrayList<>();
         for (project.roles.Module x : InteractTxt.allModule) {
-            JCheckBox cb = new JCheckBox(x.getModuleId());
+            JCheckBox cb = new JCheckBox(x.toString());
+            cb.putClientProperty("module", x);
             moduleBoxes.add(cb);
             modulesPanel.add(cb);
         }
@@ -302,10 +245,10 @@ public class ManageIntakes extends FrameFormat {
             if (result == JOptionPane.OK_OPTION) {
                 String id = idField.getText().trim();
                 String name = nameField.getText().trim();
-                ArrayList<String> selectedModules = new ArrayList<>();
+                ArrayList<project.roles.Module> selectedModules = new ArrayList<>();
                 for (JCheckBox cb : moduleBoxes) {
                     if (cb.isSelected()) {
-                        selectedModules.add(cb.getText());
+                        selectedModules.add((project.roles.Module) cb.getClientProperty("module"));
                     }
                 }
                 
@@ -320,43 +263,13 @@ public class ManageIntakes extends FrameFormat {
                     InteractTxt.allIntake.add(new Intake(id, name));
                     Intake New = InteractTxt.checkIntID(id);
                     
-                    for(String y : selectedModules){
-                        int max = 0;
-                        for(IntakeModule x : InteractTxt.allIntakeModule){
-                            String numPart = x.getIMID().substring(4);
-                            int num = Integer.parseInt(numPart);
-                            if (num > max) {
-                                max = num;
-                            }
-                        }
-                        String IMID = "IMID" + (max + 1);
-                        InteractTxt.allIntakeModule.add(new IntakeModule(IMID, New.getIntakeId(), y));
-
-                        int max2 = 0;
-                        for(project.roles.Class x : InteractTxt.allClass){
-                            String numPart = x.getClassId().substring(1);
-                            int num = Integer.parseInt(numPart);
-                            if (num > max2) {
-                                max2 = num;
-                            }
-                        }
-                        String ClassId = "C" + (max2 + 1);
-                        InteractTxt.allClass.add(new project.roles.Class(ClassId, "Default Class", "NA", IMID));
-                        InteractTxt.checkIMID(IMID).IM_Classes.add(InteractTxt.checkClassID(ClassId));
+                    for(project.roles.Module y : selectedModules){
+                        New.createIntakeModule(y.getModuleId());
                     }
                     
                     InteractTxt.saveDatabase();
                     
-                    String Modules = "";
-                    for(int i=0; i < InteractTxt.checkInt_Modules(New.getIntakeId()).size(); i++){
-                        if(i == (InteractTxt.checkInt_Modules(New.getIntakeId()).size()-1)){
-                            Modules += InteractTxt.checkInt_Modules(New.getIntakeId()).get(i).getModuleId();
-                        }else{
-                            Modules += InteractTxt.checkInt_Modules(New.getIntakeId()).get(i).getModuleId() + ", ";
-                            
-                        }
-                    }
-                    model.addRow(new String[]{New.getIntakeId(), New.getIntakeName(), Modules});
+                    model.addRow(new String[]{New.getIntakeId(), New.getIntakeName(), New.getModulesAsString()});
                     break;
                 }
             }

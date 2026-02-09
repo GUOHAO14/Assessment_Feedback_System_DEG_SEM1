@@ -22,6 +22,8 @@ public class ManageStudents extends FrameFormat {
         for(Student x : InteractTxt.allStudent){
             model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), x.getIntakeId(), x.getDob()});
         }
+        
+        Tools.showIntakeName(StudentTable, Set.of(3));
     }
 
     /**
@@ -115,9 +117,9 @@ public class ManageStudents extends FrameFormat {
         nameField.setText(Stu.getName());
         JTextField emailField = new JTextField(25);
         emailField.setText(Stu.getEmail());
-        JComboBox<String> intakeList = new JComboBox<>();
+        JComboBox<Intake> intakeList = new JComboBox<>();
         for(Intake x : InteractTxt.allIntake){
-            intakeList.addItem(x.getIntakeId());
+            intakeList.addItem(x);
         }
         intakeList.setSelectedItem(Stu.getIntakeId());
         if(!Stu.Stu_Classes.isEmpty()){
@@ -148,7 +150,7 @@ public class ManageStudents extends FrameFormat {
             if (result == 0) {
                 String name = nameField.getText().trim();
                 String email = emailField.getText().trim();
-                String intakeId = (String) intakeList.getSelectedItem();
+                String intakeId = ((Intake) intakeList.getSelectedItem()).getIntakeId();
                 String dob = new SimpleDateFormat("yyyy-MM-dd").format((Date) dobSpinner.getValue());
                 
                 ValidationResult nameResult = ErrorChecking.checkInput(name);
@@ -198,9 +200,9 @@ public class ManageStudents extends FrameFormat {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         JTextField nameField = new JTextField(25);
         JTextField emailField = new JTextField(25);
-        JComboBox<String> intakeList = new JComboBox<>();
+        JComboBox<Intake> intakeList = new JComboBox<>();
         for(Intake x : InteractTxt.allIntake){
-            intakeList.addItem(x.getIntakeId());
+            intakeList.addItem(x);
         }
         SpinnerDateModel dobModel = new SpinnerDateModel(new Date(), null, new Date(), Calendar.DAY_OF_MONTH);
         JSpinner dobSpinner = new JSpinner(dobModel);
@@ -225,7 +227,7 @@ public class ManageStudents extends FrameFormat {
             if (result == JOptionPane.OK_OPTION) {
                 String name = nameField.getText().trim();
                 String email = emailField.getText().trim();
-                String intakeId = (String) intakeList.getSelectedItem();
+                String intakeId = ((Intake) intakeList.getSelectedItem()).getIntakeId();
                 String dob = new SimpleDateFormat("yyyy-MM-dd").format((Date) dobSpinner.getValue());
 
                 ValidationResult nameResult = ErrorChecking.checkInput(name);
@@ -236,17 +238,9 @@ public class ManageStudents extends FrameFormat {
                 }else if (emailResult != ValidationResult.OK) {
                     showEmailError(emailResult);
                 }else{
-                    int max = 0;
-                    for(Student x : InteractTxt.allStudent){
-                        String numPart = x.getId().substring(2);
-                        int num = Integer.parseInt(numPart);
-                        if (num > max) {
-                            max = num;
-                        }
-                    }
-                    String id = "tp" + (max + 1);
+                    String id = User.getNewStuID();
 
-                    String password = Tools.GeneratePW();
+                    String password = User.GeneratePW();
 
                     String [] userdata = {id, name, email, password, "student"};
                     InteractTxt.allStudent.add(new Student(userdata));

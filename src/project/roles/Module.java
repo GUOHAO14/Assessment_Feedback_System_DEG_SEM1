@@ -40,4 +40,9 @@ public class Module {
         this.moduleName = moduleName;
     }
     
+    @Override
+    public String toString() {
+        return getModuleId() + " (" + getModuleName() + ")";
+    }
+    
 }
