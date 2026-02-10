@@ -1,5 +1,7 @@
 package project.roles;
 
+import project.utils.InteractTxt;
+
 public class Assessment {
     private String assId, assName, assType, assPercentage, assFullMarks;
     private IntakeModule assIM;
@@ -72,5 +74,18 @@ public class Assessment {
     
     public void getAllAssDetails() {
         System.out.println(getAssName() + ", " + getAssId() + ", " + getAssType() + ", " + getAssPercentage() + ", " + getAssFullMarks() + ", " + getAssIM().getIMID());
+    }
+    
+    public static String getNewAssID() {
+        int max = 0;
+        for(Assessment x : InteractTxt.allAssessment){
+            String numPart = x.getAssId().substring(3);
+            int num = Integer.parseInt(numPart);
+            if (num > max) {
+                max = num;
+            }
+        }
+        String id = "Ass" + (max + 1);
+        return id;
     }
 }

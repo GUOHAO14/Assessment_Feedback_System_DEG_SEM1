@@ -37,6 +37,7 @@ public class LoginPage0 extends FrameFormat {
         lecturerLogin = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(51, 204, 255));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 26)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

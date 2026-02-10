@@ -638,22 +638,6 @@ public class ViewStudentComments extends FrameFormat {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        try {
-            /* Create and display the form */
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-        for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-            System.out.println(info.getName() + " -> " + info.getClassName());
-        }
-
-        } catch (ClassNotFoundException ex) {
-            System.getLogger(ViewStudentComments.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        } catch (InstantiationException ex) {
-            System.getLogger(ViewStudentComments.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        } catch (IllegalAccessException ex) {
-            System.getLogger(ViewStudentComments.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
-            System.getLogger(ViewStudentComments.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        }
 
         InteractTxt.initDatabase();
         String x = "lc076206";

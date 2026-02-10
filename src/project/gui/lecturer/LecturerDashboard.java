@@ -38,6 +38,7 @@ public class LecturerDashboard extends FrameFormat {
         designAssessment1 = new javax.swing.JButton();
         logout = new javax.swing.JButton();
         profileButton = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -60,6 +61,10 @@ public class LecturerDashboard extends FrameFormat {
 
         profileButton.setText("My Profile");
         profileButton.addActionListener(this::profileButtonActionPerformed);
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Lecturer Dashboard");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -85,6 +90,7 @@ public class LecturerDashboard extends FrameFormat {
                 .addGap(186, 186, 186)
                 .addComponent(profileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -93,15 +99,17 @@ public class LecturerDashboard extends FrameFormat {
                 .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
-                .addGap(42, 42, 42)
-                .addComponent(welcomeText)
                 .addGap(18, 18, 18)
-                .addComponent(profileButton, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addComponent(welcomeText)
+                .addGap(26, 26, 26)
+                .addComponent(profileButton, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(designAssessment, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(designAssessment1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(52, 52, 52))
+                .addGap(37, 37, 37))
         );
 
         pack();
@@ -167,6 +175,7 @@ public class LecturerDashboard extends FrameFormat {
     private javax.swing.JButton designAssessment;
     private javax.swing.JButton designAssessment1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JButton logout;
     private javax.swing.JButton profileButton;
     private javax.swing.JLabel welcomeText;

@@ -16,6 +16,7 @@ abstract public class FrameFormat extends JFrame {
     public FrameFormat() {
         // intercept termination
         // set the default to DO_NOTHING_ON_CLOSE so the window doesn't disappear
+        getContentPane().setBackground(new java.awt.Color(230, 240, 255));
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); 
 
         // add a WindowListener to handle the event
@@ -125,6 +126,4 @@ abstract public class FrameFormat extends JFrame {
                 JOptionPane.showMessageDialog(this, "Intake ID must be unique", "Invalid Input", JOptionPane.ERROR_MESSAGE);
         }
     }
-
-    
 }
