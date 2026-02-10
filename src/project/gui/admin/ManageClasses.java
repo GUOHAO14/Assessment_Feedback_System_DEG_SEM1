@@ -16,6 +16,7 @@ public class ManageClasses extends FrameFormat {
     
     public ManageClasses(Admin sessionUser) {
         initComponents();
+        super.formatWindow("Classes");
         this.sessionUser = sessionUser;
         for(project.roles.Class x : InteractTxt.allClass){
             model.addRow(new String[]{x.getClassId(), x.getClassName(), x.getLecId(), x.getIMID(), x.getStudentsAsString()});

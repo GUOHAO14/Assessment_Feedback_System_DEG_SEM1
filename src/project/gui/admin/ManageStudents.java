@@ -18,6 +18,7 @@ public class ManageStudents extends FrameFormat {
     
     public ManageStudents(Admin sessionUser) {
         initComponents();
+        super.formatWindow("Students");
         this.sessionUser = sessionUser;
         for(Student x : InteractTxt.allStudent){
             model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), x.getIntakeId(), x.getDob()});

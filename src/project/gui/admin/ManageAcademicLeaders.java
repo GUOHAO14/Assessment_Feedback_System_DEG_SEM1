@@ -16,6 +16,7 @@ public class ManageAcademicLeaders extends FrameFormat {
     
     public ManageAcademicLeaders(Admin sessionUser) {
         initComponents();
+        super.formatWindow("Academic Leaders");
         this.sessionUser = sessionUser;
         for(Leader x : InteractTxt.allLeader){
             model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), x.getLecturersAsString(), x.getModulesAsString()});
