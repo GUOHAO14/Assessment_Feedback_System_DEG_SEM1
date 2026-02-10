@@ -1,35 +1,749 @@
-tp076267
+tp76267
 Ass1
 15.0
 45
 60
 The final submission meets the assignment requirements and objectives. Minor improvements in coordination and consistency are recommended.
 
-tp076267
+tp76267
 Ass2
 40.0
 8
 10
-The student shows a good understanding of the required concepts. The work is organized and mostly accurate. 
+The student shows a good understanding of the required concepts. The work is organized and mostly accurate.
 
-tp076267
+tp76267
 Ass3
 24.0
 80
 100
-oh my god you suck so much!
+Great work!
 
-tp076267
+tp76267
+Ass6
+12.5
+25
+100
+Group assignment completed successfully.
+
+tp76267
+Ass7
+41.7
+25
+30
+Test performance shows good understanding.
+
+tp76267
 Ass4
-48.0
+18.0
+30
+100
+Group assignment demonstrates strong coordination.
+
+tp76267
+Ass5
+7.5
+20
+80
+Final exam performance is satisfactory.
+
+tp76267
+Ass8
+0.1
+1
+100
+Presentation was clear but lacked depth.
+
+tp76267
+Ass9
+35.2
+44
+50
+Individual assignment completed well.
+
+tp76267
+Ass10
+18.0
+18
+20
+Quiz knowledge acceptable.
+
+tp76267
+Ass11
+31.2
+78
+100
+Final exam performance is excellent.
+
+tp76267
+Ass12
+45.0
+90
+100
+Group assignment done successfully.
+
+tp76267
+Ass13
+24.0
+40
+50
+Midterm test meets expectations.
+
+tp76267
+Ass14
+16.0
+40
+50
+Presentation clear and structured.
+
+tp76266
+Ass6
+10.0
+20
+100
+Group assignment shows good understanding.
+
+tp76266
+Ass7
+46.7
+28
+30
+Test skills satisfactory.
+
+tp76266
+Ass4
+19.8
+33
+100
+Group assignment completed with minor inconsistencies.
+
+tp76266
+Ass5
+9.0
+24
+80
+Final exam performance satisfactory.
+
+tp76266
+Ass8
+0.1
+1
+100
+Presentation clear and concise.
+
+tp76266
+Ass9
+28.0
+35
+50
+Individual assignment meets all requirements.
+
+tp76266
+Ass10
+15.0
+15
+20
+Quiz partially correct.
+
+tp76266
+Ass11
+36.0
+90
+100
+Final exam good performance.
+
+tp76266
+Ass12
+45.0
+90
+100
+Group assignment well executed.
+
+tp76266
+Ass13
+24.0
+40
+50
+Midterm test good.
+
+tp76266
+Ass14
+14.0
+35
+50
+Presentation clear.
+
+tp76266
+Ass1
+14.0
+42
+60
+Satisfactory submission with minor errors.
+
+tp76266
+Ass2
+45.0
+9
+10
+Good understanding of assignment concepts.
+
+tp76266
+Ass3
+21.0
+70
+100
+Work is organized and mostly correct.
+
+tp76268
+Ass1
+16.0
+48
+60
+Submission meets requirements.
+
+tp76268
+Ass2
+35.0
+7
+10
+Work is generally correct.
+
+tp76268
+Ass3
+24.0
 80
 100
-asdfasdfd
+Great understanding shown.
 
-tp076266
+tp76268
+Ass6
+11.0
+22
+100
+Group assignment successful.
+
+tp76268
+Ass7
+45.0
+27
+30
+Test performance acceptable.
+
+tp76268
 Ass4
-48.0
+18.6
+31
+100
+Group assignment done properly.
+
+tp76268
+Ass5
+7.5
+20
+80
+Final exam adequate.
+
+tp76268
+Ass8
+0.1
+1
+100
+Presentation clear.
+
+tp76268
+Ass9
+24.0
+30
+50
+Individual assignment done.
+
+tp76268
+Ass10
+20.0
+20
+20
+Quiz performance okay.
+
+tp76268
+Ass11
+31.6
+79
+100
+Final exam good.
+
+tp76268
+Ass12
+43.5
+87
+100
+Group assignment satisfactory.
+
+tp76268
+Ass13
+28.2
+47
+50
+Midterm test completed.
+
+tp76268
+Ass14
+17.6
+44
+50
+Presentation satisfactory.
+
+tp76269
+Ass1
+15.0
+45
+60
+Submission meets requirements.
+
+tp76269
+Ass2
+40.0
+8
+10
+Good understanding.
+
+tp76269
+Ass3
+24.0
 80
 100
-Good job
+Work is well done.
+
+tp76269
+Ass6
+11.0
+22
+100
+Group assignment done properly.
+
+tp76269
+Ass7
+43.3
+26
+30
+Test skills good.
+
+tp76269
+Ass4
+18.0
+30
+100
+Group assignment acceptable.
+
+tp76269
+Ass5
+8.3
+22
+80
+Final exam satisfactory.
+
+tp76269
+Ass8
+0.1
+1
+100
+Presentation okay.
+
+tp76269
+Ass9
+32.8
+41
+50
+Individual assignment completed.
+
+tp76269
+Ass10
+16.0
+16
+20
+Quiz performance adequate.
+
+tp76269
+Ass11
+28.0
+70
+100
+Final exam strong.
+
+tp76269
+Ass12
+43.0
+86
+100
+Group assignment good.
+
+tp76269
+Ass13
+26.4
+44
+50
+Midterm test completed.
+
+tp76269
+Ass14
+17.6
+44
+50
+Presentation clear.
+
+tp76270
+Ass15
+15.0
+30
+60
+Individual assignment done well.
+
+tp76270
+Ass16
+21.0
+28
+40
+Practical test acceptable.
+
+tp76270
+Ass17
+14.4
+36
+100
+Final exam performance good.
+
+tp76270
+Ass18
+40.0
+80
+100
+Group project completed.
+
+tp76270
+Ass19
+12.0
+30
+50
+Presentation done.
+
+tp76270
+Ass20
+25.0
+25
+30
+Quiz okay.
+
+tp76270
+Ass27
+54.0
+90
+100
+Good
+
+tp76270
+Ass28
+18.0
+90
+100
+Awesome
+
+tp76270
+Ass29
+18.0
+90
+100
+Perfect
+
+tp76270
+Ass21
+34.3
+60
+70
+Perfect
+
+tp76270
+Ass22
+17.6
+44
+50
+Perfect
+
+tp76270
+Ass23
+39.2
+98
+100
+Perfect
+
+tp76270
+Ass24
+44.0
+88
+100
+Perfect
+
+tp76270
+Ass25
+26.4
+44
+50
+Perfect
+
+tp76270
+Ass26
+19.8
+99
+100
+Perfect
+
+tp76271
+Ass15
+16.5
+33
+60
+Individual assignment satisfactory.
+
+tp76271
+Ass16
+19.5
+26
+40
+Practical test done properly.
+
+tp76271
+Ass17
+14.0
+35
+100
+Final exam acceptable.
+
+tp76271
+Ass18
+11.5
+23
+100
+Group project satisfactory.
+
+tp76271
+Ass19
+4.4
+11
+50
+Presentation okay.
+
+tp76271
+Ass20
+20.0
+20
+30
+Quiz good.
+
+tp76271
+Ass21
+38.3
+67
+70
+Nice
+
+tp76271
+Ass22
+18.0
+45
+50
+Good
+
+tp76271
+Ass23
+36.0
+90
+100
+Awesome
+
+tp76271
+Ass27
+54.0
+90
+100
+Very good	
+
+tp76271
+Ass28
+18.0
+90
+100
+Awesome
+
+tp76271
+Ass29
+18.0
+90
+100
+Excellent
+
+tp76271
+Ass24
+44.0
+88
+100
+Perfect
+
+tp76271
+Ass25
+26.4
+44
+50
+Perfect
+
+tp76271
+Ass26
+15.4
+77
+100
+Perfect
+
+tp76272
+Ass15
+15.5
+31
+60
+Individual assignment done.
+
+tp76272
+Ass16
+21.0
+28
+40
+Practical test good.
+
+tp76272
+Ass17
+13.6
+34
+100
+Final exam okay.
+
+tp76272
+Ass18
+12.5
+25
+100
+Group project completed.
+
+tp76272
+Ass19
+4.8
+12
+50
+Presentation done.
+
+tp76272
+Ass20
+19.0
+19
+30
+Quiz satisfactory.
+
+tp76272
+Ass27
+54.0
+90
+100
+Perfect
+
+tp76272
+Ass28
+18.0
+90
+100
+Nice
+
+tp76272
+Ass29
+18.0
+90
+100
+OMG
+
+tp76272
+Ass21
+34.3
+60
+70
+Perfect
+
+tp76272
+Ass22
+16.0
+40
+50
+Not bad
+
+tp76272
+Ass23
+36.0
+90
+100
+Nice
+
+tp76272
+Ass24
+44.0
+88
+100
+Perfect
+
+tp76272
+Ass25
+26.4
+44
+50
+Perfect
+
+tp76272
+Ass26
+19.6
+98
+100
+Perfect
+
+tp76273
+Ass15
+53.0
+32
+60
+Individual assignment good.
+
+tp76273
+Ass16
+36.0
+27
+40
+Practical test completed.
+
+tp76273
+Ass17
+87.0
+35
+100
+Final exam done well.
+
+tp76273
+Ass18
+49.0
+25
+50
+Group project done.
+
+tp76273
+Ass19
+23.0
+11
+50
+Presentation good.
+
+tp76273
+Ass20
+29.0
+20
+30
+Quiz good.
 

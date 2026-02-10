@@ -161,7 +161,7 @@ public class LecturerDashboard extends FrameFormat {
 
         /* Create and display the form */
         InteractTxt.initDatabase();
-        String x = "lc076206";
+        String x = "lc76359";
         InteractTxt.allLecturer.forEach(l -> {
             System.out.println(l.getId());
             if (l.getId().equals(x)) {

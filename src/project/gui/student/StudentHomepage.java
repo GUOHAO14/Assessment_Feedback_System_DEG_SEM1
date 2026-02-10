@@ -157,7 +157,7 @@ public static void main(String args[]) {
         InteractTxt.initDatabase();
 
         // Retrieve the student using their ID from the saved user/student files
-        Student sessionStudent = InteractTxt.checkStuID("tp076267");
+        Student sessionStudent = InteractTxt.checkStuID("tp76267");
 
         if (sessionStudent != null) {
             // Open the StudentHomepage with the real session student

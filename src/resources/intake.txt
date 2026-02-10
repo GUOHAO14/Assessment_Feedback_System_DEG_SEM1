@@ -1,12 +1,6 @@
 APD2F25011CS(CYB)
 CyberSecurity
 
-ABCDE
-A Class Of ABC
-
-APP2FCK0000(DS)
-DigitalForensic
-
-UCDF2307ICT
-Diploma in Information & Communication Technology
+UCDF2307ICT(SE)
+Software Engineering
 

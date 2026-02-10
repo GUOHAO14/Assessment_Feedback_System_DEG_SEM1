@@ -24,7 +24,6 @@ public class LeaderEditAssign extends FrameFormat {
     private String originalClassId;
     private String className;
     private String currentModuleId;
-    private String currentIMID;
     private String currentLecturerId;
 
     public LeaderEditAssign(Leader sessionUser, String classId, String className, String moduleId, String moduleName, String lecturerId, String lecturerName) {
@@ -37,37 +36,34 @@ public class LeaderEditAssign extends FrameFormat {
 
         super.formatWindow("Edit Lecturer Assignment");
 
-        // Get current class object to find IMID
+        moduleCombo.setEnabled(false);
+        intakeModuleCombo.setEnabled(false);
+        classCombo.setEnabled(false);
+        lecturerCombo.setEnabled(true);
+
+        moduleCombo.removeAllItems();
+        moduleCombo.addItem(moduleId + " - " + moduleName);
+
+        // Display current intake-module
         Class classObj = InteractTxt.checkClassID(classId);
         if (classObj != null) {
-            this.currentIMID = classObj.getIMID();
-        }
-
-        initializeComboBoxes();
-
-        loadModuleComboBox();
-
-        moduleCombo.setSelectedItem(moduleId + " - " + moduleName);
-
-        loadIntakeModuleComboBox();
-
-        // Find and set current intake-module (disabled, display-only)
-        if (currentIMID != null) {
-            IntakeModule im = InteractTxt.checkIMID(currentIMID);
+            String imid = classObj.getIMID();
+            IntakeModule im = InteractTxt.checkIMID(imid);
             if (im != null) {
                 Intake intake = InteractTxt.checkIntID(im.getIntakeId());
                 String imDisplay = im.getIMID() + " - "
                         + (intake != null ? intake.getIntakeName() : im.getIntakeId());
-                intakeModuleCombo.setSelectedItem(imDisplay);
+                intakeModuleCombo.removeAllItems();
+                intakeModuleCombo.addItem(imDisplay);
             }
         }
 
-        // Load classes for this intake-module (editable)
-        loadClassComboBox();
-        classCombo.setSelectedItem(classId + " - " + className);
+        // Display current class
+        classCombo.removeAllItems();
+        classCombo.addItem(classId + " - " + className);
 
         // Load lecturers for this module (editable)
-        loadLecturerComboBox();
+        loadLecturerComboBox(moduleId);
 
         // Set current lecturer
         if (lecturerId != null && !lecturerId.equals("NA")) {
@@ -75,73 +71,10 @@ public class LeaderEditAssign extends FrameFormat {
         }
     }
 
-    private void initializeComboBoxes() {
-        moduleCombo.setEnabled(false);
-        intakeModuleCombo.setEnabled(false);
-        classCombo.setEnabled(true);
-        lecturerCombo.setEnabled(true);
-    }
-
-    private void loadModuleComboBox() {
-        moduleCombo.removeAllItems();
-        moduleCombo.addItem("-- Select Module --");
-
-        for (Module module : sessionUser.Lea_Modules) {
-            moduleCombo.addItem(module.getModuleId() + " - " + module.getModuleName());
-        }
-    }
-
-    private void loadIntakeModuleComboBox() {
-        intakeModuleCombo.removeAllItems();
-        intakeModuleCombo.addItem("-- Select Intake-Module --");
-
-        String moduleSelection = (String) moduleCombo.getSelectedItem();
-        if (moduleSelection == null || moduleSelection.startsWith("--")) {
-            return;
-        }
-
-        String moduleId = moduleSelection.split(" - ")[0];
-
-        for (IntakeModule im : InteractTxt.allIntakeModule) {
-            if (im.getModuleId().equals(moduleId)) {
-                Intake intake = InteractTxt.checkIntID(im.getIntakeId());
-                String displayText = im.getIMID() + " - "
-                        + (intake != null ? intake.getIntakeName() : im.getIntakeId());
-                intakeModuleCombo.addItem(displayText);
-            }
-        }
-    }
-
-    private void loadClassComboBox() {
-        classCombo.removeAllItems();
-        classCombo.addItem("-- Select Class --");
-
-        String imSelection = (String) intakeModuleCombo.getSelectedItem();
-        if (imSelection == null || imSelection.startsWith("--")) {
-            return;
-        }
-
-        String imid = imSelection.split(" - ")[0];
-        IntakeModule im = InteractTxt.checkIMID(imid);
-
-        if (im != null && !im.IM_Classes.isEmpty()) {
-            for (Class classObj : im.IM_Classes) {
-                classCombo.addItem(classObj.getClassId() + " - " + classObj.getClassName());
-            }
-        }
-    }
-
-    private void loadLecturerComboBox() {
+    private void loadLecturerComboBox(String moduleId) {
         lecturerCombo.removeAllItems();
         lecturerCombo.addItem("-- Select Lecturer --");
 
-        String moduleSelection = (String) moduleCombo.getSelectedItem();
-        if (moduleSelection == null || moduleSelection.startsWith("--")) {
-            lecturerCombo.addItem("Select a module first");
-            return;
-        }
-
-        String moduleId = moduleSelection.split(" - ")[0];
         Module module = InteractTxt.checkModID(moduleId);
 
         if (module == null) {
@@ -160,79 +93,58 @@ public class LeaderEditAssign extends FrameFormat {
         }
     }
 
-    /**
-     * Update assignment
-     */
     private void updateClassAssignment() {
-        // Validate class selection
-        String classSelection = (String) classCombo.getSelectedItem();
-        if (classSelection == null || classSelection.startsWith("--")) {
-            showError("Please select a Class!");
-            return;
-        }
-
         // Validate lecturer selection - MUST select a lecturer
         String lecturerSelection = (String) lecturerCombo.getSelectedItem();
         if (lecturerSelection == null || lecturerSelection.startsWith("--")
                 || lecturerSelection.equals("No lecturers assigned to this module")
-                || lecturerSelection.equals("Select a module first")
                 || lecturerSelection.equals("Module not found")) {
             showError("Please select a Lecturer!\nTo remove a lecturer, use the 'Remove' option in the main table.");
             return;
         }
 
-        String newClassId = classSelection.split(" - ")[0];
         String lecturerId = lecturerSelection.split(" - ")[0];
 
-        // Get module (fixed)
-        String moduleSelection = (String) moduleCombo.getSelectedItem();
-        String moduleId = moduleSelection.split(" - ")[0];
-        String moduleName = moduleSelection.split(" - ")[1];
-
-        Module module = InteractTxt.checkModID(moduleId);
+        // Get module
+        Module module = InteractTxt.checkModID(currentModuleId);
         if (module == null) {
             showError("Module not found!");
             return;
         }
 
-        // Get new class object
-        Class newClassObj = InteractTxt.checkClassID(newClassId);
-        if (newClassObj == null) {
+        // Get current class object
+        Class classObj = InteractTxt.checkClassID(this.originalClassId);
+        if (classObj == null) {
             showError("Class not found!");
             return;
         }
 
-        // Get old class to remove old assignment
-        Class oldClassObj = InteractTxt.checkClassID(this.originalClassId);
-
-        // Remove old lecturer from old class
-        if (oldClassObj != null && currentLecturerId != null && !currentLecturerId.equals("NA")) {
-            Lecturer oldLecturer = InteractTxt.checkLecID(currentLecturerId);
-            if (oldLecturer != null) {
-                oldLecturer.Lec_Classes.remove(oldClassObj);
-            }
-            // Clear old class assignment
-            oldClassObj.setLecId("NA");
-        }
-
+        // Get new lecturer
         Lecturer newLecturer = InteractTxt.checkLecID(lecturerId);
         if (newLecturer == null) {
             showError("Lecturer not found!");
             return;
         }
 
-        // Verify lecturer is assigned to this module
         if (!module.Mod_Lecturers.contains(newLecturer)) {
             showError("This lecturer is not assigned to the selected module!\n"
                     + "Please assign the lecturer to the module first.");
             return;
         }
 
-        // Check if new class already has a different lecturer
-        if (newClassObj.getLecId() != null && !newClassObj.getLecId().equals("NA")
-                && !newClassObj.getLecId().equals(lecturerId)) {
-            Lecturer existingLecturer = InteractTxt.checkLecID(newClassObj.getLecId());
-            String existingName = existingLecturer != null ? existingLecturer.getName() : newClassObj.getLecId();
+        // Remove old lecturer from class (if exists)
+        if (currentLecturerId != null && !currentLecturerId.equals("NA")) {
+            Lecturer oldLecturer = InteractTxt.checkLecID(currentLecturerId);
+            if (oldLecturer != null) {
+                oldLecturer.Lec_Classes.remove(classObj);
+            }
+        }
+
+        // Check if class already has a different lecturer
+        if (classObj.getLecId() != null && !classObj.getLecId().equals("NA")
+                && !classObj.getLecId().equals(lecturerId)) {
+            Lecturer existingLecturer = InteractTxt.checkLecID(classObj.getLecId());
+            String existingName = existingLecturer != null ? existingLecturer.getName() : classObj.getLecId();
 
             int confirm = JOptionPane.showConfirmDialog(this,
                     "This class is already assigned to " + existingName + ".\n"
@@ -247,7 +159,7 @@ public class LeaderEditAssign extends FrameFormat {
 
             // Remove class from existing lecturer
             if (existingLecturer != null) {
-                existingLecturer.Lec_Classes.remove(newClassObj);
+                existingLecturer.Lec_Classes.remove(classObj);
             }
         }
 
@@ -259,21 +171,19 @@ public class LeaderEditAssign extends FrameFormat {
             module.Mod_Lecturers.add(newLecturer);
         }
 
-        // Assign lecturer to new class
-        newClassObj.setLecId(newLecturer.getId());
-        if (!newLecturer.Lec_Classes.contains(newClassObj)) {
-            newLecturer.Lec_Classes.add(newClassObj);
+        // Assign lecturer to class
+        classObj.setLecId(newLecturer.getId());
+        if (!newLecturer.Lec_Classes.contains(classObj)) {
+            newLecturer.Lec_Classes.add(classObj);
         }
 
-        // Save database
         InteractTxt.saveDatabase();
 
         showSuccess("Assignment updated successfully!\n"
-                + "Module: " + moduleName + "\n"
-                + "Class: " + newClassObj.getClassName() + "\n"
+                + "Module: " + module.getModuleName() + "\n"
+                + "Class: " + classObj.getClassName() + "\n"
                 + "Lecturer: " + newLecturer.getName());
 
-        // Go back
         new LeaderAssign(sessionUser).setVisible(true);
         this.dispose();
     }
