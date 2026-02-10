@@ -262,7 +262,7 @@ public class LeaderReport extends FrameFormat {
                                             totalScore += finalScore;
                                             studentCount++;
 
-                                            // Count as pass if score >= 50%
+                                            // Count as pass if score >= 40
                                             if (finalScore >= 50) {
                                                 passCount++;
                                             }
