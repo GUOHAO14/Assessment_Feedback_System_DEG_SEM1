@@ -24,6 +24,7 @@ public class ManageGradingSystem extends FrameFormat {
     
     public ManageGradingSystem(Admin sessionUser) {
         initComponents();
+        super.formatWindow("Grading System");
         this.sessionUser = sessionUser;
         InteractTxt.allGrading.clear();
         InteractTxt.readGrade();

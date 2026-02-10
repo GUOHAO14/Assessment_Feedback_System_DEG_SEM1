@@ -16,6 +16,7 @@ public class ManageIntakes extends FrameFormat {
 
     public ManageIntakes(Admin sessionUser) {
         initComponents();
+        super.formatWindow("Intakes");
         this.sessionUser = sessionUser;
         for(Intake x : InteractTxt.allIntake){
             model.addRow(new String[]{x.getIntakeId(), x.getIntakeName(), x.getModulesAsString()});

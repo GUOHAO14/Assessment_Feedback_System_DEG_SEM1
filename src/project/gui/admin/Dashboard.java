@@ -8,6 +8,7 @@ public class Dashboard extends FrameFormat {
     private Admin sessionUser;
     public Dashboard(Admin sessionUser) {
         initComponents();
+        super.formatWindow("Dashboard");
         this.sessionUser = sessionUser;
     }
 

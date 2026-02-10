@@ -16,6 +16,7 @@ public class ManageLecturers extends FrameFormat {
     
     public ManageLecturers(Admin sessionUser) {
         initComponents();
+        super.formatWindow("Lecturers");
         this.sessionUser = sessionUser;
         for(Lecturer x : InteractTxt.allLecturer){
             model.addRow(new String[]{x.getId(), x.getName(), x.getEmail(), x.getLeader().getId()});
