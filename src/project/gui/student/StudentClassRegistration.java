@@ -55,7 +55,12 @@ public class StudentClassRegistration extends FrameFormat {
     model1.setRowCount(0);
 
     Intake intake = InteractTxt.checkIntID(intakeId);
-    if (intake == null) return;
+    if (intake == null) {
+        model1.addRow(new Object[]{"No module available", ""});
+        return;
+    }
+
+    boolean hasAvailableModule = false;
 
     for (project.roles.Module m : InteractTxt.checkInt_Modules(intake.getIntakeId())) {
 
@@ -64,18 +69,34 @@ public class StudentClassRegistration extends FrameFormat {
             continue;
         }
 
+        hasAvailableModule = true;
+
         model1.addRow(new Object[]{
             m.getModuleId(),
             m.getModuleName()
         });
     }
+
+    // 🚫 No modules left to register
+    if (!hasAvailableModule) {
+        model1.addRow(new Object[]{"No module available", ""});
+    }
 }
+
 private void setupModuleSelectionListener() {
     jTable1.getSelectionModel().addListSelectionListener(e -> {
         if (!e.getValueIsAdjusting()) {
             int selectedRow = jTable1.getSelectedRow();
             if (selectedRow != -1) {
+
                 String moduleId = jTable1.getValueAt(selectedRow, 0).toString();
+
+                // 🚫 Ignore placeholder row
+                if (moduleId.equals("No module available")) {
+                    ((DefaultTableModel) jTable2.getModel()).setRowCount(0);
+                    return;
+                }
+
                 populateClassTable(moduleId);
             }
         }
