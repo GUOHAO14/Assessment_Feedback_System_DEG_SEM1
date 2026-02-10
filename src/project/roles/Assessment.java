@@ -1,5 +1,6 @@
 package project.roles;
 
+import java.util.ArrayList;
 import project.utils.InteractTxt;
 
 public class Assessment {
@@ -76,7 +77,7 @@ public class Assessment {
         System.out.println(getAssName() + ", " + getAssId() + ", " + getAssType() + ", " + getAssPercentage() + ", " + getAssFullMarks() + ", " + getAssIM().getIMID());
     }
     
-    public static String getNewAssID() {
+    public static String getNewAssID(ArrayList<Assessment> workingAssessmentList) {
         int max = 0;
         for(Assessment x : InteractTxt.allAssessment){
             String numPart = x.getAssId().substring(3);
@@ -85,6 +86,16 @@ public class Assessment {
                 max = num;
             }
         }
+        
+        // also check working assessment list
+        for(Assessment x : workingAssessmentList){
+            String numPart = x.getAssId().substring(3);
+            int num = Integer.parseInt(numPart);
+            if (num > max) {
+                max = num;
+            }
+        }
+        
         String id = "Ass" + (max + 1);
         return id;
     }

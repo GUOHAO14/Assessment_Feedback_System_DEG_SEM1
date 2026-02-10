@@ -616,38 +616,66 @@ public class EnterAssessmentMarks0 extends FrameFormat {
         
         if (chosenIM.IM_Assessments.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Assessment format unset for this module and class.\nGo to Design Assessment page.", "Error - Void Action", 0);
-        } else {
+        } else if (chosenIM.calcTotalAssPercent() != 100) {
+            JOptionPane.showMessageDialog(this, "Cannot add/update score and feedback because assessment format is invalid.\nCombined assessment percentage must be 100%.\nGo to Design Assessment page.", "Error - Invalid Value", 0);
+        } 
+        
+        else {
             //LIKELY correct (not concrete...), if got time use more concrete solution
             
             ArrayList<scoreInputGroup> userInputs = new ArrayList<>();
 
             JPanel panel = new JPanel();
             panel.setLayout(new GridBagLayout());
+            panel.setBackground(new java.awt.Color(230, 240, 255));
             GridBagConstraints gbc = new GridBagConstraints();
-            gbc.insets = new Insets(5, 5, 5, 5);
+            gbc.insets = new Insets(20, 20, 20, 20);
             gbc.fill = GridBagConstraints.HORIZONTAL;
             
-            gbc.gridx = 0;
-            gbc.weightx = 0.0;
-            panel.add(new JLabel("Assessment Type"), gbc);
+            // used for horizontal separator
+            GridBagConstraints gbhs = new GridBagConstraints();
+            gbhs.gridx = 0;
+            gbhs.gridy = row;      // row number
+            gbhs.gridwidth = 5;    // span all columns
+            gbhs.fill = GridBagConstraints.HORIZONTAL;
+            gbhs.insets = new Insets(5, 0, 5, 0);
             
+            JLabel lblType = new JLabel("Assessment Type");
+            lblType.setFont(lblType.getFont().deriveFont(Font.BOLD));
+            panel.add(lblType, gbc);
+
             gbc.gridx = 1;
-            gbc.weightx = 0.0;
-            panel.add(new JLabel("Score"), gbc);
-            
+            JLabel lblName = new JLabel("Assessment Name");
+            lblName.setFont(lblName.getFont().deriveFont(Font.BOLD));
+            panel.add(lblName, gbc);
+
             gbc.gridx = 2;
-            gbc.weightx = 0.0;
-            panel.add(new JLabel("Full Score"), gbc);
-            
+            JLabel lblScore = new JLabel("Score");
+            lblScore.setFont(lblScore.getFont().deriveFont(Font.BOLD));
+            panel.add(lblScore, gbc);
+
             gbc.gridx = 3;
-            gbc.weightx = 1.0;
-            panel.add(new JLabel("Feedback"), gbc);
+            JLabel lblFullScore = new JLabel("Full Score");
+            lblFullScore.setFont(lblFullScore.getFont().deriveFont(Font.BOLD));
+            panel.add(lblFullScore, gbc);
+
+            gbc.gridx = 4;
+            JLabel lblFeedback = new JLabel("Feedback");
+            lblFeedback.setFont(lblFeedback.getFont().deriveFont(Font.BOLD));
+            panel.add(lblFeedback, gbc);
+            
+            panel.add(new JSeparator(SwingConstants.HORIZONTAL), gbhs);
             
             for (Assessment a : chosenIM.IM_Assessments) {
                 String assId = a.getAssId();
                 gbc.gridx = 0;
                 gbc.weightx = 0.0;
-                panel.add(new JLabel(a.getAssName()), gbc);
+                panel.add(new JLabel(a.getAssType()), gbc);
+                
+                gbc.gridx = 1;
+                gbc.weightx = 0.0;
+                JLabel nameLabel = new JLabel("<html><body style='width:125px'>" + a.getAssName() + "</body></html>");
+                panel.add(nameLabel, gbc);
                 
                 JTextField scoreField = new JTextField(10);
                 JTextArea feedbackField = new JTextArea(10, 30);
@@ -663,16 +691,16 @@ public class EnterAssessmentMarks0 extends FrameFormat {
                         feedbackField.setText(ss.getFeedback());
                     }
                 }
-                gbc.gridx = 1;
+                gbc.gridx = 2;
                 gbc.weightx = 0.0;
                 panel.add(scoreField, gbc);
                 
                 String fullMarks = a.getAssFullMarks();
-                gbc.gridx = 2;
+                gbc.gridx = 3;
                 gbc.weightx = 0.0;
                 panel.add(new JLabel(fullMarks), gbc);
                 
-                gbc.gridx = 3;
+                gbc.gridx = 4;
                 gbc.weightx = 1.0;
                 panel.add(scrollPane, gbc);
                 
@@ -692,7 +720,7 @@ public class EnterAssessmentMarks0 extends FrameFormat {
             
             JScrollPane scrollableContainer = new JScrollPane(panel);
             
-            int maxWidth = 690;
+            int maxWidth = 1000;
             int maxHeight = 500;
             Dimension maxScrollPaneSize = new Dimension(maxWidth, maxHeight);
             scrollableContainer.setPreferredSize(maxScrollPaneSize);
@@ -727,7 +755,7 @@ public class EnterAssessmentMarks0 extends FrameFormat {
                                             throw new Exception();
                                         }
                                         if (feedbackInput.length() < Constants.FEEDBACK_MIN_LENGTH || feedbackInput.length() > Constants.FEEDBACK_MAX_LENGTH) {
-                                            throw new IntegerRangeException("Feedback", Constants.FEEDBACK_MIN_LENGTH, Constants.FEEDBACK_MAX_LENGTH);
+                                            throw new IntegerRangeException("Feedback length", Constants.FEEDBACK_MIN_LENGTH, Constants.FEEDBACK_MAX_LENGTH);
                                         } 
                                         ss.setOrginalScore(scoreInput);
                                         ss.setFinalScore(finalScoreInput);
@@ -774,7 +802,9 @@ public class EnterAssessmentMarks0 extends FrameFormat {
                         } else {
                             break;
                         }
-                    } catch (NumberFormatException | IntegerRangeException e) {
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(this, "Score value must be numeric.\nDecimal are allowed.", "Error - Invalid Value", 0);
+                    } catch (IntegerRangeException e) {
                         JOptionPane.showMessageDialog(this, e.getMessage(), "Error - Invalid Value", 0);
                     } catch (Exception e) {
                         JOptionPane.showMessageDialog(this, "Assessment edit failed.\nReport this error.", "Error - Unknown Error", 0);

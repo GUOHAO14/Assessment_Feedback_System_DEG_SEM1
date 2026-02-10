@@ -51,4 +51,12 @@ public class IntakeModule {
     public String toString() {
         return getIMID() + " (" + getIMName() + ")";
     }
+    
+    public int calcTotalAssPercent() {
+        int total = 0;
+        for (Assessment ass : this.IM_Assessments) {
+            total += Integer.parseInt(ass.getAssPercentage());
+        }
+        return total;
+    }
 }

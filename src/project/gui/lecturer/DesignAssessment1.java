@@ -25,6 +25,9 @@ public class DesignAssessment1 extends FrameFormat {
     private ArrayList<Assessment> workingAssessmentList = new ArrayList<>();
     private ArrayList<String> usedAssIds = new ArrayList<>();
     private boolean saveStatus = true;
+    private ArrayList<Assessment> userDeleteAss = new ArrayList<>();
+    private ArrayList<String> userDeleteAssId = new ArrayList<>();
+    private ArrayList<Assessment> newChanges = new ArrayList<>();
     
     // constructor
     public DesignAssessment1(Lecturer sessionUser, IntakeModule designIM) {
@@ -38,6 +41,7 @@ public class DesignAssessment1 extends FrameFormat {
         assessmentContainer.setLayout(
             new BoxLayout(assessmentContainer, BoxLayout.Y_AXIS)
         );
+        assessmentContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
         saveChanges.setEnabled(false);
         workingAssessmentList = new ArrayList<>();
         
@@ -48,8 +52,17 @@ public class DesignAssessment1 extends FrameFormat {
         identifyInUseAssessment();
         generateAssessmentList(workingAssessmentList);
         
-        intakeText.setText("Intake: "+designIM.getIntakeId()+" ("+InteractTxt.checkIntID(designIM.getIntakeId()).getIntakeName()+")");
-        moduleText.setText("Module: "+designIM.getModuleId()+" ("+InteractTxt.checkModID(designIM.getModuleId()).getModuleName()+")");
+        int width = intakeText.getWidth();
+        intakeText.setText(
+            "<html><div style='width:" + width + "px;'>"
+            + "Intake: "+designIM.getIntakeId()+" ("+InteractTxt.checkIntID(designIM.getIntakeId()).getIntakeName()+")"
+            + "</div></html>"
+        );
+        moduleText.setText(
+            "<html><div style='width:" + width + "px;'>"
+            + "Module: "+designIM.getModuleId()+" ("+InteractTxt.checkModID(designIM.getModuleId()).getModuleName()+")"
+            + "</div></html>"
+        );
     }
     
     
@@ -64,28 +77,124 @@ public class DesignAssessment1 extends FrameFormat {
             String name = a.getAssName();
             String percent = a.getAssPercentage();
             
-            JButton part = new JButton("<html>"+type+" ("+percent+"%) - "+name+"</html>");
+            JPanel row = new JPanel(new BorderLayout(10, 0));
+            row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+            row.setAlignmentX(Component.CENTER_ALIGNMENT);
+            row.setOpaque(false);
             
+            JButton part = new JButton("<html>"+type+" ("+percent+"%) - "+name+"</html>");
             //button and panel design
-            part.setHorizontalAlignment(SwingConstants.LEFT);  // <--- key
+            part.setHorizontalAlignment(SwingConstants.LEFT); 
 
-            // Optional: add some padding so text isn't right at the edge
             part.setMargin(new Insets(10, 10, 10, 10));
-
             part.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
-            part.setPreferredSize(new Dimension(assessmentContainer.getWidth() - 100, 50)); 
-
+            part.setPreferredSize(new Dimension(assessmentContainer.getWidth() - 100, 50));
+            
+            JButton deleteBtn = new JButton("🗑");
+            deleteBtn.setFont(new Font("Dialog", Font.BOLD, 20));
+            deleteBtn.setForeground(new Color(200, 0, 0));
+            deleteBtn.setPreferredSize(new Dimension(60, 30));
+            deleteBtn.setFocusPainted(false);
+            deleteBtn.setToolTipText("Delete assessment");
+            
             part.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     createEditDialog(a);
                 }
             });
             
+            deleteBtn.addActionListener(e -> {
+                if (!userDeleteAss.contains(a)) {
+
+                    int confirm = JOptionPane.showConfirmDialog(
+                        this,
+                        "Delete this assessment?\nTo finalise the deletion, click \"Save\" button.",
+                        "Confirm Delete",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE
+                    );
+
+                    if (confirm == JOptionPane.YES_OPTION) {
+
+                        // add to delete list
+                        userDeleteAss.add(a);
+                        userDeleteAssId.add(a.getAssId());
+                        newChanges.add(a);
+                        updateSaveButtonState();
+
+                        // visual feedback
+                        row.setBackground(new Color(255, 200, 200)); // light red
+                        row.setOpaque(true);
+
+                        part.setBackground(new Color(255, 180, 180));
+                        part.setOpaque(true);
+
+                        // change delete button to revert
+                        deleteBtn.setText("↩"); // or "⟲"
+                        deleteBtn.setFont(new Font("Dialog", Font.BOLD, 16));
+                        deleteBtn.setToolTipText("Revert deletion");
+                        deleteBtn.setForeground(new Color(0, 200, 0));
+                    }
+
+                }
+                // undo/revert delete
+                else {
+                    int confirm = JOptionPane.showConfirmDialog(
+                        this,
+                        "Undo assessment delete?",
+                        "Confirm Undo Delete",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE
+                    );
+
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        // remove from delete list
+                        userDeleteAss.remove(a);
+                        userDeleteAssId.remove(a.getAssId());
+                        newChanges.remove(a);
+                        updateSaveButtonState();
+
+                        // restore visuals
+                        row.setBackground(null);
+                        row.setOpaque(false);
+
+                        part.setBackground(null);
+                        part.setOpaque(false);
+
+                        // restore delete button
+                        deleteBtn.setText("🗑");
+                        deleteBtn.setToolTipText("Delete assessment");
+                        deleteBtn.setFont(new Font("Dialog", Font.BOLD, 20));
+                        deleteBtn.setForeground(new Color(200, 0, 0));
+                    }
+                }
+            });
+            
+            row.add(part, BorderLayout.CENTER);
+            row.add(deleteBtn, BorderLayout.EAST);
+
+            assessmentContainer.add(row);
             // FORCE size so Swing cannot collapse it
-            assessmentContainer.add(part);
-            assessmentContainer.revalidate();
-            assessmentContainer.repaint();
         });
+        assessmentContainer.revalidate();
+        assessmentContainer.repaint();
+    }
+    
+    private void updateSaveButtonState() {
+        saveChanges.setEnabled(!newChanges.isEmpty());
+    }
+    
+    private int calcTotalPercent() {
+        int total = 0;
+        for (Assessment ass : workingAssessmentList) {
+            total += Integer.parseInt(ass.getAssPercentage());
+        }
+        
+        for (Assessment ass : userDeleteAss) {
+            total -= Integer.parseInt(ass.getAssPercentage());
+        }
+        
+        return total;
     }
     
     private void createEditDialog(Assessment a) {
@@ -138,7 +247,7 @@ public class DesignAssessment1 extends FrameFormat {
                 
                 int userConfirm = JOptionPane.showConfirmDialog(
                         this, 
-                        "Type: " + type+"\nName: " + name+"\nFull Marks: "+fullMarks+"\nScore Percent: " + percent, 
+                        "<html><h3>Confirm Assessment Details.</h3>Type: " + type+"<br>Name: " + name+"<br>Full Marks: "+fullMarks+"<br>Score Percent: " + percent+"</html>", 
                         "Confirm Creation", 
                         JOptionPane.YES_NO_OPTION);
                 if (userConfirm == JOptionPane.YES_OPTION) {
@@ -175,7 +284,7 @@ public class DesignAssessment1 extends FrameFormat {
                         
                         // create new assessment
                         if (createSignal) {
-                            String newId = Assessment.getNewAssID();
+                            String newId = Assessment.getNewAssID(workingAssessmentList);
                             Assessment newAssessment = new Assessment(newId, name, type, percent, fullMarks, designIM);
 
                             workingAssessmentList.add(newAssessment);
@@ -189,12 +298,12 @@ public class DesignAssessment1 extends FrameFormat {
                         
                         JOptionPane.showMessageDialog(
                                 this, 
-                                "Assessment creted.\nType: " + type+"\nName: " + name+"\nFull Marks: "+fullMarks+"\nScore Percent: " + percent,
-                                "Assessment Creation", 
+                                "<html><h3>Assessment Created.</h3>Type: " + type+"<br>Name: " + name+"<br>Full Marks: "+fullMarks+"<br>Score Percent: " + percent,
+                                "Assessment Creation</html>", 
                                 1);
                         
-                        saveChanges.setEnabled(true);
-                        saveStatus = false;
+                        newChanges.add(a);
+                        updateSaveButtonState();
                         generateAssessmentList(workingAssessmentList);
                         loop = false;
                     } catch (NumberFormatException e) {
@@ -264,7 +373,7 @@ public class DesignAssessment1 extends FrameFormat {
         assessmentContainer.setLayout(assessmentContainerLayout);
         assessmentContainerLayout.setHorizontalGroup(
             assessmentContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 467, Short.MAX_VALUE)
+            .addGap(0, 476, Short.MAX_VALUE)
         );
         assessmentContainerLayout.setVerticalGroup(
             assessmentContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -297,28 +406,26 @@ public class DesignAssessment1 extends FrameFormat {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(112, 112, 112)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap()
+                        .addComponent(backButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(103, 103, 103)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(moduleText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(intakeText, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(29, 29, 29)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(moduleText, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
-                                    .addComponent(intakeText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(94, 94, 94)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(115, 115, 115)
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(263, 263, 263)
-                        .addComponent(saveChanges, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(backButton)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(68, 68, 68)
+                        .addComponent(assessmentScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 482, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(71, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(71, Short.MAX_VALUE)
-                .addComponent(assessmentScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(71, 71, 71))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(saveChanges, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(267, 267, 267))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -354,18 +461,46 @@ public class DesignAssessment1 extends FrameFormat {
 
     private void saveChangesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveChangesActionPerformed
         // TODO add your handling code here:
-        int total = 0;
-        for (Assessment ass : workingAssessmentList) {
-            total += Integer.parseInt(ass.getAssPercentage());
-        }
+        boolean deletingAssSignal1 = false;
+        boolean deletingAssSignal2 = false;
+        ArrayList<Assessment> deletingAss1 = new ArrayList<>();
+        ArrayList<String> deletingAssId1 = new ArrayList<>();
+        ArrayList<Assessment> deletingAss2 = new ArrayList<>();
+        ArrayList<String> deletingAssId2 = new ArrayList<>();
         
         try {
-            if (total != 100) {
-                throw new ValueErrorException("100", "total combined percentage");
-            } 
-
-            ArrayList<Assessment> deletingAss = new ArrayList<>();
+//            if (calcTotalPercent() != 100) {
+//                throw new ValueErrorException("100", "total combined percentage");
+//            } 
+//            
+            for (Assessment a : userDeleteAss) {
+                if (usedAssIds.contains(a.getAssId())) {
+                    deletingAss1.add(a);
+                }
+            }
             
+            for (Assessment ass : deletingAss1) {
+                deletingAssId1.add(ass.getAssId()+" ("+ass.getAssName()+")");
+            }
+            
+            // check for assessment deletes
+            if (!deletingAss1.isEmpty()) {
+                
+                int userConfirm = JOptionPane.showConfirmDialog(
+                    this, 
+                    "There are already student scores recorded for:\n"+String.join(",\n", deletingAssId1)+".\nIf you insist to save your changes, all existing student scores and grades for the selected assessment(s).\nProceed to Save Changes?", 
+                    "Confirm Assessment Delete", 
+                    JOptionPane.YES_NO_OPTION, 
+                2);
+
+                if (userConfirm == JOptionPane.YES_OPTION) {
+                    deletingAssSignal1 = true;
+                } else {
+                    throw new DontSaveChangesException();
+                }
+            }
+            
+            // check for assessment edits
             // check if existing assessment change does not involve percent or full marks
             // if yes, that assessment's existing records must be deleted 
             // therefore, add it into a deletingAss arraylist 
@@ -374,39 +509,74 @@ public class DesignAssessment1 extends FrameFormat {
 
                     if (newAss.getAssId().equals(oldAss.getAssId())) {
                         if (usedAssIds.contains(oldAss.getAssId()) && (!oldAss.getAssPercentage().equals(newAss.getAssPercentage()) || !oldAss.getAssFullMarks().equals(newAss.getAssFullMarks()))) {
-                            deletingAss.add(oldAss);
+                            deletingAss2.add(oldAss);
                         }
                     }
                 }
             }
 
-            ArrayList<String> deletingID = new ArrayList<>();
-            for (Assessment a : deletingAss) {
-                deletingID.add(a.getAssId()+" ("+a.getAssName()+")");
+            for (Assessment a : deletingAss2) {
+                deletingAssId2.add(a.getAssId()+" ("+a.getAssName()+")");
             }
             
             // if deletingAss has items --> got assessment needed to be deleted
             // ask user for confirmation
-            if (!deletingAss.isEmpty()) {
+            if (!deletingAss2.isEmpty()) {
                 int userConfirm = JOptionPane.showConfirmDialog(
                 this, 
-                "There are already student scores recorded for "+String.join(", ", deletingID)+".\nIf you insist this change, all existing student scores and grades will be deleted for this intake module.\nProceed with the change?", 
-                "Assessment Creation", 
+                "There are already student scores recorded for:\n"+String.join(",\n", deletingAssId2)+".\nIf you insist to save your changes, all existing student scores and grades for the edited assessment(s).\nProceed to Save Changes?", 
+                "Confirm Assessment Edit", 
                 JOptionPane.YES_NO_OPTION, 
                 2);
 
                 if (userConfirm == JOptionPane.YES_OPTION) {
-                    //reset all student grades
-                    Tools.setAllAssStuGrades(designIM, "NA");
-                    //delete score
-                    for (Assessment byeAss : deletingAss) {
-                        Tools.deleteAllAssStuScores(byeAss);
-                    }
+                    deletingAssSignal2 = true;
                 } else {
                     throw new DontSaveChangesException();
                 }
+            }
+            
+            if (deletingAssSignal1 || deletingAssSignal2) {
+                //reset all student grades
+                Tools.setAllAssStuGrades(designIM, "NA");
             } 
             
+            System.out.println("hey this is deleting ass 1 GUOHAO GUO HAO GUO HAO");
+            if (deletingAssSignal1) {
+                //delete score
+                System.out.println("yep we're in");
+                for (Assessment byeAss : deletingAss1) {
+                    Tools.deleteAllAssStuScores(byeAss);
+                }
+            }
+            
+            if (deletingAssSignal2) {
+                //delete score
+                for (Assessment byeAss : deletingAss2) {
+                    Tools.deleteAllAssStuScores(byeAss);
+                }
+            }
+            
+            for (Assessment a : userDeleteAss) {
+                System.out.println("HEY: "+a.getAssId());
+            }
+            
+            if (!userDeleteAss.isEmpty()) {
+                // delete the assessment from workingAssessmentList
+                // later will overwrite the old assessment list
+                Iterator<Assessment> assIterator = workingAssessmentList.iterator();
+
+                // loop using the iterator's methods
+                while (assIterator.hasNext()) {
+                    Assessment a = assIterator.next();
+                    System.out.println(a.getAssId());
+                    // search for assessments that are under the current intake_module
+                    if (userDeleteAssId.contains(a.getAssId())) {
+                        // remove the old assessments
+                        assIterator.remove(); 
+                    }
+                }
+            }
             // clear original assessments
             designIM.IM_Assessments.clear();
             
@@ -429,23 +599,34 @@ public class DesignAssessment1 extends FrameFormat {
             
             //indicate that changes have been saved
             saveChanges.setEnabled(false);
-            saveStatus = true;
+            
+            JOptionPane.showMessageDialog(
+                this, 
+                "Your changes are saved.",
+                "Save Changes", 
+                1);
+            // reset arrays and start fresh
+            workingAssessmentList.clear();
+            newChanges.clear();
+            for (Assessment a : designIM.IM_Assessments) {
+                workingAssessmentList.add(new Assessment(a));
+            }
+            generateAssessmentList(workingAssessmentList);
 
-        } catch (ValueErrorException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error - Invalid Value", 0);
+//        } catch (ValueErrorException e) {
+//            JOptionPane.showMessageDialog(this, e.getMessage(), "Error - Invalid Value", 0);
         } catch (DontSaveChangesException e) {
             JOptionPane.showMessageDialog(this, "No changes are made.", "Info - Discard Changes", 1);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage()+"\nReport this error.", "Error - Unknown Error", 0);
             e.printStackTrace();
         }
-        
-        
     }//GEN-LAST:event_saveChangesActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         // TODO add your handling code here:
-        if (saveStatus) {
+        int assToBeSaved = newChanges.size();
+        if (assToBeSaved == 0) {
             new DesignAssessment0(sessionUser).setVisible(true);
             this.dispose();
         } else {
@@ -458,13 +639,6 @@ public class DesignAssessment1 extends FrameFormat {
             switch (userConfirm) {
                 case JOptionPane.YES_OPTION -> {
                     saveChanges.doClick();
-                    JOptionPane.showMessageDialog(
-                                this, 
-                                "Your changes are saved.\nYou will now safely exit the page.",
-                                "Save Changes and Exit", 
-                                1);
-                    new DesignAssessment0(sessionUser).setVisible(true);
-                    this.dispose();
                 }
                 case JOptionPane.NO_OPTION -> {
                     JOptionPane.showMessageDialog(

@@ -1,24 +1,40 @@
 Mod1
-Java OODJ
-lc076357
+Switching and Routing
+lc76357
 
 Mod2
-Python
-lc076357
+CTF Strategies
+lc76357
 
 Mod3
-C++
-lc456
+Network Administration
+lc76366
 
 Mod4
-Intro to Cyber
-lc456
+DevOps Fundamental
+lc76357
 
 Mod5
-Object Oriented Programming
-lc76364
+Python Programming
+lc76367
 
 Mod6
-Data Structures
-lc76364
+Java Programming
+lc76367
+
+Mod7
+Web Programming
+lc76367
+
+Mod8
+System Analysis
+lc76368
+
+Mod9
+Network Security
+lc76368
+
+Mod10
+Database Management
+lc76368
 

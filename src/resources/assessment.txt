@@ -41,7 +41,7 @@ Assignment
 IMID2
 
 Ass5
-Final Exam hehe
+Final Exam 
 Examination
 80
 30
@@ -53,4 +53,151 @@ Presentation
 100
 10
 IMID2
+
+Ass9
+Individual Assignment
+Assignment
+50
+40
+IMID4
+
+Ass10
+Quiz
+Class Test
+20
+20
+IMID4
+
+Ass11
+Final Exam
+Examination
+100
+40
+IMID4
+
+Ass12
+Group Assignment
+Assignment
+100
+50
+IMID5
+
+Ass13
+Midterm Test
+Class Test
+50
+30
+IMID5
+
+Ass14
+Presentation
+Presentation
+50
+20
+IMID5
+
+Ass15
+Individual Assignment
+Assignment
+60
+30
+IMID6
+
+Ass16
+Practical Test
+Class Test
+40
+30
+IMID6
+
+Ass17
+Final Exam
+Examination
+100
+40
+IMID6
+
+Ass18
+Group Project
+Assignment
+100
+50
+IMID7
+
+Ass19
+Presentation
+Presentation
+50
+20
+IMID7
+
+Ass20
+Quiz
+Class Test
+30
+30
+IMID7
+
+Ass21
+Individual Assignment
+Assignment
+70
+40
+IMID8
+
+Ass22
+Test Skills
+Class Test
+50
+20
+IMID8
+
+Ass23
+Final Exam
+Examination
+100
+40
+IMID8
+
+Ass24
+Group Assignment
+Assignment
+100
+50
+IMID9
+
+Ass25
+Test Skills
+Class Test
+50
+30
+IMID9
+
+Ass26
+Group Presentation
+Presentation
+100
+20
+IMID9
+
+Ass27
+Capstone Project
+Assignment
+100
+60
+IMID10
+
+Ass28
+Final Presentation
+Presentation
+100
+20
+IMID10
+
+Ass29
+Final Exam
+Examination
+100
+20
+IMID10
 

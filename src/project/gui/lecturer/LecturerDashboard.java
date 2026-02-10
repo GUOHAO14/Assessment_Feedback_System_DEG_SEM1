@@ -103,13 +103,13 @@ public class LecturerDashboard extends FrameFormat {
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addComponent(welcomeText)
-                .addGap(26, 26, 26)
-                .addComponent(profileButton, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addComponent(profileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(designAssessment, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(designAssessment1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37))
+                .addGap(51, 51, 51))
         );
 
         pack();
@@ -161,7 +161,7 @@ public class LecturerDashboard extends FrameFormat {
 
         /* Create and display the form */
         InteractTxt.initDatabase();
-        String x = "lc076206";
+        String x = "lc76359";
         InteractTxt.allLecturer.forEach(l -> {
             System.out.println(l.getId());
             if (l.getId().equals(x)) {
