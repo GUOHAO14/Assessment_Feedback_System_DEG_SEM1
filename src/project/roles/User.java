@@ -27,9 +27,6 @@ public abstract class User {
         this.email = email;
         this.password = password;
         this.role = role;
-        // add input validation here 
-        // add try-catch
-        // add JOptionPane (class)
     }
     
     public void setDetails(String [] data) {
@@ -37,10 +34,6 @@ public abstract class User {
         this.email = data[2];
         this.password = data[3];
         this.role = data[4];
-        
-        // add input validation here 
-        // add try-catch
-        // add JOptionPane (class)
     }
     
     public String getId() {
