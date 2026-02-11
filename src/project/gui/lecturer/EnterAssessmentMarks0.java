@@ -632,14 +632,6 @@ public class EnterAssessmentMarks0 extends FrameFormat {
             gbc.insets = new Insets(20, 20, 20, 20);
             gbc.fill = GridBagConstraints.HORIZONTAL;
             
-            // used for horizontal separator
-            GridBagConstraints gbhs = new GridBagConstraints();
-            gbhs.gridx = 0;
-            gbhs.gridy = row;      // row number
-            gbhs.gridwidth = 5;    // span all columns
-            gbhs.fill = GridBagConstraints.HORIZONTAL;
-            gbhs.insets = new Insets(5, 0, 5, 0);
-            
             JLabel lblType = new JLabel("Assessment Type");
             lblType.setFont(lblType.getFont().deriveFont(Font.BOLD));
             panel.add(lblType, gbc);
@@ -663,8 +655,6 @@ public class EnterAssessmentMarks0 extends FrameFormat {
             JLabel lblFeedback = new JLabel("Feedback");
             lblFeedback.setFont(lblFeedback.getFont().deriveFont(Font.BOLD));
             panel.add(lblFeedback, gbc);
-            
-            panel.add(new JSeparator(SwingConstants.HORIZONTAL), gbhs);
             
             for (Assessment a : chosenIM.IM_Assessments) {
                 String assId = a.getAssId();

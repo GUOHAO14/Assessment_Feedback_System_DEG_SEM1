@@ -117,27 +117,6 @@ Examination
 40
 IMID6
 
-Ass21
-Individual Assignment
-Assignment
-70
-40
-IMID8
-
-Ass22
-Test Skills
-Class Test
-50
-20
-IMID8
-
-Ass23
-Final Exam
-Examination
-100
-40
-IMID8
-
 Ass24
 Group Assignment
 Assignment
@@ -200,4 +179,25 @@ Assignment
 67
 67
 IMID7
+
+Ass21
+Individual Assignment
+Assignment
+70
+40
+IMID8
+
+Ass22
+Test Skills
+Class Test
+50
+20
+IMID8
+
+Ass31
+Final Exam
+Examination
+100
+40
+IMID8
 

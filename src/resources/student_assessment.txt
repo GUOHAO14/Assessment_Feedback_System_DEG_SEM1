@@ -440,27 +440,6 @@ Ass29
 Perfect
 
 tp76270
-Ass21
-34.3
-60
-70
-Perfect
-
-tp76270
-Ass22
-17.6
-44
-50
-Perfect
-
-tp76270
-Ass23
-39.2
-98
-100
-Perfect
-
-tp76270
 Ass24
 44.0
 88
@@ -480,6 +459,27 @@ Ass26
 99
 100
 Perfect
+
+tp76270
+Ass21
+34.3
+60
+70
+Perfect
+
+tp76270
+Ass22
+17.6
+44
+50
+Perfect
+
+tp76270
+Ass31
+35.2
+88
+100
+that's my goat right there
 
 tp76271
 Ass15
@@ -522,13 +522,6 @@ Ass22
 45
 50
 Good
-
-tp76271
-Ass23
-36.0
-90
-100
-Awesome
 
 tp76271
 Ass27
@@ -622,27 +615,6 @@ Ass29
 OMG
 
 tp76272
-Ass21
-34.3
-60
-70
-Perfect
-
-tp76272
-Ass22
-16.0
-40
-50
-Not bad
-
-tp76272
-Ass23
-36.0
-90
-100
-Nice
-
-tp76272
 Ass24
 44.0
 88
@@ -662,6 +634,27 @@ Ass26
 98
 100
 Perfect
+
+tp76272
+Ass21
+34.3
+60
+70
+Perfect
+
+tp76272
+Ass22
+16.0
+40
+50
+Not bad
+
+tp76272
+Ass31
+28.0
+70
+100
+Great stuff colwyn but u need to start studying WITHOUT watching some vtuber streaming at the same time bruh. 
 
 tp76273
 Ass15
@@ -683,13 +676,6 @@ Ass17
 35
 100
 Final exam done well.
-
-tp76273
-Ass18
-49.0
-25
-50
-Group project done.
 
 tp76273
 Ass19
