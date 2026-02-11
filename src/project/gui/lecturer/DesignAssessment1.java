@@ -488,7 +488,7 @@ public class DesignAssessment1 extends FrameFormat {
                 
                 int userConfirm = JOptionPane.showConfirmDialog(
                     this, 
-                    "There are already student scores recorded for:\n"+String.join(",\n", deletingAssId1)+".\nIf you insist to save your changes, all existing student scores and grades for the selected assessment(s).\nProceed to Save Changes?", 
+                    "There are already student scores recorded for:\n"+String.join(",\n", deletingAssId1)+".\nIf you insist to save your changes, all existing student scores and grades for the selected assessment(s) will be deleted.\nProceed to Save Changes?", 
                     "Confirm Assessment Delete", 
                     JOptionPane.YES_NO_OPTION, 
                 2);

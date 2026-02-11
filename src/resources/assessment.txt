@@ -117,27 +117,6 @@ Examination
 40
 IMID6
 
-Ass18
-Group Project
-Assignment
-100
-50
-IMID7
-
-Ass19
-Presentation
-Presentation
-50
-20
-IMID7
-
-Ass20
-Quiz
-Class Test
-30
-30
-IMID7
-
 Ass21
 Individual Assignment
 Assignment
@@ -200,4 +179,25 @@ Examination
 100
 20
 IMID10
+
+Ass19
+Presentation
+Presentation
+11
+1
+IMID7
+
+Ass20
+Quiz
+Class Test
+30
+30
+IMID7
+
+Ass30
+mogging test
+Assignment
+67
+67
+IMID7
 
