@@ -70,7 +70,7 @@ public class LeaderAssign extends FrameFormat {
                 String className = model.getValueAt(row, 1).toString();
                 String lecturerName = model.getValueAt(row, 4).toString();
 
-                // Find the lecturerId from the lecturer name
+               
                 String lecturerId = findLecturerIdByName(lecturerName);
 
                 int confirm = JOptionPane.showConfirmDialog(
@@ -83,10 +83,10 @@ public class LeaderAssign extends FrameFormat {
                         Lecturer lecturer = InteractTxt.checkLecID(lecturerId);
 
                         if (classObj != null && lecturer != null) {
-                            // Remove lecturer from class
+                            
                             classObj.setLecId("NA");
 
-                            // Remove class from lecturer
+                           
                             lecturer.Lec_Classes.remove(classObj);
 
                             InteractTxt.saveDatabase();
@@ -164,12 +164,10 @@ public class LeaderAssign extends FrameFormat {
     public void loadModuleData() {
         model.setRowCount(0);
 
-        // Get selected filters
         String selectedModule = (String) moduleFilter.getSelectedItem();
         String selectedLecturer = (String) lecturerFilter.getSelectedItem();
         String selectedIntake = (String) intakeFilter.getSelectedItem();
 
-        // Extract IDs from selections (if not "All")
         String filterModuleId = null;
         String filterLecturerId = null;
         String filterIntakeId = null;

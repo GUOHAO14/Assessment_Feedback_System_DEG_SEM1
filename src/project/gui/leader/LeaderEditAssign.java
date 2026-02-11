@@ -44,7 +44,7 @@ public class LeaderEditAssign extends FrameFormat {
         moduleCombo.removeAllItems();
         moduleCombo.addItem(moduleId + " - " + moduleName);
 
-        // Display current intake-module
+       
         Class classObj = InteractTxt.checkClassID(classId);
         if (classObj != null) {
             String imid = classObj.getIMID();
@@ -58,14 +58,14 @@ public class LeaderEditAssign extends FrameFormat {
             }
         }
 
-        // Display current class
+       
         classCombo.removeAllItems();
         classCombo.addItem(classId + " - " + className);
 
         // Load lecturers for this module (editable)
         loadLecturerComboBox(moduleId);
 
-        // Set current lecturer
+        
         if (lecturerId != null && !lecturerId.equals("NA")) {
             lecturerCombo.setSelectedItem(lecturerId + " - " + lecturerName);
         }
@@ -105,21 +105,21 @@ public class LeaderEditAssign extends FrameFormat {
 
         String lecturerId = lecturerSelection.split(" - ")[0];
 
-        // Get module
+        
         Module module = InteractTxt.checkModID(currentModuleId);
         if (module == null) {
             showError("Module not found!");
             return;
         }
 
-        // Get current class object
+
         Class classObj = InteractTxt.checkClassID(this.originalClassId);
         if (classObj == null) {
             showError("Class not found!");
             return;
         }
 
-        // Get new lecturer
+    
         Lecturer newLecturer = InteractTxt.checkLecID(lecturerId);
         if (newLecturer == null) {
             showError("Lecturer not found!");

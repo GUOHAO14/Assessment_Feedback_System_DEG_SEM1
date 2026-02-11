@@ -81,7 +81,7 @@ public class LeaderReport extends FrameFormat {
                 break;
         }
     }
-    
+
     private void generateModulePerformanceReport() {
         reportTableModel.setColumnIdentifiers(new String[]{
             "Module ID", "Module Name", "Total Classes", "Assigned Lecturers", "Total Students", "Total Assessments", "Avg Score"
@@ -94,7 +94,6 @@ public class LeaderReport extends FrameFormat {
             double totalScore = 0;
             int scoreCount = 0;
 
-            // Count classes, students, and assessments
             for (IntakeModule im : InteractTxt.allIntakeModule) {
                 if (im.getModuleId().equals(module.getModuleId())) {
                     totalClasses += im.IM_Classes.size();
@@ -103,16 +102,20 @@ public class LeaderReport extends FrameFormat {
                     for (Class classObj : im.IM_Classes) {
                         totalStudents += classObj.Class_Students.size();
 
-                        // Calculate average score from assessments
                         for (Student student : classObj.Class_Students) {
                             for (StudentScore score : student.Stu_Scores) {
                                 if (score.getAssessment().getAssIM().getIMID().equals(im.getIMID())) {
                                     try {
-                                        double finalScore = Double.parseDouble(score.getFinalScore());
-                                        totalScore += finalScore;
+
+                                        double originalScore = Double.parseDouble(score.getOrginalScore());
+                                        double fullMarks = Double.parseDouble(score.getOriginalFullMarks());
+
+                                        double percentageScore = (originalScore / fullMarks) * 100;
+
+                                        totalScore += percentageScore;
                                         scoreCount++;
-                                    } catch (NumberFormatException e) {
-                                        // Skip invalid scores
+                                    } catch (NumberFormatException | ArithmeticException e) {
+                                        // Skip invalid scores or division by zero
                                     }
                                 }
                             }
@@ -258,16 +261,21 @@ public class LeaderReport extends FrameFormat {
                                 for (StudentScore score : student.Stu_Scores) {
                                     if (score.getAssessment().getAssId().equals(assessment.getAssId())) {
                                         try {
-                                            double finalScore = Double.parseDouble(score.getFinalScore());
-                                            totalScore += finalScore;
+
+                                            double originalScore = Double.parseDouble(score.getOrginalScore());
+                                            double fullMarks = Double.parseDouble(score.getOriginalFullMarks());
+
+                                            double percentageScore = (originalScore / fullMarks) * 100;
+
+                                            totalScore += percentageScore;
                                             studentCount++;
 
-                                            // Count as pass if score >= 40
-                                            if (finalScore >= 40) {
+                                            
+                                            if (percentageScore >= 40) {
                                                 passCount++;
                                             }
-                                        } catch (NumberFormatException e) {
-                                            // Skip invalid scores
+                                        } catch (NumberFormatException | ArithmeticException e) {
+                                            // Skip invalid scores or division by zero
                                         }
                                     }
                                 }
@@ -304,21 +312,21 @@ public class LeaderReport extends FrameFormat {
             "Category", "Count", "Details"
         });
 
-        // Total Modules
+       
         reportTableModel.addRow(new Object[]{
             "Total Modules Managed",
             sessionUser.Lea_Modules.size(),
             "Modules under your leadership"
         });
 
-        // Total Lecturers
+     
         reportTableModel.addRow(new Object[]{
             "Total Lecturers in Team",
             sessionUser.leaderTeam.size(),
             "Lecturers reporting to you"
         });
 
-        // Total Classes
+        
         int totalClasses = 0;
         int totalStudents = 0;
 
@@ -371,7 +379,7 @@ public class LeaderReport extends FrameFormat {
             return -1;
         }
 
-        // Try to parse as percentage first
+        
         if (grade.contains("%")) {
             try {
                 return Double.parseDouble(grade.replace("%", "").trim());
@@ -380,32 +388,31 @@ public class LeaderReport extends FrameFormat {
             }
         }
 
-        // Convert letter grades
         switch (grade.toUpperCase().trim()) {
             case "A+":
-                return 95;
+                return 80;   
             case "A":
-                return 90;
-            case "A-":
-                return 85;
+                return 75;  
             case "B+":
-                return 80;
+                return 70;  
             case "B":
-                return 75;
-            case "B-":
-                return 70;
+                return 65;   
             case "C+":
-                return 65;
+                return 60;  
             case "C":
-                return 60;
+                return 55;  
             case "C-":
-                return 55;
+                return 50;   
             case "D":
-                return 50;
+                return 40;   
+            case "F+":
+                return 30;   
             case "F":
-                return 40;
+                return 21;   
+            case "F-":
+                return 0;   
             default:
-                // Try to parse as number
+                
                 try {
                     return Double.parseDouble(grade);
                 } catch (NumberFormatException e) {

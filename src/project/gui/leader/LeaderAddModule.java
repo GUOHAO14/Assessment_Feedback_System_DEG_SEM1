@@ -65,7 +65,7 @@ public class LeaderAddModule extends FrameFormat {
 
         String moduleId = generateModuleId();
 
-        // Create new module with Leader object
+     
         Module newModule = new Module(moduleId, moduleName, sessionUser);
         InteractTxt.allModule.add(newModule);
 
@@ -82,11 +82,11 @@ public class LeaderAddModule extends FrameFormat {
                     String lecturerId = lecturerSelection.split(" - ")[0];
                     Lecturer lecturer = InteractTxt.checkLecID(lecturerId);
                     if (lecturer != null) {
-                        // Add module to lecturer's module list
+                        
                         if (!lecturer.Lec_Modules.contains(newModule)) {
                             lecturer.Lec_Modules.add(newModule);
                         }
-                        // Add lecturer to module's lecturer list
+                       
                         if (!newModule.Mod_Lecturers.contains(lecturer)) {
                             newModule.Mod_Lecturers.add(lecturer);
                         }

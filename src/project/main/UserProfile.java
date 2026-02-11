@@ -153,7 +153,7 @@ public class UserProfile extends FrameFormat {
 
         pwField.setText("jPasswordField1");
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("User Profile");
 
         jLabel2.setText("ID");

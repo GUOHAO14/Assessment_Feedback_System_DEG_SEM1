@@ -36,9 +36,7 @@ public class LeaderModule extends FrameFormat {
         loadModuleData();
     }
 
-    /**
-     * Create the popup menu for table rows
-     */
+
     private void createPopupMenu() {
         popupMenu = new JPopupMenu();
 
@@ -89,11 +87,11 @@ public class LeaderModule extends FrameFormat {
                                 }
                             }
 
-                            // Remove from global module list
+                          
                             InteractTxt.allModule.remove(moduleToDelete);
                         }
 
-                        // Save changes
+                        
                         InteractTxt.saveDatabase();
 
                         JOptionPane.showMessageDialog(
@@ -226,14 +224,15 @@ public class LeaderModule extends FrameFormat {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(473, 473, 473)
                                 .addComponent(jButton1))
-                            .addComponent(jLabel1)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(181, 181, 181))))
+                            .addComponent(jLabel1)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jButton4)))
                 .addContainerGap(16, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(205, 205, 205))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -242,9 +241,9 @@ public class LeaderModule extends FrameFormat {
                 .addComponent(jButton4)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15)
                 .addComponent(jButton1)
