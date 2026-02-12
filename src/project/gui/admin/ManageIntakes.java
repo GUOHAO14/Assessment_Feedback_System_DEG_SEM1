@@ -112,11 +112,15 @@ public class ManageIntakes extends FrameFormat {
 
         JTextField nameField = new JTextField(25);
         nameField.setText(Int.getIntakeName());
-        
-        JPanel panel = new JPanel(new GridLayout(0, 1));
+                
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(new JLabel("Name:"));
+        panel.add(Box.createVerticalStrut(8));
         panel.add(nameField);
+        panel.add(Box.createVerticalStrut(16));
         panel.add(new JLabel("Modules:"));
+        panel.add(Box.createVerticalStrut(8));
         
         JPanel modulesPanel = new JPanel();
         modulesPanel.setLayout(new BoxLayout(modulesPanel, BoxLayout.Y_AXIS));
@@ -135,6 +139,9 @@ public class ManageIntakes extends FrameFormat {
         }
         JScrollPane moduleScroll = new JScrollPane(modulesPanel);
         panel.add(moduleScroll);
+        
+        nameField.setPreferredSize(new Dimension(260, 24));
+        moduleScroll.setPreferredSize(new Dimension(260,100));
         
         boolean emptyStu = Int.checkEmptyStu();
         if(!emptyStu){
@@ -217,12 +224,18 @@ public class ManageIntakes extends FrameFormat {
         JTextField idField = new JTextField(25);
         JTextField nameField = new JTextField(25);
         
-        JPanel panel = new JPanel(new GridLayout(0, 1));
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(new JLabel("Intake ID:"));
+        panel.add(Box.createVerticalStrut(8));
         panel.add(idField);
+        panel.add(Box.createVerticalStrut(16));
         panel.add(new JLabel("Name:"));
+        panel.add(Box.createVerticalStrut(8));
         panel.add(nameField);
+        panel.add(Box.createVerticalStrut(16));
         panel.add(new JLabel("Modules:"));
+        panel.add(Box.createVerticalStrut(8));
         
         JPanel modulesPanel = new JPanel();
         modulesPanel.setLayout(new BoxLayout(modulesPanel, BoxLayout.Y_AXIS));
@@ -236,8 +249,9 @@ public class ManageIntakes extends FrameFormat {
         JScrollPane moduleScroll = new JScrollPane(modulesPanel);
         panel.add(moduleScroll);
         
+        idField.setPreferredSize(new Dimension(260, 24));
+        nameField.setPreferredSize(new Dimension(260, 24));
         moduleScroll.setPreferredSize(new Dimension(260,100));
-
 
         while(true){
             int result = JOptionPane.showConfirmDialog(this, panel, "New Intake", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
