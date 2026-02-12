@@ -99,7 +99,7 @@ public class LeaderAssign extends FrameFormat {
 
                         } else {
                             JOptionPane.showMessageDialog(
-                                    this, "Class or Lecturer not found!", "Error", JOptionPane.ERROR_MESSAGE
+                                    this, "Lecturer not found!", "Error", JOptionPane.ERROR_MESSAGE
                             );
                         }
 

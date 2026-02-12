@@ -187,7 +187,7 @@ public class LeaderDashboard extends FrameFormat {
             public void run() {
 //                new LeaderDashboard().setVisible(true);
                 InteractTxt.initDatabase();
-                String x = "lc76366";
+                String x = "lc76367";
                 InteractTxt.allLeader.forEach(l -> {
                     System.out.println(l.getId());
                     if (l.getId().equals(x)) {
