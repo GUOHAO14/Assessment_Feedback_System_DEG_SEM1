@@ -278,7 +278,7 @@ public class DesignAssessment1 extends FrameFormat {
                         int intFullMarks = Integer.parseInt(fullMarks);
                         
                         // value checking
-                        if (name.length() < Constants.ITEM_NAME_MAX_LENGTH || name.length() > Constants.ITEM_NAME_MAX_LENGTH) throw new IntegerRangeException("Assessment name length", Constants.ITEM_NAME_MIN_LENGTH, Constants.ITEM_NAME_MAX_LENGTH);
+                        if (name.length() < Constants.ITEM_NAME_MIN_LENGTH || name.length() > Constants.ITEM_NAME_MAX_LENGTH) throw new IntegerRangeException("Assessment name length", Constants.ITEM_NAME_MIN_LENGTH, Constants.ITEM_NAME_MAX_LENGTH);
                         if (intPercent < 1 || intPercent > 100) throw new IntegerRangeException("Score Percentage", 1, 100);
                         if (intFullMarks < 1 || intFullMarks > 100) throw new IntegerRangeException("Full Marks", 10, 100);
                         
