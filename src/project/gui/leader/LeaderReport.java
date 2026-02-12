@@ -166,7 +166,7 @@ public class LeaderReport extends FrameFormat {
 
     private void generateClassPerformanceReport() {
         reportTableModel.setColumnIdentifiers(new String[]{
-            "Class ID", "Class Name", "Module", "Lecturer", "Students", "Avg Grade"
+            "Class ID", "Class Name", "Module", "Lecturer", "Students", "Avg Score"
         });
 
         for (Module module : sessionUser.Lea_Modules) {
@@ -176,7 +176,6 @@ public class LeaderReport extends FrameFormat {
                         Lecturer lecturer = InteractTxt.checkLecID(classObj.getLecId());
                         String lecturerName = lecturer != null ? lecturer.getName() : "Not Assigned";
 
-                        // Calculate average grade using actual scores
                         double totalScore = 0;
                         int scoreCount = 0;
 
@@ -199,7 +198,7 @@ public class LeaderReport extends FrameFormat {
                             }
                         }
 
-                        String avgGrade = scoreCount > 0
+                        String avgScore = scoreCount > 0
                                 ? String.format("%.2f%%", totalScore / scoreCount)
                                 : "N/A";
 
@@ -209,7 +208,7 @@ public class LeaderReport extends FrameFormat {
                             module.getModuleName(),
                             lecturerName,
                             classObj.Class_Students.size(),
-                            avgGrade
+                            avgScore
                         };
                         reportTableModel.addRow(rowData);
                     }
