@@ -176,23 +176,31 @@ public class LeaderReport extends FrameFormat {
                         Lecturer lecturer = InteractTxt.checkLecID(classObj.getLecId());
                         String lecturerName = lecturer != null ? lecturer.getName() : "Not Assigned";
 
-                        // Calculate average grade
-                        double totalGrade = 0;
-                        int gradeCount = 0;
+                        // Calculate average grade using actual scores
+                        double totalScore = 0;
+                        int scoreCount = 0;
 
                         for (Student student : classObj.Class_Students) {
-                            String grade = student.getSpecificGrade(classObj);
-                            if (grade != null && !grade.equals("N/A") && !grade.isEmpty()) {
-                                double numericGrade = convertGradeToNumeric(grade);
-                                if (numericGrade >= 0) {
-                                    totalGrade += numericGrade;
-                                    gradeCount++;
+                            for (StudentScore score : student.Stu_Scores) {
+
+                                if (score.getAssessment().getAssIM().getIMID().equals(im.getIMID())) {
+                                    try {
+                                        double originalScore = Double.parseDouble(score.getOrginalScore());
+                                        double fullMarks = Double.parseDouble(score.getOriginalFullMarks());
+
+                                        double percentageScore = (originalScore / fullMarks) * 100;
+
+                                        totalScore += percentageScore;
+                                        scoreCount++;
+                                    } catch (NumberFormatException | ArithmeticException e) {
+                                        // Skip invalid scores or division by zero
+                                    }
                                 }
                             }
                         }
 
-                        String avgGrade = gradeCount > 0
-                                ? String.format("%.2f%%", totalGrade / gradeCount)
+                        String avgGrade = scoreCount > 0
+                                ? String.format("%.2f%%", totalScore / scoreCount)
                                 : "N/A";
 
                         Object[] rowData = {
@@ -270,7 +278,6 @@ public class LeaderReport extends FrameFormat {
                                             totalScore += percentageScore;
                                             studentCount++;
 
-                                            
                                             if (percentageScore >= 40) {
                                                 passCount++;
                                             }
@@ -312,21 +319,18 @@ public class LeaderReport extends FrameFormat {
             "Category", "Count", "Details"
         });
 
-       
         reportTableModel.addRow(new Object[]{
             "Total Modules Managed",
             sessionUser.Lea_Modules.size(),
             "Modules under your leadership"
         });
 
-     
         reportTableModel.addRow(new Object[]{
             "Total Lecturers in Team",
             sessionUser.leaderTeam.size(),
             "Lecturers reporting to you"
         });
 
-        
         int totalClasses = 0;
         int totalStudents = 0;
 
@@ -372,53 +376,6 @@ public class LeaderReport extends FrameFormat {
             unassignedClasses,
             "Classes without assigned lecturers"
         });
-    }
-
-    private double convertGradeToNumeric(String grade) {
-        if (grade == null || grade.isEmpty() || grade.equals("N/A")) {
-            return -1;
-        }
-
-        
-        if (grade.contains("%")) {
-            try {
-                return Double.parseDouble(grade.replace("%", "").trim());
-            } catch (NumberFormatException e) {
-                // Continue to letter grade conversion
-            }
-        }
-
-        switch (grade.toUpperCase().trim()) {
-            case "A+":
-                return 80;   
-            case "A":
-                return 75;  
-            case "B+":
-                return 70;  
-            case "B":
-                return 65;   
-            case "C+":
-                return 60;  
-            case "C":
-                return 55;  
-            case "C-":
-                return 50;   
-            case "D":
-                return 40;   
-            case "F+":
-                return 30;   
-            case "F":
-                return 21;   
-            case "F-":
-                return 0;   
-            default:
-                
-                try {
-                    return Double.parseDouble(grade);
-                } catch (NumberFormatException e) {
-                    return -1;
-                }
-        }
     }
 
     /**
