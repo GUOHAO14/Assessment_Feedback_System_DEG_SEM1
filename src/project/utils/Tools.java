@@ -5,9 +5,9 @@ import java.util.*;
 import javax.swing.*;
 import project.roles.*;
 
-public class Tools {
-   
-    public static User checkCredentials(ArrayList<? extends User> userCred, String emailInput, String passwordInput) {
+public interface Tools {   
+    public static User checkCredentials(ArrayList<? extends User> userCred, 
+            String emailInput, String passwordInput) {
         //in progress
         for (User user : userCred) {
             String emailCred = user.getEmail();
