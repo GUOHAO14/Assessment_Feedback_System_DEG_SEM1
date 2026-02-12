@@ -150,4 +150,15 @@ public class Student extends User {
         }
         return grade;
     }
+    
+    public static ArrayList<Student> search(String input){
+        input = input.toLowerCase();
+        ArrayList<Student> matched = new ArrayList<Student>();
+        for(Student x : InteractTxt.allStudent){
+            if(x.getId().toLowerCase().contains(input) || x.getName().toLowerCase().contains(input)){
+                matched.add(x);
+            }
+        }
+        return matched;
+    }
 }

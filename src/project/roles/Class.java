@@ -93,4 +93,15 @@ public class Class {
         }
         return delete;
     }
+    
+    public static ArrayList<project.roles.Class> search(String input){
+        input = input.toLowerCase();
+        ArrayList<project.roles.Class> matched = new ArrayList<project.roles.Class>();
+        for(project.roles.Class x : InteractTxt.allClass){
+            if(x.getClassId().toLowerCase().contains(input) || x.getClassName().toLowerCase().contains(input)){
+                matched.add(x);
+            }
+        }
+        return matched;
+    }
 }

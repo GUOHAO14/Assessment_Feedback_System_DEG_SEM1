@@ -97,4 +97,15 @@ public class Intake {
         return getIntakeId() + " (" + getIntakeName() + ")";
     }
     
+    public static ArrayList<Intake> search(String input){
+        input = input.toLowerCase();
+        ArrayList<Intake> matched = new ArrayList<Intake>();
+        for(Intake x : InteractTxt.allIntake){
+            if(x.getIntakeId().toLowerCase().contains(input) || x.getIntakeName().toLowerCase().contains(input)){
+                matched.add(x);
+            }
+        }
+        return matched;
+    }
+    
 }

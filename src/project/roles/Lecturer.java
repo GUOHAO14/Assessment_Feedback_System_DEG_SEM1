@@ -1,6 +1,7 @@
 package project.roles;
 
 import java.util.ArrayList;
+import project.utils.*;
 
 public class Lecturer extends User {
     private Leader leader;
@@ -37,22 +38,14 @@ public class Lecturer extends User {
         System.out.println(String.join(", ", fullData));
     }
     
-    
-                
-    
-//    @Override
-//    public void setDetails(String[] fullData) {
-//        super.setDetails(fullData);
-//        
-//        this.leader = fullData[4];
-//        this.dob = fullData[5];
-//    }
-//    
-//    // overloading
-//    public void setDetails(String[] userData, String[] studentData) {
-//        super.setDetails(userData);
-//        
-//        this.intakeId = studentData[1];
-//        this.dob = studentData[2];
-//    }
+    public static ArrayList<Lecturer> search(String input){
+        input = input.toLowerCase();
+        ArrayList<Lecturer> matched = new ArrayList<Lecturer>();
+        for(Lecturer x : InteractTxt.allLecturer){
+            if(x.getId().toLowerCase().contains(input) || x.getName().toLowerCase().contains(input)){
+                matched.add(x);
+            }
+        }
+        return matched;
+    }
 }
