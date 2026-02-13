@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import project.utils.*;
 import project.roles.*;
 import project.roles.Module;
+import project.roles.Class;
 
 /**
  *
@@ -28,7 +29,7 @@ public class LeaderEditModule extends FrameFormat {
 
         super.formatWindow("Edit Module");
 
-        // Initialize lecturer list model
+     
         lecturerListModel = new DefaultListModel<>();
         jList1.setModel(lecturerListModel);
 
@@ -36,7 +37,6 @@ public class LeaderEditModule extends FrameFormat {
         moduleIdField.setEditable(false);
         moduleNameField.setText(moduleName);
 
-      
         loadLecturerList();
         preselectAssignedLecturers(moduleId);
 
@@ -97,7 +97,6 @@ public class LeaderEditModule extends FrameFormat {
             return;
         }
 
-        // Find module object
         Module module = InteractTxt.checkModID(moduleId);
         if (module == null) {
             showError("Module not found!");
@@ -106,7 +105,7 @@ public class LeaderEditModule extends FrameFormat {
 
         // Check for duplicate module names (excluding the current module being edited)
         for (Module existingModule : InteractTxt.allModule) {
-            // Skip the current module being edited
+
             if (existingModule.getModuleId().equals(moduleId)) {
                 continue;
             }
@@ -120,10 +119,8 @@ public class LeaderEditModule extends FrameFormat {
             }
         }
 
-        // Update module name
         module.setModuleName(newModuleName);
 
-        // Update lecturer assignments
         updateLecturerAssignments(module);
 
         InteractTxt.saveDatabase();
@@ -135,7 +132,7 @@ public class LeaderEditModule extends FrameFormat {
     }
 
     private void updateLecturerAssignments(Module module) {
-   
+
         List<String> selectedLecturers = jList1.getSelectedValuesList();
 
         // Clear existing assignments
@@ -158,6 +155,26 @@ public class LeaderEditModule extends FrameFormat {
                         // Add lecturer to module
                         if (!module.Mod_Lecturers.contains(lecturer)) {
                             module.Mod_Lecturers.add(lecturer);
+                        }
+                    }
+                }
+            }
+        }
+
+        // NEW CODE: Clear class assignments for lecturers removed from this module
+        for (IntakeModule im : InteractTxt.allIntakeModule) {
+            if (im.getModuleId().equals(module.getModuleId())) {
+                for (Class c : im.IM_Classes) {
+                    // Check if the class's lecturer is still assigned to this module
+                    if (c.getLecId() != null && !c.getLecId().equals("NA")) {
+                        Lecturer classLecturer = InteractTxt.checkLecID(c.getLecId());
+
+                        // If lecturer is not in the module's lecturer list anymore, unassign
+                        if (classLecturer != null && !module.Mod_Lecturers.contains(classLecturer)) {
+                            // Remove class from lecturer
+                            classLecturer.Lec_Classes.remove(c);
+                            // Set class lecturer to NA
+                            c.setLecId("NA");
                         }
                     }
                 }
