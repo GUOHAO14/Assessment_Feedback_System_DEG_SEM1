@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import project.utils.*;
 import project.roles.*;
 import project.roles.Module;
+import project.roles.Class;
 
 /**
  *
@@ -36,7 +37,6 @@ public class LeaderModule extends FrameFormat {
         loadModuleData();
     }
 
-
     private void createPopupMenu() {
         popupMenu = new JPopupMenu();
 
@@ -60,7 +60,7 @@ public class LeaderModule extends FrameFormat {
                 int confirm = JOptionPane.showConfirmDialog(
                         this,
                         "Are you sure you want to delete module: " + moduleName + "?\n"
-                        + "This will also remove all lecturer assignments and related data.",
+                        + "This will also remove all lecturer assignments, intake modules, assessments, and related data.",
                         "Confirm Deletion",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.WARNING_MESSAGE
@@ -68,30 +68,8 @@ public class LeaderModule extends FrameFormat {
 
                 if (confirm == JOptionPane.YES_OPTION) {
                     try {
-                        Module moduleToDelete = InteractTxt.checkModID(moduleId);
-                        if (moduleToDelete != null) {
-                            // Remove module from all lecturers who teach it
-                            for (Lecturer lecturer : moduleToDelete.Mod_Lecturers) {
-                                lecturer.Lec_Modules.remove(moduleToDelete);
-                            }
+                        deleteModuleAndRelatedData(moduleId);
 
-                            // Remove from leader's module list
-                            sessionUser.Lea_Modules.remove(moduleToDelete);
-
-                            // Remove all IntakeModules associated with this module
-                            java.util.Iterator<IntakeModule> imIterator = InteractTxt.allIntakeModule.iterator();
-                            while (imIterator.hasNext()) {
-                                IntakeModule im = imIterator.next();
-                                if (im.getModuleId().equals(moduleId)) {
-                                    imIterator.remove();
-                                }
-                            }
-
-                          
-                            InteractTxt.allModule.remove(moduleToDelete);
-                        }
-
-                        
                         InteractTxt.saveDatabase();
 
                         JOptionPane.showMessageDialog(
@@ -119,6 +97,102 @@ public class LeaderModule extends FrameFormat {
         popupMenu.add(editItem);
         popupMenu.addSeparator();
         popupMenu.add(deleteItem);
+    }
+
+    private void deleteModuleAndRelatedData(String moduleId) {
+        Module moduleToDelete = InteractTxt.checkModID(moduleId);
+        if (moduleToDelete == null) {
+            throw new IllegalArgumentException("Module not found: " + moduleId);
+        }
+
+        // Collect IDs to delete
+        java.util.List<String> intakeModuleIds = new java.util.ArrayList<>();
+        java.util.List<String> assessmentIds = new java.util.ArrayList<>();
+        java.util.List<String> classIds = new java.util.ArrayList<>();
+
+        // Gather all related IDs
+        for (IntakeModule im : InteractTxt.allIntakeModule) {
+            if (im.getModuleId().equals(moduleId)) {
+                intakeModuleIds.add(im.getIMID());
+            }
+        }
+
+        for (Assessment assessment : InteractTxt.allAssessment) {
+            if (assessment.getAssIM() != null && intakeModuleIds.contains(assessment.getAssIM().getIMID())) {
+                assessmentIds.add(assessment.getAssId());
+            }
+        }
+
+        for (Class classObj : InteractTxt.allClass) {
+            if (intakeModuleIds.contains(classObj.getIMID())) {
+                classIds.add(classObj.getClassId());
+            }
+        }
+
+        // Delete student-related data
+        for (Student student : InteractTxt.allStudent) {
+            if (student.Stu_Scores != null) {
+                student.Stu_Scores.removeIf(score
+                        -> score.getAssessment() != null && assessmentIds.contains(score.getAssessment().getAssId())
+                );
+            }
+            if (student.Stu_Classes != null) {
+                student.Stu_Classes.removeIf(classObj -> classIds.contains(classObj.getClassId()));
+            }
+            if (student.GradesAndComments != null) {
+                student.GradesAndComments.removeIf(gc
+                        -> gc.getStuClass() != null && classIds.contains(gc.getStuClass().getClassId())
+                );
+            }
+        }
+
+        // Delete lecturer-related data
+        for (Lecturer lecturer : InteractTxt.allLecturer) {
+            if (lecturer.Lec_Classes != null) {
+                lecturer.Lec_Classes.removeIf(classObj -> classIds.contains(classObj.getClassId()));
+            }
+            if (lecturer.Lec_Modules != null) {
+                lecturer.Lec_Modules.remove(moduleToDelete);
+            }
+        }
+
+        // Clear class student lists
+        for (Class classObj : InteractTxt.allClass) {
+            if (classIds.contains(classObj.getClassId()) && classObj.Class_Students != null) {
+                classObj.Class_Students.clear();
+            }
+        }
+
+        // Clear IntakeModule lists
+        for (IntakeModule im : InteractTxt.allIntakeModule) {
+            if (intakeModuleIds.contains(im.getIMID())) {
+                if (im.IM_Assessments != null) {
+                    im.IM_Assessments.clear();
+                }
+                if (im.IM_Classes != null) {
+                    im.IM_Classes.clear();
+                }
+            }
+        }
+
+        // Delete from global lists
+        InteractTxt.allAssessment.removeIf(assessment
+                -> assessment.getAssIM() != null && intakeModuleIds.contains(assessment.getAssIM().getIMID())
+        );
+        InteractTxt.allClass.removeIf(classObj -> intakeModuleIds.contains(classObj.getIMID()));
+        InteractTxt.allIntakeModule.removeIf(im -> im.getModuleId().equals(moduleId));
+
+        // Remove from leader
+        if (sessionUser.Lea_Modules != null) {
+            sessionUser.Lea_Modules.remove(moduleToDelete);
+        }
+
+        // Delete module
+        InteractTxt.allModule.remove(moduleToDelete);
+
+        logger.info("Deleted module " + moduleId + " with " + intakeModuleIds.size()
+                + " intake modules, " + assessmentIds.size() + " assessments, and "
+                + classIds.size() + " classes");
     }
 
     public void loadModuleData() {
