@@ -8,9 +8,26 @@ import project.utils.*;
 public class ManageGradingSystem extends FrameFormat {
 
     private Admin sessionUser;
+    
     private DefaultTableModel model = new DefaultTableModel(
         new String[]{"Grade", "Marks From", "Marks To"}, 0
-    );
+    ) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            if (column == 0) {
+                return false;
+            }
+
+            if (column == 1 && row == (InteractTxt.allGrading.size()-1)) {
+                return false;
+            }
+
+            if (column == 2 && row == 0) {
+                return false;
+            }
+            return true;
+        }
+    };
     
     private boolean ProgramUpdate = false;
     private boolean Loop = true;
@@ -42,10 +59,7 @@ public class ManageGradingSystem extends FrameFormat {
                 Grading OldV = InteractTxt.allGrading.get(row);
                 System.out.println("Changed at row " + row + ", col " + col + ": " + NewV);
                 
-                if(col == 0){
-                    rejectEdit(row, col, OldV.getGrade(), "Cannot edit");
-                    return;
-                } else if (col == 1){
+                if (col == 1){
                     if (row == (InteractTxt.allGrading.size()-1)) {
                         rejectEdit(row, col, OldV.getMarksFrom(), "Cannot edit");
                         return;
