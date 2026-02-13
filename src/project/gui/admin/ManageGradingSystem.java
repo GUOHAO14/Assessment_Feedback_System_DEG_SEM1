@@ -59,12 +59,7 @@ public class ManageGradingSystem extends FrameFormat {
                 Grading OldV = InteractTxt.allGrading.get(row);
                 System.out.println("Changed at row " + row + ", col " + col + ": " + NewV);
                 
-                if (col == 1){
-                    if (row == (InteractTxt.allGrading.size()-1)) {
-                        rejectEdit(row, col, OldV.getMarksFrom(), "Cannot edit");
-                        return;
-                    }
-                    
+                if (col == 1){                    
                     try {
                         int NewValue = Integer.parseInt(String.valueOf(NewV));
                         
@@ -93,11 +88,6 @@ public class ManageGradingSystem extends FrameFormat {
                     }
                     
                 } else if (col == 2){
-                    if (row == 0) {
-                        rejectEdit(row, col, OldV.getMarksTo(), "Cannot edit");
-                        return;
-                    }
-                    
                     try {
                         int NewValue = Integer.parseInt(String.valueOf(NewV));
                         
