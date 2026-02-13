@@ -98,8 +98,3 @@ Python - D
 lc76365
 IMID7
 
-C24
-Default Class
-NA
-IMID11
-

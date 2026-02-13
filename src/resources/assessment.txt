@@ -19,20 +19,6 @@ Class Test
 30
 IMID1
 
-Ass6
-Group Assignment
-Assignment
-100
-50
-IMID3
-
-Ass7
-Test
-Class Test
-30
-50
-IMID3
-
 Ass4
 Group Assignment
 Assignment
@@ -200,4 +186,18 @@ Examination
 100
 40
 IMID8
+
+Ass6
+Group Assignment
+Assignment
+100
+50
+IMID3
+
+Ass7
+Test
+Class Test
+30
+50
+IMID3
 

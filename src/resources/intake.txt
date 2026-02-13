@@ -4,6 +4,3 @@ CyberSecurity
 UCDF2307ICT(SE)
 Software Engineering
 
-sds
-asef
-

@@ -13,7 +13,7 @@ admin
 lc76357
 Jennie
 jennie@gmail.com
-lol
+mynamejeff
 leader
 
 lc76366
@@ -85,13 +85,13 @@ lecturer
 tp76267
 Khoo Guo Hao
 guohao@gmail.com
-shit
+12345678
 student
 
 tp76266
 Kee Wen Yew
 wenyew@gmail.com
-shit
+12345678
 student
 
 tp76268

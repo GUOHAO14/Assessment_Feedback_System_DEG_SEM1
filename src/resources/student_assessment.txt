@@ -20,20 +20,6 @@ Ass3
 Great work!
 
 tp76267
-Ass6
-12.5
-25
-100
-Group assignment completed successfully.
-
-tp76267
-Ass7
-41.7
-25
-30
-Test performance shows good understanding.
-
-tp76267
 Ass4
 18.0
 30
@@ -95,6 +81,20 @@ Ass14
 40
 50
 Presentation clear and structured.
+
+tp76267
+Ass6
+50.0
+100
+100
+Group assignment completed successfully.
+
+tp76267
+Ass7
+41.7
+25
+30
+Test performance shows good understanding.
 
 tp76266
 Ass6
@@ -419,27 +419,6 @@ Ass20
 Quiz okay.
 
 tp76270
-Ass27
-54.0
-90
-100
-Good
-
-tp76270
-Ass28
-18.0
-90
-100
-Awesome
-
-tp76270
-Ass29
-18.0
-90
-100
-Perfect
-
-tp76270
 Ass24
 44.0
 88
@@ -480,6 +459,27 @@ Ass31
 88
 100
 that's my goat right there
+
+tp76270
+Ass27
+30.0
+50
+100
+123
+
+tp76270
+Ass28
+18.0
+90
+100
+Awesome
+
+tp76270
+Ass29
+18.0
+90
+100
+Perfect
 
 tp76271
 Ass15

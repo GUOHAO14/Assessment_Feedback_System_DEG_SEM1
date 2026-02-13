@@ -10,8 +10,8 @@ NA
 
 tp76267
 C3
-C-
-meow
+A+
+need some work
 
 tp76267
 C4
@@ -120,7 +120,7 @@ NA
 
 tp76270
 C10
-A+
+B
 NA
 
 tp76271
