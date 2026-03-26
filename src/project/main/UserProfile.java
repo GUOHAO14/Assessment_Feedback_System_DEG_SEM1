@@ -10,6 +10,7 @@ import project.roles.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import javax.swing.JFrame;
 
 /**
@@ -70,9 +71,10 @@ public class UserProfile extends FrameFormat {
             return false;
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
         try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd")
+            .withResolverStyle(ResolverStyle.STRICT);
+            
             LocalDate parsedDate = LocalDate.parse(dob, formatter);
 
             // Block future dates
