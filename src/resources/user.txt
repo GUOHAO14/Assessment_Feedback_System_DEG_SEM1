@@ -37,7 +37,7 @@ leader
 lc76358
 Siwa
 siwa@gmail.com
-Xx6,r@(uO>:5
+Siwa123.
 lecturer
 
 lc76359
@@ -128,5 +128,11 @@ tp76273
 Wong Kit Hoong
 wong@gmail.com
 Dg6)xpBqwU.d
+student
+
+tp76274
+Ivan Chin
+ivan@mail.com
+Tu1<Om.O_Zb!
 student
 

@@ -40,7 +40,7 @@ public class DesignAssessment0 extends FrameFormat {
     
     public DesignAssessment0(Lecturer sessionUser) {
         initComponents();
-        super.formatWindow("Design Module Assessment - Select Class");
+        super.formatWindow("Design Module Assessment - Select Intake Module");
         this.sessionUser = sessionUser;
         
         intakeDropdown.setEditable(true);
@@ -179,7 +179,7 @@ public class DesignAssessment0 extends FrameFormat {
         String choice = intakeDropdown.getSelectedItem().toString();
         System.out.println(choice);
 
-        if (choice == null || choice.isEmpty() || choice.equals("None")) 
+        if (!InteractTxt.allIntake.contains(InteractTxt.checkIntID(choice.split(" ")[0])) || choice == null || choice.isEmpty() || choice.equals("None")) 
             return;
         else {
             // valid choice
@@ -212,6 +212,7 @@ public class DesignAssessment0 extends FrameFormat {
             });
 
             moduleDropdown.setEnabled(true);
+            AutoCompleteDecorator.decorate(moduleDropdown);
         }
     }//GEN-LAST:event_intakeDropdownActionPerformed
 

@@ -100,8 +100,8 @@ NA
 
 tp76270
 C6
-C-
 NA
+Thanks for the great lectures, Mr Siwa
 
 tp76270
 C7
@@ -125,7 +125,7 @@ NA
 
 tp76271
 C6
-D
+NA
 NA
 
 tp76271
@@ -150,7 +150,7 @@ NA
 
 tp76272
 C6
-D
+NA
 NA
 
 tp76272
@@ -171,5 +171,10 @@ NA
 tp76272
 C10
 A+
+NA
+
+tp76274
+C1
+NA
 NA
 

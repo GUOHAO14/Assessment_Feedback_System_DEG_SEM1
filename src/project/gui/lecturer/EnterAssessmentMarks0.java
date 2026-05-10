@@ -715,9 +715,37 @@ public class EnterAssessmentMarks0 extends FrameFormat {
             Dimension maxScrollPaneSize = new Dimension(maxWidth, maxHeight);
             scrollableContainer.setPreferredSize(maxScrollPaneSize);
             
+            JTextArea sideTextArea = new JTextArea(20, 25);
+            sideTextArea.setLineWrap(true);
+            sideTextArea.setWrapStyleWord(true);
+            sideTextArea.setEditable(false); // optional
+            
+            // display comment
+            JScrollPane sideScrollPane = new JScrollPane(sideTextArea);
+            
+            JPanel rightPanel = new JPanel(new BorderLayout());
+
+            JLabel header = new JLabel("Comment");
+            header.setFont(header.getFont().deriveFont(Font.BOLD, 14f));
+            header.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // spacing
+
+            rightPanel.add(header, BorderLayout.NORTH);
+            rightPanel.add(sideScrollPane, BorderLayout.CENTER);
+            
+            // create overall display
+            JPanel container = new JPanel(new BorderLayout());
+            container.add(scrollableContainer, BorderLayout.CENTER);
+            container.add(rightPanel, BorderLayout.EAST);
+            
+            for (StudentGradeAndComment gc : clickedStudent.GradesAndComments) {
+                if (gc.getStuClass().getClassId().equals(classId)) {
+                    sideTextArea.append(gc.getComment());
+                }
+            }
+            
             //loop until no error (finish filling score)
             while (true) {
-                int userInput = JOptionPane.showConfirmDialog(this, scrollableContainer, "Input Student Scores", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                int userInput = JOptionPane.showConfirmDialog(this, container, "Input Student Scores", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         
                 if (userInput == JOptionPane.OK_OPTION) {
                     try {

@@ -391,27 +391,6 @@ Ass14
 Presentation clear.
 
 tp76270
-Ass15
-15.0
-30
-60
-Individual assignment done well.
-
-tp76270
-Ass16
-21.0
-28
-40
-Practical test acceptable.
-
-tp76270
-Ass17
-14.4
-36
-100
-Final exam performance good.
-
-tp76270
 Ass20
 25.0
 25
@@ -481,26 +460,19 @@ Ass29
 100
 Perfect
 
+tp76270
+Ass15
+25.0
+50
+60
+Individual assignment done well.
+
 tp76271
 Ass15
 16.5
 33
 60
 Individual assignment satisfactory.
-
-tp76271
-Ass16
-19.5
-26
-40
-Practical test done properly.
-
-tp76271
-Ass17
-14.0
-35
-100
-Final exam acceptable.
 
 tp76271
 Ass20
@@ -571,20 +543,6 @@ Ass15
 31
 60
 Individual assignment done.
-
-tp76272
-Ass16
-21.0
-28
-40
-Practical test good.
-
-tp76272
-Ass17
-13.6
-34
-100
-Final exam okay.
 
 tp76272
 Ass20

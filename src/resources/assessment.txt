@@ -82,27 +82,6 @@ Presentation
 20
 IMID5
 
-Ass15
-Individual Assignment
-Assignment
-60
-30
-IMID6
-
-Ass16
-Practical Test
-Class Test
-40
-30
-IMID6
-
-Ass17
-Final Exam
-Examination
-100
-40
-IMID6
-
 Ass24
 Group Assignment
 Assignment
@@ -200,4 +179,25 @@ Class Test
 30
 50
 IMID3
+
+Ass15
+Individual Assignment
+Assignment
+60
+30
+IMID6
+
+Ass16
+Practical Test
+Class Test
+50
+30
+IMID6
+
+Ass17
+Final Exam
+Examination
+100
+40
+IMID6
 

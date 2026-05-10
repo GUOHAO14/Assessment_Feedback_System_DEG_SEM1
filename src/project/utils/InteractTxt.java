@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class InteractTxt {
-    public static ArrayList<Student> allStudent = new ArrayList<Student>();
-    public static ArrayList<Leader> allLeader = new ArrayList<Leader>();
-    public static ArrayList<Lecturer> allLecturer = new ArrayList<Lecturer>();
-    public static ArrayList<Admin> allAdmin = new ArrayList<Admin>();
+    public static ArrayList<Student> allStudent = new ArrayList<>();
+    public static ArrayList<Leader> allLeader = new ArrayList<>();
+    public static ArrayList<Lecturer> allLecturer = new ArrayList<>();
+    public static ArrayList<Admin> allAdmin = new ArrayList<>();
     
     public static void writeUser(){
         try{

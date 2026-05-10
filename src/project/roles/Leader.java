@@ -5,8 +5,8 @@ import project.utils.*;
 
 public class Leader extends User {
 
-    public ArrayList<Lecturer> leaderTeam = new ArrayList<Lecturer>();
-    public ArrayList<Module> Lea_Modules = new ArrayList<Module>();
+    public ArrayList<Lecturer> leaderTeam = new ArrayList<>();
+    public ArrayList<Module> Lea_Modules = new ArrayList<>();
 
     public Leader(String[] userData) {
         super(userData);
